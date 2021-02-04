@@ -1,0 +1,28 @@
+name: nrlifecare
+description: A new Flutter project.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  auto_route: ^0.6.9
+
+  cupertino_icons: ^1.0.0
+  easy_localization: ^2.3.3
+  get: ^3.24.0
+
+dev_dependencies:
+  auto_route_generator: ^0.6.10
+  build_runner:
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/translations/
