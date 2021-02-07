@@ -1,38 +1,39 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:nrlifecare/routes/router.gr.dart';
+import 'package:flutter_screenutil/screenutil_init.dart';
+import 'package:get/get.dart';
+import 'package:nrlifecare/routes/router.dart';
+import 'package:nrlifecare/view/PageNotFound/pagenotfound.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
+import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 
 void main() {
-  runApp(
-    EasyLocalization(
-      child: MainApp(),
-      supportedLocales: [Locale("en", "IN")],
-      path: "assets/translations",
-      fallbackLocale: Locale("en"),
-    ),
-  );
+  runApp(EasyLocalization(
+    child: MainApp(),
+    supportedLocales: const [Locale("en", "IN")],
+    path: "assets/translations",
+    fallbackLocale: const Locale("en"),
+  ));
 }
 
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      builder: ExtendedNavigator.builder(
-        router: NRRouter(),
-        initialRoute: Routes.splash,
-        builder: (_, navigator) => Theme(
-          data: ThemeData.dark(),
-          child: navigator,
+    return ScreenUtilInit(
+      designSize: const Size(480, 800),
+      allowFontScaling: true,
+      builder: () => GetMaterialApp(
+        initialBinding: AuthBindings(),
+        initialRoute: "/",
+        unknownRoute: GetPage(name: "/notfound", page: () => PageNotFount()),
+        getPages: NrRouter.pages,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Splash(),
         ),
-      ),
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Splash(),
       ),
     );
   }

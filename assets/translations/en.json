@@ -1,1 +1,19 @@
-{}
+{
+    "signin_text":"Sign In",
+    "access_account":"Access account",
+    "signin_option_text":"or Sign In with Email",
+    "email_text":"Email",
+    "password_text":"Password",
+    "sign_in_btn_text":"Sign In",
+    "goto_register_text":"Don't have an account ? Register",
+
+    "signup_text":"Sign Up",
+    "signup_option_text":"or Sign Up with Email",
+    "confirm_password":"Confirm Password",
+    "goto_login_text":"Already have an account ? Login",
+
+    "phone_text":"OTP Verification",
+    "phone_number":"Phone number",
+    "phone_otp":"Otp",
+    "send_otp":"Send OTP"
+}
