@@ -15,5 +15,66 @@
     "phone_text":"OTP Verification",
     "phone_number":"Phone number",
     "phone_otp":"Otp",
-    "send_otp":"Send OTP"
+    "send_otp":"Send OTP",
+
+    "nr_name":"NR Life Care",
+    "nr_subname":"Pharmaceutical Company",
+    "home_top_products":"Top Products",
+    "home_new_in":"New In",
+    "home_see_all":"See all",
+    "home_categories":"Categories",
+
+    "home_newin":"New In",
+
+    "category_title":"Categories",
+
+    "cart_title":"Cart",
+    "cart_checkout":"Checkout",
+    "cart_total":"Total:",
+
+    "aboutus_title":"About Us",
+
+    "product_price_and_quantity":"Price and Quantity",
+    "product_specifications":"Product Specifications",
+    "product_description":"Product Description",
+    "product_trade_information":"Trade Information",
+    "payment_term":"Payment Terms",
+    "supply_ability":"Supply Ability",
+    "main_domestic_market":"Main Domestic Market",
+    "drug_type":"Drug Type",
+    "recommended_for":"Recommended For",
+    "storage_instruction":"Storage Instruction",
+    "physical_form":"Physical Form",
+    "suitable_for":"Suitable For",
+    "product_price":"Price",
+    "minimum_order":"Min. Order",
+
+
+    "aboutus_1_title":"Who are we ?",
+    "aboutus_1_subtitle":"We, NR Life Care, are a trustworthy pharmaceutical company involved as an Exporter, Wholesaler and Trader of a wide range of medicinal products, Antibiotic Medicine, Analgesic and Antipyretic Medicines, Pharmaceutical Medicines, Pharmaceutical Products such as Vitamin etc.",
+    "aboutus_2_title":"Premium Quality Product",
+    "aboutus_2_subtitle":"We, NR Life Care, Are a promising and reliable organization established in 2014. With the matchless efforts towards regular quality inspection of our procured products, We serve clients with safe and prime products and gain their loyalty",
+    "aboutus_3_title":"100% Best Service",
+    "aboutus_3_subtitle":"Our skilled staff support us in satisfying our Client by supplying high grade medicinal Products. We make medicines easily available with Value for money to satisfy the demands of the Customers.",
+    "aboutus_4_title":"Flexible Payment Modes",
+    "aboutus_4_subtitle":"We have flexible payment modes for hassle free financial transactions. We render prompt delivery of medicines to our clients. We make medicines easily available to satisfy the demands of the customers.",
+
+    "contactus":"Contact Us",
+    "visit_website":"Visit our Website",
+    "email":"Reach us via Email",
+    "address":"Where are we ?",
+    "nature_of_business":"Nature of Business",
+    "wholesale_trader":"Wholesale Trader",
+    "employement":"Total employment",
+    "total_employee":"Upto 10 People",
+    "establishment":"Year of Est.",
+    "year_of_est":"2014",
+    "annual_turnover":"Annual Turnover",
+    "total_turnover":"Upto 2 Crore",
+    "gst":"GST Number",
+    "gst_number":"24ADVPN9611L2ZU",
+    "firm":"Legal Status of Firm",
+    "status_of_firm":"Personal"
+
+
 }

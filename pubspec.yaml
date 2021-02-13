@@ -14,13 +14,18 @@ dependencies:
   cupertino_icons: ^1.0.0
   device_preview: ^0.5.5
   easy_localization: ^2.3.3
+  fab_circular_menu: ^1.0.1
   flutter_screenutil: ^4.0.3
+  flutter_slidable: ^0.5.7
   flutter_svg: ^0.19.0
   get: ^3.24.0
+  material_floating_search_bar: ^0.2.6
   pin_code_fields: ^6.1.0
 
 dev_dependencies:
   lint: ^1.0.0
+  json_serializable: ^3.5.1
+  build_runner: any
 
 flutter:
   uses-material-design: true
@@ -29,6 +34,24 @@ flutter:
     - assets/translations/
     - assets/images/facebook_logo.svg
     - assets/images/google_logo.svg
+    - assets/icons/search_icon.svg
+    - assets/icons/shopping-basket.svg
+    - assets/icons/swipe-left.svg
+    - assets/images/logo.jpeg
+    - assets/images/test_product.png
+    - assets/images/aboutus_1.png
+    - assets/images/aboutus_2.png
+    - assets/images/aboutus_3.png
+    - assets/images/aboutus_4.png
+    - assets/images/contactus_1.png
+    - assets/images/contactus_2.png
+    - assets/images/contactus_3.png
+    - assets/images/contactus_bottom_1.png
+    - assets/images/contactus_bottom_2.png
+    - assets/images/contactus_bottom_3.png
+    - assets/images/contactus_bottom_4.png
+    - assets/images/contactus_bottom_5.png
+    - assets/images/contactus_bottom_6.png
 
   fonts:
     - family: Roboto

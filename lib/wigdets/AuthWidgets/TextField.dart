@@ -5,16 +5,17 @@ import '../../constants/app_text_decoration.dart';
 
 class CustomTextField extends StatelessWidget {
   final String Function(String) validateField;
-  final void Function(String) onChange;
   final TextEditingController controller;
   final String hintText;
   final bool isObsecure;
-  CustomTextField(
-      {@required this.validateField,
-      @required this.controller,
-      this.hintText,
-      this.isObsecure = false,
-      @required this.onChange});
+  final Widget prefix;
+  CustomTextField({
+    @required this.validateField,
+    @required this.controller,
+    this.hintText,
+    this.isObsecure = false,
+    this.prefix,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,6 @@ class CustomTextField extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(top: 4.h, bottom: 4.h, right: 4.w, left: 15.w),
         child: TextFormField(
-          onChanged: (value) => onChange(value),
           style: AppTextDecoration.bodyText2.copyWith(fontSize: 16.sp),
           validator: (value) {
             return validateField(value);
@@ -32,6 +32,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           obscureText: isObsecure,
           decoration: InputDecoration(
+            prefix: prefix,
             hintText: hintText,
             hintStyle: TextStyle(
               color: Colors.grey,

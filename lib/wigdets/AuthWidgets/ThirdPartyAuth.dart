@@ -22,7 +22,7 @@ Widget ThirdPartyAuth(context) {
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primaryColor.withOpacity(0.2),
-                  offset: Offset(0, 5),
+                  offset: const Offset(0, 5),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),
@@ -57,7 +57,7 @@ Widget ThirdPartyAuth(context) {
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primaryColor.withOpacity(0.2),
-                  offset: Offset(0, 5),
+                  offset: const Offset(0, 5),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),
@@ -87,7 +87,7 @@ Widget ThirdPartyAuth(context) {
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primaryColor.withOpacity(0.2),
-                  offset: Offset(0, 5),
+                  offset: const Offset(0, 5),
                   spreadRadius: 1,
                   blurRadius: 10,
                 ),

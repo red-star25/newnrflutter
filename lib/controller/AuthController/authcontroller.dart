@@ -1,15 +1,16 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:nrlifecare/constants/colors.dart';
 
 class AuthController extends GetxController {
   static final _emailController = TextEditingController();
   static final _passwordController = TextEditingController();
   static final _confirmpasswordController = TextEditingController();
+  static final _phoneNumberController = TextEditingController();
 
   TextEditingController get email => _emailController;
   TextEditingController get password => _passwordController;
   TextEditingController get confirmpassword => _confirmpasswordController;
+  TextEditingController get phonenumber => _phoneNumberController;
 
   String emailValidate(String email) {
     if (email.isEmpty) {
@@ -41,6 +42,19 @@ class AuthController extends GetxController {
     }
     if (confirmPassword != _passwordController.text) {
       return "Password does not match";
+    }
+    return null;
+  }
+
+  String phoneNumberValidator(String number) {
+    if (number.isEmpty) {
+      return "Please enter a valid phone number";
+    }
+    if (number.length < 10) {
+      return "Number should be 10 digit long";
+    }
+    if (number.length > 10) {
+      return "Number should be 10 digit long";
     }
     return null;
   }

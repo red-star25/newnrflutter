@@ -10,7 +10,7 @@ import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 void main() {
   runApp(EasyLocalization(
     child: MainApp(),
-    supportedLocales: const [Locale("en", "IN")],
+    supportedLocales: const [Locale("en")],
     path: "assets/translations",
     fallbackLocale: const Locale("en"),
   ));

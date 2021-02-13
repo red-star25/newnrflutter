@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:nrlifecare/wigdets/GlobalWidgets/globalHeader.dart';
+import 'package:nrlifecare/wigdets/HomeWidgets/FloatingButton.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../Category/LeftBody.dart';
+import '../Category/RightBody.dart';
+
+class NrCategory extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: FloatingButton(),
+        body: SizedBox(
+          width: 1.sw,
+          height: 1.sh,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GlobalHeader(title: "category_title"),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Row(
+                  children: [
+                    CategoryLeftBody(),
+                    SizedBox(
+                      width: 20.h,
+                    ),
+                    CategoryRightBody()
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -19,140 +19,144 @@ class Login extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.primaryColor,
-      body: Column(
-        children: [
-          Heading(),
-          SizedBox(
-            height: 40.h,
-          ),
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: 1.sh,
+          child: Column(
+            children: [
+              Heading(
+                headingText: "signin_text",
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(height: 20.h),
-                      ThirdPartyAuth(context),
-                      SizedBox(
-                        height: 25.h,
-                      ),
-                      FittedBox(
-                          child: Text(
-                        "signin_option_text",
-                        style: AppTextDecoration.bodyText2,
-                      ).tr()),
-                    ],
-                  ),
-                  SizedBox(height: 0.05.sh),
-                  Form(
-                    key: _signInFormKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                  child: Text("email_text",
-                                          style: AppTextDecoration.bodyText2)
-                                      .tr()),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              CustomTextField(
-                                validateField: (email) =>
-                                    authController.emailValidate(email),
-                                controller: authController.email,
-                                hintText: "a@email.com",
-                                onChange: (email) {
-                                  authController.email.text = email;
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                  child: Text("password_text",
-                                          style: AppTextDecoration.bodyText2)
-                                      .tr()),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              CustomTextField(
-                                controller: authController.password,
-                                validateField: (password) =>
-                                    authController.passwordValidate(password),
-                                hintText: "******",
-                                isObsecure: true,
-                                onChange: (password) =>
-                                    authController.password.text = password,
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+              SizedBox(
+                height: 40.h,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
                   ),
-                  SizedBox(
-                    height: 0.1.sh,
-                  ),
-                  Column(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        width: 0.8.sw,
-                        height: 0.08.sh,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.primaryColor,
-                              AppColors.btnColor1,
-                            ],
+                      Column(
+                        children: [
+                          SizedBox(height: 20.h),
+                          ThirdPartyAuth(context),
+                          SizedBox(
+                            height: 25.h,
                           ),
-                        ),
-                        child: AuthButton(
-                          btnText: "signin_text",
-                          verify: () =>
-                              authController.navigateToHome(_signInFormKey),
+                          FittedBox(
+                              child: Text(
+                            "signin_option_text",
+                            style: AppTextDecoration.bodyText2,
+                          ).tr()),
+                        ],
+                      ),
+                      SizedBox(height: 0.05.sh),
+                      Form(
+                        key: _signInFormKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                      child: Text("email_text",
+                                              style:
+                                                  AppTextDecoration.bodyText2)
+                                          .tr()),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  CustomTextField(
+                                    validateField: (email) =>
+                                        authController.emailValidate(email),
+                                    controller: authController.email,
+                                    hintText: "a@email.com",
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                      child: Text("password_text",
+                                              style:
+                                                  AppTextDecoration.bodyText2)
+                                          .tr()),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  CustomTextField(
+                                    controller: authController.password,
+                                    validateField: (password) => authController
+                                        .passwordValidate(password),
+                                    hintText: "******",
+                                    isObsecure: true,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 15.h),
-                      InkWell(
-                        onTap: () {
-                          //TODO Navigate to Register Screen
-                          authController.clearTextField();
-                          Get.toNamed("/register");
-                        },
-                        child: FittedBox(
-                            child: Text(
-                          "goto_register_text",
-                          style: AppTextDecoration.bodyText2,
-                        ).tr()),
+                      SizedBox(
+                        height: 0.1.sh,
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            width: 0.8.sw,
+                            height: 0.08.sh,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primaryColor,
+                                  AppColors.btnColor1,
+                                ],
+                              ),
+                            ),
+                            child: AuthButton(
+                              btnText: "signin_text",
+                              verify: () =>
+                                  authController.navigateToHome(_signInFormKey),
+                            ),
+                          ),
+                          SizedBox(height: 15.h),
+                          InkWell(
+                            onTap: () {
+                              //TODO Navigate to Register Screen
+                              authController.clearTextField();
+                              Get.toNamed("/register");
+                            },
+                            child: FittedBox(
+                                child: Text(
+                              "goto_register_text",
+                              style: AppTextDecoration.bodyText2,
+                            ).tr()),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          )
-        ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
