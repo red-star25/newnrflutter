@@ -7,7 +7,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:nrlifecare/controller/ProductController/productController.dart';
 
 class ProductBottom extends StatelessWidget {
-  // final productController = Get.put(ProductController());
+  // final productController = Get.find<ProductController>();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductController>(
@@ -33,11 +34,11 @@ class ProductBottom extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "NRCOF-TR",
+                          productController.selectedProduct.productName,
                           style: AppTextDecoration.heading2,
                         ).tr(),
                         Text(
-                          "60ml",
+                          productController.selectedProduct.productSize,
                           style: AppTextDecoration.bodyText5,
                         )
                       ],
@@ -90,7 +91,10 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("₹45.00",
+                                    Text(
+                                        productController
+                                            .selectedProduct.productPrice
+                                            .toString(),
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -113,7 +117,8 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("30/pack",
+                                    Text(
+                                        "${productController.selectedProduct.minimumOrder}/pack",
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -172,7 +177,9 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("General Medicines",
+                                    Text(
+                                        productController
+                                            .selectedProduct.drugType,
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -195,7 +202,9 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("Cough",
+                                    Text(
+                                        productController
+                                            .selectedProduct.recommendedFor,
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -218,7 +227,9 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("Dry Place",
+                                    Text(
+                                        productController
+                                            .selectedProduct.storageInstruction,
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -241,7 +252,9 @@ class ProductBottom extends StatelessWidget {
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
-                                    Text("Liquid",
+                                    Text(
+                                        productController
+                                            .selectedProduct.physicalForm,
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp))
                                   ],
@@ -265,7 +278,8 @@ class ProductBottom extends StatelessWidget {
                                               fontWeight: FontWeight.normal),
                                     ).tr(),
                                     Text(
-                                      "Adults, Women",
+                                      productController
+                                          .selectedProduct.suitableFor,
                                       style: AppTextDecoration.bodyText5
                                           .copyWith(fontSize: 16.sp),
                                     )
@@ -326,21 +340,31 @@ class ProductBottom extends StatelessWidget {
                                       ),
                                     ).tr(),
                                     SizedBox(height: 10.h),
-                                    Text(
-                                      "💊 This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
-                                      style: AppTextDecoration.bodyText5
-                                          .copyWith(fontSize: 16.sp),
-                                    ),
+                                    for (int i = 0;
+                                        i <
+                                            productController
+                                                .selectedProduct.uses.length;
+                                        i++)
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.0.h),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                "💊 ${productController.selectedProduct.uses[i]}",
+                                                style: AppTextDecoration
+                                                    .bodyText5
+                                                    .copyWith(fontSize: 16.sp),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     Divider(
                                       indent: 20.w,
                                       endIndent: 20.w,
                                       color: AppColors.primaryColor,
                                     ),
-                                    Text(
-                                      "💊 This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
-                                      style: AppTextDecoration.bodyText5
-                                          .copyWith(fontSize: 16.sp),
-                                    )
                                   ],
                                 ),
                               ),
@@ -363,21 +387,31 @@ class ProductBottom extends StatelessWidget {
                                       ),
                                     ).tr(),
                                     SizedBox(height: 10.h),
-                                    Text(
-                                      "💊 Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
-                                      style: AppTextDecoration.bodyText5
-                                          .copyWith(fontSize: 16.sp),
-                                    ),
-                                    Divider(
-                                      indent: 20.w,
-                                      endIndent: 20.w,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                    Text(
-                                      "💊 Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
-                                      style: AppTextDecoration.bodyText5
-                                          .copyWith(fontSize: 16.sp),
-                                    ),
+                                    for (int i = 0;
+                                        i <
+                                            productController.selectedProduct
+                                                .howToUse.length;
+                                        i++)
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.0.h),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                "💊 ${productController.selectedProduct.howToUse[i]}",
+                                                style: AppTextDecoration
+                                                    .bodyText5
+                                                    .copyWith(fontSize: 16.sp),
+                                              ),
+                                            ),
+                                            Divider(
+                                              indent: 20.w,
+                                              endIndent: 20.w,
+                                              color: AppColors.primaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     SizedBox(height: 10.h),
                                   ],
                                 ),
@@ -440,7 +474,8 @@ class ProductBottom extends StatelessWidget {
                                             height: 5.h,
                                           ),
                                           Text(
-                                              "Cash in Advance (CID), Cash Advance (CA)",
+                                              productController
+                                                  .selectedProduct.paymentTerms,
                                               style: AppTextDecoration.bodyText5
                                                   .copyWith(fontSize: 16.sp)),
                                           Divider(
@@ -460,7 +495,8 @@ class ProductBottom extends StatelessWidget {
                                           SizedBox(
                                             height: 5.h,
                                           ),
-                                          Text("20,000 Piece Per Day",
+                                          Text(
+                                              "${productController.selectedProduct.supplyAbility} Piece Per Day",
                                               style: AppTextDecoration.bodyText5
                                                   .copyWith(fontSize: 16.sp)
                                                   .copyWith(fontSize: 16.sp)),
@@ -481,7 +517,10 @@ class ProductBottom extends StatelessWidget {
                                           SizedBox(
                                             height: 5.h,
                                           ),
-                                          Text("All India",
+                                          Text(
+                                              productController.selectedProduct
+                                                      .mainDomesticMarket ??
+                                                  "",
                                               style: AppTextDecoration.bodyText5
                                                   .copyWith(fontSize: 16.sp))
                                         ],
@@ -513,9 +552,12 @@ class ProductBottom extends StatelessWidget {
                           height: 80.h,
                           child: Center(
                               child: TextField(
-                            controller: productController.quantityController,
+                            controller: Get.find<ProductController>()
+                                .quantityController,
                             onSubmitted: (value) {
-                              productController.productQuantity.value = value;
+                              Get.find<ProductController>()
+                                  .productQuantity
+                                  .value = value.toString();
                             },
                             decoration: InputDecoration(
                                 labelText: "Quantity",

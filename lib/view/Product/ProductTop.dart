@@ -3,19 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
-import 'package:nrlifecare/constants/colors.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
+import 'package:nrlifecare/controller/ProductController/productController.dart';
 
 class ProductTop extends StatelessWidget {
-  var product;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-        init: HomeController(),
-        initState: (state) {
-          product = Get.arguments;
-        },
-        builder: (homeController) {
+    return GetBuilder<ProductController>(
+        init: ProductController(),
+        builder: (productController) {
           return Column(
             children: [
               Row(
@@ -31,36 +27,45 @@ class ProductTop extends StatelessWidget {
                         }),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: InkWell(
-                      onTap: () {
-                        //TODO Add to cart
-                      },
-                      child: product["productModel"].isAdded == false
-                          ? SvgPicture.asset(
-                              "assets/icons/shopping-basket.svg",
-                              color: Colors.white,
-                              width: 25.w,
-                              height: 25.h,
-                            )
-                          : Row(
-                              children: [
-                                Icon(
-                                  Icons.check,
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: Obx(
+                        () => InkWell(
+                          onTap: () {
+                            Get.find<HomeController>().addProductToCart(
+                                Get.find<HomeController>()
+                                    .topProducts
+                                    .value[productController.selectedIndex],
+                                productController.selectedIndex);
+                          },
+                          child: Get
+                                      .arguments["productList"]
+                                          [productController.selectedIndex]
+                                      .isAdded ==
+                                  false
+                              ? SvgPicture.asset(
+                                  "assets/icons/shopping-basket.svg",
                                   color: Colors.white,
-                                  size: 20.h,
+                                  width: 25.w,
+                                  height: 25.h,
+                                )
+                              : Row(
+                                  children: [
+                                    Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 20.h,
+                                    ),
+                                    Text("Added",
+                                        style: AppTextDecoration.subtitle2
+                                            .copyWith(color: Colors.white)),
+                                  ],
                                 ),
-                                Text("Added",
-                                    style: AppTextDecoration.subtitle2
-                                        .copyWith(color: Colors.white)),
-                              ],
-                            ),
-                    ),
-                  )
+                        ),
+                      )),
                 ],
               ),
               Image.asset(
-                "${product["productModel"].productImage}",
+                productController.selectedProduct.productImage,
                 width: 300.w,
                 height: 300.h,
                 fit: BoxFit.contain,

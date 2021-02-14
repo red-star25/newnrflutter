@@ -11,7 +11,7 @@ class Product extends StatefulWidget {
 }
 
 class _ProductState extends State<Product> {
-  final productController = Get.put(ProductController());
+  final productController = Get.find<ProductController>();
 
   @override
   Widget build(BuildContext context) {

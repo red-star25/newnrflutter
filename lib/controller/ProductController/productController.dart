@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class ProductController extends GetxController {
-  int productQuantity = 100;
+  RxString productQuantity = "100".obs;
+
+  ProductModel selectedProduct;
+  int selectedIndex;
 
   ScrollController scrollController;
   TextEditingController quantityController;

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:nrlifecare/controller/HomeController/homeController.dart';
 
 class Categories extends StatelessWidget {
   @override
@@ -25,15 +27,21 @@ class Categories extends StatelessWidget {
                   ),
                 ).tr(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: FittedBox(
-                    child: Text(
-                      "home_see_all",
-                      style: AppTextDecoration.bodyText1,
-                    ).tr(),
+              InkWell(
+                onTap: () {
+                  Get.find<HomeController>().selectedFabIcon.value = 2;
+                  Get.toNamed("/category");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: FittedBox(
+                      child: Text(
+                        "home_see_all",
+                        style: AppTextDecoration.bodyText1,
+                      ).tr(),
+                    ),
                   ),
                 ),
               ),

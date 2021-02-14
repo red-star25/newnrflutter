@@ -4,125 +4,211 @@ import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class CategoryController extends GetxController {
-  List<Map> categoryList;
-  List<ProductModel> productList;
-  List<ProductModel> searchList;
+  final categoryList = RxList<Map>([
+    {"name": "Antibiotics", "isSelected": true},
+    {"name": "Cough & Cold", "isSelected": false},
+    {"name": "Analgesic", "isSelected": false},
+    {"name": "Nutritional & Nutraceuticals", "isSelected": false},
+    {"name": "Gastrointestinal", "isSelected": false},
+    {"name": "Antimenetic", "isSelected": false},
+    {"name": "Pesticides", "isSelected": false},
+  ].obs);
 
-  bool isSearchVisible = false;
+  final searchedProducts = RxList<ProductModel>().obs;
+  final productList = RxList<ProductModel>([
+    ProductModel.fromJson({
+      "id": 111,
+      "productImage": "assets/images/test_product.png",
+      "productName": "NRCOF-TR",
+      "productSize": "60ml",
+      "productPrice": 45.00,
+      "productQuantity": 1,
+      "isAdded": false,
+      "productType": "Syrup",
+      "minimumOrder": 30,
+      "drugType": "General Medicine",
+      "recommendedFor": "Cough",
+      "storageInstruction": "Dry Place",
+      "physicalForm": "Liquid",
+      "suitableFor": "Adults, Women",
+      "uses": [
+        "This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
+        "This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
+      ],
+      "howToUse": [
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor."
+      ],
+      "paymentTerms": "Cash in Advance (CID), Cash Advance (CA)",
+      "supply_ability": 20000,
+      "main_domestic_market": "All India"
+    }),
+    ProductModel.fromJson({
+      "id": 222,
+      "productImage": "assets/images/test_product.png",
+      "productName": "NRMet",
+      "productSize": "60ml",
+      "productPrice": 45.00,
+      "productQuantity": 2,
+      "isAdded": false,
+      "productType": "Syrup",
+      "minimumOrder": 30,
+      "drugType": "General Medicine",
+      "recommendedFor": "Cough",
+      "storageInstruction": "Dry Place",
+      "physicalForm": "Liquid",
+      "suitableFor": "Adults, Women",
+      "uses": [
+        "This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
+        "This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
+      ],
+      "howToUse": [
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor."
+      ],
+      "paymentTerms": "Cash in Advance (CID), Cash Advance (CA)",
+      "supplyAbility": 20000,
+      "mainDomesticMarket": "All India"
+    }),
+    ProductModel.fromJson({
+      "id": 333,
+      "productImage": "assets/images/test_product.png",
+      "productName": "NRPro",
+      "productSize": "60ml",
+      "productPrice": 45.00,
+      "productQuantity": 2,
+      "isAdded": false,
+      "productType": "Syrup",
+      "minimumOrder": 30,
+      "drugType": "General Medicine",
+      "recommendedFor": "Cough",
+      "storageInstruction": "Dry Place",
+      "physicalForm": "Liquid",
+      "suitableFor": "Adults, Women",
+      "uses": [
+        "This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
+        "This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
+      ],
+      "howToUse": [
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor."
+      ],
+      "paymentTerms": "Cash in Advance (CID), Cash Advance (CA)",
+      "supplyAbility": 20000,
+      "mainDomesticMarket": "All India"
+    }),
+    ProductModel.fromJson({
+      "id": 444,
+      "productImage": "assets/images/test_product.png",
+      "productName": "NRAnti",
+      "productSize": "60ml",
+      "productPrice": 45.00,
+      "productQuantity": 2,
+      "isAdded": false,
+      "productType": "Syrup",
+      "minimumOrder": 30,
+      "drugType": "General Medicine",
+      "recommendedFor": "Cough",
+      "storageInstruction": "Dry Place",
+      "physicalForm": "Liquid",
+      "suitableFor": "Adults, Women",
+      "uses": [
+        "This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
+        "This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
+      ],
+      "howToUse": [
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor."
+      ],
+      "paymentTerms": "Cash in Advance (CID), Cash Advance (CA)",
+      "supplyAbility": 20000,
+      "mainDomesticMarket": "All India"
+    }),
+    ProductModel.fromJson({
+      "id": 555,
+      "productImage": "assets/images/test_product.png",
+      "productName": "NRSyrup",
+      "productSize": "60ml",
+      "productPrice": 45.00,
+      "productQuantity": 2,
+      "isAdded": false,
+      "productType": "Syrup",
+      "minimumOrder": 30,
+      "drugType": "General Medicine",
+      "recommendedFor": "Cough",
+      "storageInstruction": "Dry Place",
+      "physicalForm": "Liquid",
+      "suitableFor": "Adults, Women",
+      "uses": [
+        "This medication is used to treat a wide variety of bacterial infections. This medication is known as a cephalosporin antibiotic. It works by stopping the growth of bacteria.",
+        "This antibiotic treats only bacterial infections. It will not work for viral infections (e.g., common cold, flu). Unnecessary use or misuse of any antibiotic can lead to its decreased effectiveness.",
+      ],
+      "howToUse": [
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor.",
+        "Take this medication by mouth, usually every 12 hours or as directed by your doctor."
+      ],
+      "paymentTerms": "Cash in Advance (CID), Cash Advance (CA)",
+      "supplyAbility": 20000,
+      "mainDomesticMarket": "All India"
+    }),
+  ]).obs;
 
-  CartController cartController;
-  @override
-  void onInit() {
-    cartController = Get.put(CartController());
-    searchList = [];
-    productList = [
-      ProductModel.fromJson({
-        "id": 111,
-        "product_image": "assets/images/test_product.png",
-        "product_name": "NRCOF-TR",
-        "product_size": "60ml",
-        "product_price": 45.00,
-        "product_quantity": 1,
-        "is_added": false
-      }),
-      ProductModel.fromJson({
-        "id": 222,
-        "product_image": "assets/images/test_product.png",
-        "product_name": "NRMet",
-        "product_size": "60ml",
-        "product_price": 45.00,
-        "product_quantity": 2,
-        "is_added": false
-      }),
-      ProductModel.fromJson({
-        "id": 333,
-        "product_image": "assets/images/test_product.png",
-        "product_name": "NRPro",
-        "product_size": "60ml",
-        "product_price": 45.00,
-        "product_quantity": 3,
-        "is_added": false
-      }),
-      ProductModel.fromJson({
-        "id": 444,
-        "product_image": "assets/images/test_product.png",
-        "product_name": "NRAnti",
-        "product_size": "60ml",
-        "product_price": 45.00,
-        "product_quantity": 4,
-        "is_added": false
-      }),
-      ProductModel.fromJson({
-        "id": 555,
-        "product_image": "assets/images/test_product.png",
-        "product_name": "NRSyrup",
-        "product_size": "60ml",
-        "product_price": 45.00,
-        "product_quantity": 5,
-        "is_added": false
-      }),
-    ];
-    categoryList = [
-      {"name": "Antibiotics", "isSelected": true},
-      {"name": "Cough & Cold", "isSelected": false},
-      {"name": "Analgesic", "isSelected": false},
-      {"name": "Nutritional & Nutraceuticals", "isSelected": false},
-      {"name": "Gastrointestinal", "isSelected": false},
-      {"name": "Antimenetic", "isSelected": false},
-      {"name": "Pesticides", "isSelected": false},
-    ];
-    super.onInit();
-  }
+  RxBool isSearchVisible = false.obs;
 
   void updateIsSearchVisible({bool value}) {
-    isSearchVisible = value;
+    isSearchVisible = RxBool(value);
     update();
+  }
+
+  void addSearchedProducts(String term) {
+    searchedProducts.value.clear();
+    productList.value.forEach((product) {
+      if (product.productName.toLowerCase() == term.toLowerCase()) {
+        searchedProducts.value.add(product);
+        debugPrint(searchedProducts.toString());
+      }
+    });
   }
 
   void setSelectedCategory(int index) {
     for (int i = 0; i < categoryList.length; i++) {
       if (i == index) {
         categoryList[i]["isSelected"] = true;
-        update();
       } else {
         categoryList[i]["isSelected"] = false;
-        update();
       }
     }
   }
 
   void updateProductQuantity({int quantity, int index}) {
-    productList[index].productQuantity = quantity;
-    update();
-  }
-
-  void addProductToCartToggle({int index}) {
-    if (productList[index].isAdded == false) {
-      productList[index].isAdded = true;
-      cartController.cartItems.add(productList[index]);
-      update();
-
-      print("Added: ");
-      print(cartController.cartItems);
-      print("\n");
-    } else {
-      productList[index].isAdded = false;
-
-      cartController.cartItems
-          .removeWhere((product) => product.id == productList[index].id);
-      update();
-
-      print("Removed");
-      print(cartController.cartItems);
-      print("\n");
-    }
-  }
-
-  getSearchResults(String query) {
-    productList.forEach((product) {
-      if (product.productName.contains(query)) searchList.add(product);
+    productList.update((product) {
+      product[index].productQuantity = quantity;
     });
-    update();
+  }
+
+  void addProductToCartToggle({int id}) {
+    productList.update((product) {
+      final filteredProduct =
+          product.singleWhere((element) => element.id == id);
+      if (filteredProduct.isAdded == false) {
+        filteredProduct.isAdded = true;
+        Get.find<CartController>().cartItems.add(filteredProduct);
+
+        print("Added: ");
+        print(Get.find<CartController>().cartItems);
+        print("\n");
+      } else {
+        filteredProduct.isAdded = false;
+
+        Get.find<CartController>()
+            .cartItems
+            .removeWhere((cartProduct) => cartProduct.id == filteredProduct.id);
+
+        print("Removed");
+        print(Get.find<CartController>().cartItems);
+        print("\n");
+      }
+    });
   }
 
   // getSearchResults(String searchQuery) {

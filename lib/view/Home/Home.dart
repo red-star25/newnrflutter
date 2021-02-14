@@ -9,14 +9,13 @@ import 'package:nrlifecare/wigdets/HomeWidgets/FloatingButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Home extends StatelessWidget {
-  final hometController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingButton(),
         body: NestedScrollView(
-          controller: hometController.scrollController,
+          controller: Get.find<HomeController>().scrollController,
           headerSliverBuilder: (context, innerBoxIsScroller) => [
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
