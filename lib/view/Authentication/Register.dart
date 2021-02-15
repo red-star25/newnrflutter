@@ -144,10 +144,11 @@ class Register extends StatelessWidget {
                           height: 0.05.sh,
                         ),
                         AuthButton(
-                          btnText: "signup_text",
-                          verify: () =>
-                              authController.navigateToHome(_signUpFormKey),
-                        ),
+                            btnText: "signup_text",
+                            verify: () async {
+                              await authController.registerUser(_signUpFormKey);
+                              // authController.navigateToHome();
+                            }),
                         SizedBox(height: 15.h),
                         InkWell(
                           onTap: () {

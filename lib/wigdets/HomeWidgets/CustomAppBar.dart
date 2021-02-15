@@ -58,17 +58,19 @@ class CustomAppBar extends StatelessWidget {
             ],
           ),
           Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                  onPressed: () {
-                    Get.offAllNamed("/login");
-                    // TODO SignOut From App
-                  },
-                  icon: Icon(
-                    Icons.exit_to_app_rounded,
-                    color: AppColors.primaryColor,
-                    size: 30.h,
-                  )))
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              onPressed: () {
+                Get.offAllNamed("/login");
+                // TODO SignOut From App
+              },
+              icon: Icon(
+                Icons.exit_to_app_rounded,
+                color: AppColors.primaryColor,
+                size: 30.h,
+              ),
+            ),
+          )
         ],
       ),
     );

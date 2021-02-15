@@ -17,12 +17,13 @@ class CartItems extends StatelessWidget {
         init: CartController(),
         builder: (cartController) => SizedBox(
           width: 1.sw,
-          child: cartController.cartItems.isNotEmpty
+          child: cartController.cartItems.value.isNotEmpty
               ? ListView.builder(
-                  itemCount: cartController.cartItems.length,
+                  itemCount: cartController.cartItems.value.length,
                   itemBuilder: (context, index) {
                     return Slidable(
-                      key: Key(cartController.cartItems[index].id.toString()),
+                      key: Key(
+                          cartController.cartItems.value[index].id.toString()),
                       dismissal: SlidableDismissal(
                         child: SlidableDrawerDismissal(),
                         onDismissed: (_) {},
@@ -71,38 +72,39 @@ class CartItems extends StatelessWidget {
                             padding: EdgeInsets.only(left: 20.w),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  cartController.cartItems[index].productImage
-                                      .toString(),
-                                  height: 100.h,
-                                  width: 100.h,
-                                  fit: BoxFit.contain,
-                                ),
+                                Obx(() => Image.asset(
+                                      cartController
+                                          .cartItems.value[index].productImage
+                                          .toString(),
+                                      height: 100.h,
+                                      width: 100.h,
+                                      fit: BoxFit.contain,
+                                    )),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      cartController
-                                          .cartItems[index].productName
-                                          .toString(),
-                                      style: AppTextDecoration.heading2,
-                                    ),
+                                    Obx(() => Text(
+                                          cartController.cartItems.value[index]
+                                              .productName
+                                              .toString(),
+                                          style: AppTextDecoration.heading2,
+                                        )),
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    Text(
-                                      cartController
-                                          .cartItems[index].productSize
-                                          .toString(),
-                                      style: AppTextDecoration.bodyText5,
-                                    ),
+                                    Obx(() => Text(
+                                          cartController.cartItems.value[index]
+                                              .productSize
+                                              .toString(),
+                                          style: AppTextDecoration.bodyText5,
+                                        )),
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    Text(
-                                      "₹ ${cartController.cartItems[index].productPrice.toString()} /-",
-                                      style: AppTextDecoration.bodyText4,
-                                    )
+                                    Obx(() => Text(
+                                          "₹ ${cartController.cartItems.value[index].productPrice.toString()} /-",
+                                          style: AppTextDecoration.bodyText4,
+                                        ))
                                   ],
                                 ),
                               ],
@@ -137,17 +139,17 @@ class CartItems extends StatelessWidget {
                                                   const BorderRadius.all(
                                                       Radius.circular(5))),
                                           child: Center(
-                                            child: Text(
-                                              cartController.cartItems[index]
-                                                  .productQuantity
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16.sp,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
+                                            child: Obx(() => Text(
+                                                  cartController.cartItems
+                                                      .value[index].minimumOrder
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16.sp,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                )),
                                           ),
                                         ),
                                         IconButton(

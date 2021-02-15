@@ -3,41 +3,34 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class CartController extends GetxController {
-  List<ProductModel> cartItems;
+  final cartItems = RxList<ProductModel>().obs;
   double totalCartPrice = 0.0;
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    cartItems = [];
-    super.onInit();
-  }
-
   void deleteCartProduct(int index) {
-    cartItems[index].isAdded = false;
-    cartItems.removeAt(index);
+    cartItems.value[index].isAdded = false;
+    cartItems.value.removeAt(index);
     update();
   }
 
   void updateProductQuantity(int index, String type, {int newQuantity}) {
     switch (type) {
       case "INCREMENT":
-        cartItems[index].productQuantity++;
+        cartItems.value[index].minimumOrder++;
         update();
         break;
 
       case "DECREMENT":
-        if (int.parse(cartItems[index].productQuantity.toString()) > 1) {
-          cartItems[index].productQuantity--;
+        if (int.parse(cartItems.value[index].minimumOrder.toString()) > 1) {
+          cartItems.value[index].minimumOrder--;
           update();
         } else {
-          cartItems[index].productQuantity = 1;
+          cartItems.value[index].minimumOrder = 1;
           update();
         }
         break;
 
       case "NEWQUANTITY":
-        cartItems[index].productQuantity = newQuantity;
+        cartItems.value[index].minimumOrder = newQuantity;
         update();
         break;
       default:
@@ -46,9 +39,9 @@ class CartController extends GetxController {
 
   double totalCartProductPrice() {
     totalCartPrice = 0.0;
-    for (ProductModel product in cartItems) {
+    for (ProductModel product in cartItems.value) {
       totalCartPrice = totalCartPrice +
-          (double.parse(product.productQuantity.toString()) *
+          (double.parse(product.minimumOrder.toString()) *
               double.parse(product.productPrice.toString()));
     }
     return totalCartPrice;

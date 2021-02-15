@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "985496377434",
+    "project_id": "nrlifecare-db",
+    "storage_bucket": "nrlifecare-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985496377434:android:2d80ad14d4760da2fa6063",
+        "android_client_info": {
+          "package_name": "com.dhruvnakum.nrlifecare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985496377434-0s4i986gl83imb6agv5ja6ndncupes0q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dhruvnakum.nrlifecare",
+            "certificate_hash": "ba8dfab2100347aacd8b8383c0f4c6567944e481"
+          }
+        },
+        {
+          "client_id": "985496377434-2qemnqs4euii4qf42m8u6ke5vidcrvj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA4lKFmCwpFkqL2G_vjh5U5qCbraVakjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985496377434-2qemnqs4euii4qf42m8u6ke5vidcrvj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

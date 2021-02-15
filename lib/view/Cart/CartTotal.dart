@@ -12,7 +12,7 @@ class CartTotal extends StatefulWidget {
 }
 
 class _CartTotalState extends State<CartTotal> {
-  final cartController = Get.put(CartController());
+  final cartController = Get.find<CartController>();
 
   @override
   void initState() {

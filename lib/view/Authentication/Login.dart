@@ -131,8 +131,7 @@ class Login extends StatelessWidget {
                             ),
                             child: AuthButton(
                               btnText: "signin_text",
-                              verify: () =>
-                                  authController.navigateToHome(_signInFormKey),
+                              verify: () => authController.navigateToHome(),
                             ),
                           ),
                           SizedBox(height: 15.h),

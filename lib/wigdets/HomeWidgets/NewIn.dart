@@ -9,9 +9,9 @@ import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/controller/ProductController/productController.dart';
 
 class NewIn extends StatelessWidget {
-  final homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
     return Card(
       elevation: 10,
       shape: const RoundedRectangleBorder(
@@ -50,118 +50,139 @@ class NewIn extends StatelessWidget {
               height: 10.h,
             ),
             Flexible(
-              child: Obx(
-                () => SizedBox(
-                  height: 1.sh,
-                  child: ListView.builder(
-                    // scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.0.w, horizontal: 20.w),
-                        child: InkWell(
-                          onTap: () {
-                            Get.find<ProductController>().selectedProduct =
-                                homeController.newInProducts.value[index];
+              child: SizedBox(
+                height: 1.sh,
+                child: ListView.builder(
+                  // scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.0.w, horizontal: 20.w),
+                      child: InkWell(
+                        onTap: () {
+                          Get.find<ProductController>().selectedProduct.value =
+                              homeController.newInProducts.value[index];
 
-                            Get.find<ProductController>().selectedIndex = index;
+                          Get.find<ProductController>().selectedIndex.value =
+                              index;
 
-                            Get.toNamed("/product", arguments: {
+                          Get.toNamed(
+                            "/product",
+                            arguments: {
                               "productList": homeController.newInProducts.value
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 100.h,
-                                    width: 100.w,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color:
-                                          AppColors.listColor["l${index + 1}"],
-                                    ),
-                                    child: Obx(() => Image.asset(
-                                          homeController.newInProducts
-                                              .value[index].productImage,
-                                          height: 160.h,
-                                          fit: BoxFit.contain,
-                                        )),
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 100.h,
+                                  width: 100.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: AppColors.listColor["l${index + 1}"],
                                   ),
-                                  SizedBox(
-                                    width: 10.h,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        FittedBox(
-                                          child: Obx(() => Text(
-                                              homeController.newInProducts
-                                                  .value[index].productName,
-                                              style:
-                                                  AppTextDecoration.bodyText4)),
-                                        ),
-                                        SizedBox(
-                                          height: 5.h,
-                                        ),
-                                        FittedBox(
-                                          child: Obx(() => Text(
-                                                "₹${homeController.newInProducts.value[index].productPrice}/-",
-                                                style: AppTextDecoration
-                                                    .bodyText1
-                                                    .copyWith(fontSize: 14.sp),
-                                              )),
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                      ],
+                                  child: Obx(
+                                    () => Image.asset(
+                                      homeController.newInProducts.value[index]
+                                          .productImage,
+                                      height: 160.h,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Obx(() => InkWell(
-                                    onTap: () {
-                                      homeController.addNewInProductToCart(
-                                          Get.find<HomeController>()
-                                              .newInProducts
-                                              .value[index],
-                                          index);
-                                    },
-                                    child: !homeController
-                                            .newInProducts.value[index].isAdded
-                                        ? SvgPicture.asset(
-                                            "assets/icons/shopping-basket.svg",
-                                            color: AppColors.primaryColor,
-                                            width: 25.w,
-                                            height: 25.h,
-                                          )
-                                        : Row(
-                                            children: [
-                                              Icon(
-                                                Icons.check,
-                                                color: AppColors.secondaryColor,
-                                                size: 20.h,
-                                              ),
-                                              Text("Added",
-                                                  style: AppTextDecoration
-                                                      .subtitle2),
-                                            ],
+                                ),
+                                SizedBox(
+                                  width: 10.h,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      FittedBox(
+                                        child: Obx(() => Text(
+                                            homeController.newInProducts
+                                                .value[index].productName,
+                                            style:
+                                                AppTextDecoration.bodyText4)),
+                                      ),
+                                      SizedBox(
+                                        height: 5.h,
+                                      ),
+                                      FittedBox(
+                                        child: Obx(
+                                          () => Text(
+                                            "${homeController.newInProducts.value[index].productSize}",
+                                            style: AppTextDecoration.bodyText1
+                                                .copyWith(fontSize: 14.sp),
                                           ),
-                                  )),
-                            ],
-                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 20.0.w),
+                                  child: FittedBox(
+                                    child: Obx(
+                                      () => Text(
+                                        "₹${homeController.newInProducts.value[index].productPrice}/-",
+                                        style: AppTextDecoration.bodyText2
+                                            .copyWith(fontSize: 14.sp),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Obx(() => InkWell(
+                                      onTap: () {
+                                        homeController.addNewInProductToCart(
+                                            id: Get.find<HomeController>()
+                                                .newInProducts
+                                                .value[index]
+                                                .id);
+                                      },
+                                      child: !homeController.newInProducts
+                                              .value[index].isAdded
+                                          ? SvgPicture.asset(
+                                              "assets/icons/shopping-basket.svg",
+                                              color: AppColors.primaryColor,
+                                              width: 25.w,
+                                              height: 25.h,
+                                            )
+                                          : Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.check,
+                                                  color:
+                                                      AppColors.secondaryColor,
+                                                  size: 20.h,
+                                                ),
+                                                Text("Added",
+                                                    style: AppTextDecoration
+                                                        .subtitle2),
+                                              ],
+                                            ),
+                                    )),
+                              ],
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    itemCount: homeController.newInProducts.value.length,
-                  ),
+                      ),
+                    );
+                  },
+                  itemCount: homeController.newInProducts.value.length,
                 ),
               ),
             ),

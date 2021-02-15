@@ -9,9 +9,9 @@ import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/controller/ProductController/productController.dart';
 
 class TopProducts extends StatelessWidget {
-  final homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
     return SizedBox(
       width: 1.sw,
       child: Column(
@@ -46,14 +46,17 @@ class TopProducts extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Get.find<ProductController>().selectedProduct =
+                      Get.find<ProductController>().selectedProduct.value =
                           homeController.topProducts.value[index];
 
-                      Get.find<ProductController>().selectedIndex = index;
+                      Get.find<ProductController>().selectedIndex.value = index;
 
-                      Get.toNamed("/product", arguments: {
-                        "productList": homeController.topProducts.value
-                      });
+                      Get.toNamed(
+                        "/product",
+                        arguments: {
+                          "productList": homeController.topProducts.value
+                        },
+                      );
                     },
                     child: Container(
                       width: 170.w,
@@ -67,21 +70,25 @@ class TopProducts extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Obx(() => FittedBox(
-                                      child: Text(
-                                          homeController.topProducts
-                                              .value[index].productName,
-                                          style: AppTextDecoration.bodyText4),
-                                    )),
+                                Obx(
+                                  () => FittedBox(
+                                    child: Text(
+                                        homeController.topProducts.value[index]
+                                            .productName,
+                                        style: AppTextDecoration.bodyText4),
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 5.h,
                                 ),
                                 FittedBox(
-                                  child: Obx(() => Text(
-                                        homeController.topProducts.value[index]
-                                            .productType,
-                                        style: AppTextDecoration.subtitle1,
-                                      )),
+                                  child: Obx(
+                                    () => Text(
+                                      homeController
+                                          .topProducts.value[index].productType,
+                                      style: AppTextDecoration.subtitle1,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -91,22 +98,26 @@ class TopProducts extends StatelessWidget {
                             Align(
                               alignment: Alignment.topLeft,
                               child: FittedBox(
-                                child: Obx(() => Text(
-                                      homeController
-                                          .topProducts.value[index].productSize,
-                                      style: AppTextDecoration.bodyText1,
-                                    )),
+                                child: Obx(
+                                  () => Text(
+                                    homeController
+                                        .topProducts.value[index].productSize,
+                                    style: AppTextDecoration.bodyText1,
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(
                               height: 10.h,
                             ),
-                            Obx(() => Image.asset(
-                                  homeController
-                                      .topProducts.value[index].productImage,
-                                  height: 160.h,
-                                  fit: BoxFit.contain,
-                                )),
+                            Obx(
+                              () => Image.asset(
+                                homeController
+                                    .topProducts.value[index].productImage,
+                                height: 160.h,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                             SizedBox(
                               height: 15.h,
                             ),
@@ -125,11 +136,11 @@ class TopProducts extends StatelessWidget {
                                   ),
                                   Obx(() => InkWell(
                                         onTap: () {
-                                          homeController.addProductToCart(
-                                              Get.find<HomeController>()
+                                          homeController.addProductToCartToggle(
+                                              id: Get.find<HomeController>()
                                                   .topProducts
-                                                  .value[index],
-                                              index);
+                                                  .value[index]
+                                                  .id);
                                         },
                                         child: !homeController.topProducts
                                                 .value[index].isAdded

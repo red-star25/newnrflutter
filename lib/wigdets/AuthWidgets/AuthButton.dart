@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AuthButton extends StatelessWidget {
   final String btnText;
   final void Function() verify;
-  AuthButton({@required this.btnText, @required this.verify});
+  const AuthButton({@required this.btnText, @required this.verify});
   @override
   Widget build(BuildContext context) {
     return Container(

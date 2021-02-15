@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 
 class Categories extends StatelessWidget {
+  final categoryController = Get.find<CategoryController>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -66,9 +68,10 @@ class Categories extends StatelessWidget {
                           height: 100.h,
                           child: Padding(
                             padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(
-                              "assets/images/test_product.png",
-                            ),
+                            child: Obx(() => Image.asset(
+                                  categoryController
+                                      .categoryList.value[index].categoryImage,
+                                )),
                           ),
                         ),
                       ),
@@ -76,14 +79,15 @@ class Categories extends StatelessWidget {
                         height: 2.h,
                       ),
                       FittedBox(
-                        child: Text(
-                          "Test",
-                          style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.7),
-                        ),
+                        child: Obx(() => Text(
+                              categoryController
+                                  .categoryList.value[index].categoryName,
+                              style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.7),
+                            )),
                       )
                     ],
                   );
@@ -91,7 +95,7 @@ class Categories extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(
                       width: 10.w,
                     ),
-                itemCount: 5),
+                itemCount: categoryController.categoryList.value.length),
           ),
         ],
       ),

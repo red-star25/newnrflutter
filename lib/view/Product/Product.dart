@@ -11,10 +11,9 @@ class Product extends StatefulWidget {
 }
 
 class _ProductState extends State<Product> {
-  final productController = Get.find<ProductController>();
-
   @override
   Widget build(BuildContext context) {
+    final productController = Get.find<ProductController>();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.lightBlue,

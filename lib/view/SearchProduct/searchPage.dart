@@ -82,7 +82,6 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: FloatingSearchBar(
         backdropColor: Colors.white,
-        elevation: 0,
         automaticallyImplyBackButton: false,
         leadingActions: [
           IconButton(

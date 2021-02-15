@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nrlifecare/wigdets/GlobalWidgets/globalHeader.dart';
 import 'package:nrlifecare/wigdets/HomeWidgets/FloatingButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../Category/LeftBody.dart';
-import '../Category/RightBody.dart';
+import 'CategoryLeft.dart';
+import 'CategoryRight.dart';
 
 class NrCategory extends StatelessWidget {
   @override

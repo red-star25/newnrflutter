@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil_init.dart';
 import 'package:get/get.dart';
+import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 import 'package:nrlifecare/bindings/CartBindings/cartBindings.dart';
 import 'package:nrlifecare/bindings/CategoryBindings/categoryBindings.dart';
 import 'package:nrlifecare/bindings/ProductBindings/productBindings.dart';
@@ -10,18 +12,22 @@ import 'package:nrlifecare/view/PageNotFound/pagenotfound.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
 import 'package:nrlifecare/bindings/HomeBindings/homeBindings.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  AuthBindings().dependencies();
   HomeBindings().dependencies();
   CartBindings().dependencies();
   CategoryBindings().dependencies();
   ProductBindings().dependencies();
-
-  runApp(EasyLocalization(
-    child: MainApp(),
-    supportedLocales: const [Locale("en")],
-    path: "assets/translations",
-    fallbackLocale: const Locale("en"),
-  ));
+  runApp(
+    EasyLocalization(
+      child: MainApp(),
+      supportedLocales: const [Locale("en")],
+      path: "assets/translations",
+      fallbackLocale: const Locale("en"),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -38,9 +44,18 @@ class MainApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: Splash(),
-        ),
+        home: Scaffold(body: Splash()
+            // FutureBuilder(
+            //     future: Firebase.initializeApp(),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.connectionState == ConnectionState.done) {
+            //         return Splash();
+            //       }
+            //       return Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     }),
+            ),
       ),
     );
   }

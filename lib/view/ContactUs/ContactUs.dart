@@ -65,6 +65,7 @@ class ContactUs extends StatelessWidget {
                 height: 0.53.sh,
                 width: 1.sw,
                 child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return index.isOdd
                           ? Padding(

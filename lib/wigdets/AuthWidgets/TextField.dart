@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool isObsecure;
   final Widget prefix;
-  CustomTextField({
+  const CustomTextField({
     @required this.validateField,
     @required this.controller,
     this.hintText,

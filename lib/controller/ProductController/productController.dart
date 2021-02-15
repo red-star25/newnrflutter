@@ -5,8 +5,8 @@ import 'package:nrlifecare/model/ProductModel/productModel.dart';
 class ProductController extends GetxController {
   RxString productQuantity = "100".obs;
 
-  ProductModel selectedProduct;
-  int selectedIndex;
+  final selectedProduct = ProductModel().obs;
+  RxInt selectedIndex = 0.obs;
 
   ScrollController scrollController;
   TextEditingController quantityController;

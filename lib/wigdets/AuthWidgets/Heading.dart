@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Heading extends StatelessWidget {
   final String headingText;
-  Heading({@required this.headingText});
+  const Heading({@required this.headingText});
   @override
   Widget build(BuildContext context) {
     return Column(

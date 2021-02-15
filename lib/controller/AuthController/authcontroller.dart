@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
+import '../../view/Authentication/verifyLoading.dart';
 
 class AuthController extends GetxController {
   static final _emailController = TextEditingController();
@@ -11,6 +16,40 @@ class AuthController extends GetxController {
   TextEditingController get password => _passwordController;
   TextEditingController get confirmpassword => _confirmpasswordController;
   TextEditingController get phonenumber => _phoneNumberController;
+
+  Future registerUser(GlobalKey<FormState> key) async {
+    if (key.currentState.validate()) {
+      try {
+        final userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text)
+            .then((value) {
+          Get.to(VerifyLoading());
+        });
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          CustomWidgets.customSnackBar2();
+        }
+      } catch (e) {
+        print(e);
+      } finally {}
+    }
+  }
+
+  Future loginUser() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
 
   String emailValidate(String email) {
     if (email.isEmpty) {
@@ -59,10 +98,8 @@ class AuthController extends GetxController {
     return null;
   }
 
-  void navigateToHome(GlobalKey<FormState> key) async {
-    if (key.currentState.validate()) {
-      Get.offNamed("/home");
-    } else {}
+  void navigateToHome() {
+    Get.offNamed("/home");
   }
 
   void clearTextField() {
