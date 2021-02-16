@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
@@ -55,47 +56,67 @@ class Categories extends StatelessWidget {
           SizedBox(
             height: 0.16.sh,
             width: 1.sw,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          color: AppColors.listColor["l${8 - (index + 1)}"],
-                          width: 105.w,
-                          height: 100.h,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Obx(() => Image.asset(
-                                  categoryController
-                                      .categoryList.value[index].categoryImage,
-                                )),
+            child: AnimationLimiter(
+              child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 800),
+                      child: SlideAnimation(
+                        horizontalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: InkWell(
+                            onTap: () {
+                              categoryController.setSelectedCategory(index);
+                              Get.find<HomeController>().selectedFabIcon.value =
+                                  2;
+                              Get.toNamed("/category");
+                            },
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    color: AppColors
+                                        .listColor["l${8 - (index + 1)}"],
+                                    width: 105.w,
+                                    height: 100.h,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Obx(() => Image.asset(
+                                            categoryController.categoryList
+                                                .value[index].categoryImage,
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                FittedBox(
+                                  child: Obx(() => Text(
+                                        categoryController.categoryList
+                                            .value[index].categoryName,
+                                        style: TextStyle(
+                                            color: AppColors.primaryColor,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 0.7),
+                                      )),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 2.h,
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                        width: 10.w,
                       ),
-                      FittedBox(
-                        child: Obx(() => Text(
-                              categoryController
-                                  .categoryList.value[index].categoryName,
-                              style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.7),
-                            )),
-                      )
-                    ],
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                      width: 10.w,
-                    ),
-                itemCount: categoryController.categoryList.value.length),
+                  itemCount: categoryController.categoryList.value.length),
+            ),
           ),
         ],
       ),

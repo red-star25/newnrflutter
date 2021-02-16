@@ -5,12 +5,14 @@ import '../../constants/app_text_decoration.dart';
 
 class CustomTextField extends StatelessWidget {
   final String Function(String) validateField;
+  final String Function(String) onFieldSubmit;
   final TextEditingController controller;
   final String hintText;
   final bool isObsecure;
   final Widget prefix;
   const CustomTextField({
     @required this.validateField,
+    this.onFieldSubmit,
     @required this.controller,
     this.hintText,
     this.isObsecure = false,
@@ -30,12 +32,15 @@ class CustomTextField extends StatelessWidget {
             return validateField(value);
           },
           controller: controller,
+          onFieldSubmitted: (value) {
+            return onFieldSubmit(value);
+          },
           obscureText: isObsecure,
           decoration: InputDecoration(
             prefix: prefix,
             hintText: hintText,
             hintStyle: TextStyle(
-              color: Colors.grey,
+              color: Colors.grey.withOpacity(0.6),
               fontSize: 18.sp,
             ),
             border: InputBorder.none,

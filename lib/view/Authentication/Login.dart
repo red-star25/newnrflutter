@@ -131,13 +131,14 @@ class Login extends StatelessWidget {
                             ),
                             child: AuthButton(
                               btnText: "signin_text",
-                              verify: () => authController.navigateToHome(),
+                              verify: () async {
+                                await authController.loginUser(_signInFormKey);
+                              },
                             ),
                           ),
                           SizedBox(height: 15.h),
                           InkWell(
                             onTap: () {
-                              //TODO Navigate to Register Screen
                               authController.clearTextField();
                               Get.toNamed("/register");
                             },

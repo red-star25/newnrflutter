@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/data/fakeData.dart';
+import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/model/ProductModel/productModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   ScrollController scrollController;
   RxInt selectedFabIcon = 1.obs;
   final topProducts = FakeData.topProducts;
   final newInProducts = FakeData.newInProducts;
+  RxBool isLoggedIn = false.obs;
 
   get selectedFabIconIndex => selectedFabIcon;
 
@@ -22,8 +25,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     scrollController = ScrollController();
-
+    getIsLoggedInState();
     super.onInit();
+  }
+
+  Future<void> getIsLoggedInState() async {
+    isLoggedIn.value = await SharedPrefs.getIsLoggedIn();
   }
 
   void addProductToCartToggle({int id}) {

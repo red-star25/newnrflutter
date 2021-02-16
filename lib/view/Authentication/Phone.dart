@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
@@ -11,11 +10,27 @@ import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/Heading.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/TextField.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/ThirdPartyAuth.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class PhoneAuth extends StatelessWidget {
+class PhoneAuth extends StatefulWidget {
+  @override
+  _PhoneAuthState createState() => _PhoneAuthState();
+}
+
+class _PhoneAuthState extends State<PhoneAuth> {
   final GlobalKey<FormState> _phoneAuthKey = GlobalKey<FormState>();
+
   final authController = Get.find<AuthController>();
+
+  String verificationId, smsCode;
+
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _otpController = TextEditingController();
+
+  final _auth = FirebaseAuth.instance;
+
+  bool codeSent = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,18 +85,26 @@ class PhoneAuth extends StatelessWidget {
                                 height: 5.h,
                               ),
                               CustomTextField(
-                                validateField: (number) =>
-                                    authController.phoneNumberValidator(number),
-                                controller: authController.phonenumber,
+                                validateField: (number) {
+                                  authController.phoneNumberValidator(number);
+                                },
+                                controller: _phoneNumberController,
                                 hintText: "989898989",
-                                prefix: Text(
-                                  "+91",
-                                  style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontFamily: "Roboto",
-                                  ),
-                                ),
-                              )
+                                prefix: Text("+91",
+                                    style: AppTextDecoration.bodyText3),
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              codeSent
+                                  ? CustomTextField(
+                                      validateField: (otp) {
+                                        authController.otpValidator(otp);
+                                      },
+                                      controller: _otpController,
+                                      hintText: "Enter 6 digit OTP",
+                                    )
+                                  : Container()
                             ],
                           ),
                         ),
@@ -108,23 +131,42 @@ class PhoneAuth extends StatelessWidget {
                             ],
                           ),
                         ),
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.transparent,
-                          onPressed: () {
-                            // Sign In User
-                            sendOtp(context);
-                          },
-                          child: Text(
-                            "send_otp",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ).tr(),
-                        ),
+                        child: !codeSent
+                            ? RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: Colors.transparent,
+                                onPressed: () {
+                                  // Sign In User
+                                  codeSent
+                                      ? signInWithOTP(smsCode, verificationId)
+                                      : verifyPhone(
+                                          _phoneNumberController.text);
+                                },
+                                child: Text(
+                                  "send_otp",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ).tr())
+                            : RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                color: Colors.transparent,
+                                onPressed: () async {
+                                  await signInWithOTP(smsCode, verificationId);
+                                },
+                                child: Text(
+                                  "Verify",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ).tr(),
+                              ),
                       ),
                       SizedBox(height: 15.h),
                       InkWell(
@@ -149,248 +191,50 @@ class PhoneAuth extends StatelessWidget {
     );
   }
 
-  Future<bool> sendOtp(context) async {
-    if (_phoneAuthKey.currentState.validate()) {
-      Get.to(PhoneAuthOtp(authController.phonenumber.text));
-      // print(_phoneNumberController.text);
-    } else {}
-    return true;
-  }
-}
-
-class PhoneAuthOtp extends StatefulWidget {
-  String phoneNumber;
-
-  PhoneAuthOtp(@required this.phoneNumber);
-
-  @override
-  _PhoneAuthOtpState createState() => _PhoneAuthOtpState();
-}
-
-class _PhoneAuthOtpState extends State<PhoneAuthOtp> {
-  var onTapRecognizer;
-
-  TextEditingController textEditingController = TextEditingController();
-
-  StreamController<ErrorAnimationType> errorController;
-
-  bool hasError = false;
-  String currentText = "";
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    onTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        Navigator.pop(context);
-      };
-    errorController = StreamController<ErrorAnimationType>();
-    super.initState();
+  signIn(AuthCredential authCreds) async {
+    await FirebaseAuth.instance.signInWithCredential(authCreds);
   }
 
-  @override
-  void dispose() {
-    errorController.close();
-
-    super.dispose();
+  signInWithOTP(String smsCode, String verId) {
+    print("Verifying");
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors.primaryColor,
-      key: scaffoldKey,
-      body: GestureDetector(
-        onTap: () {},
-        child: SizedBox(
-          height: 1.sh,
-          width: 1.sw,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 30.h),
-              SizedBox(height: 8.h),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
-                child: Text(
-                  'OTP Verification',
-                  style: AppTextDecoration.heading1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                height: 40.h,
-              ),
-              Expanded(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.w, vertical: 18.h),
-                        child: RichText(
-                          text: TextSpan(
-                              text: "Enter the code sent to ",
-                              children: [
-                                TextSpan(
-                                    text: widget.phoneNumber,
-                                    style: AppTextDecoration.bodyText1),
-                              ],
-                              style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 15.sp)),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Form(
-                        key: formKey,
-                        child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8.h, horizontal: 20.w),
-                            child: PinCodeTextField(
-                              appContext: context,
-                              pastedTextStyle: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              length: 6,
+  Future<void> verifyPhone(phoneNo) async {
+    PhoneVerificationCompleted verificationCompleted =
+        (PhoneAuthCredential phoneAuthCredential) async {
+      signIn(phoneAuthCredential);
+    };
 
-                              obscuringCharacter: '*',
-                              animationType: AnimationType.fade,
-                              validator: (v) {
-                                if (v.length < 6) {
-                                  return "Invalid OTP number";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              pinTheme: PinTheme(
-                                shape: PinCodeFieldShape.box,
-                                borderRadius: BorderRadius.circular(5),
-                                fieldHeight: 40.h,
-                                fieldWidth: 30.w,
-                              ),
-                              cursorColor: AppColors.primaryColor,
-                              animationDuration:
-                                  const Duration(milliseconds: 300),
-                              textStyle:
-                                  TextStyle(fontSize: 16.sp, height: 1.6),
+    final PhoneVerificationFailed verificationfailed =
+        (Exception authException) {
+      print('$authException');
+    };
 
-                              enableActiveFill: true,
-                              errorAnimationController: errorController,
-                              controller: textEditingController,
-                              keyboardType: TextInputType.number,
+    final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
+      verificationId = verId;
+      setState(() {
+        codeSent = true;
+      });
+    };
 
-                              onCompleted: (v) {
-                                print("Completed");
-                              },
-                              // onTap: () {
-                              //   print("Pressed");
-                              // },
-                              onChanged: (value) {
-                                print(value);
-                                setState(() {
-                                  currentText = value;
-                                });
-                              },
-                              beforeTextPaste: (text) {
-                                print("Allowing to paste $text");
-                                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                return true;
-                              },
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Text(
-                          hasError
-                              ? "*Please fill up all the cells properly"
-                              : "",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text: "Didn't receive the code? ",
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 15.sp),
-                            children: [
-                              TextSpan(
-                                  text: " RESEND",
-                                  style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.sp))
-                            ]),
-                      ),
-                      const SizedBox(
-                        height: 14,
-                      ),
-                      Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 16.h, horizontal: 30.w),
-                          child: FlatButton(
-                            onPressed: () {
-                              formKey.currentState.validate();
-                              // conditions for validating
-                              if (currentText.length != 6 ||
-                                  currentText != "123456") {
-                                errorController.add(ErrorAnimationType
-                                    .shake); // Triggering error shake animation
-                                setState(() {
-                                  hasError = true;
-                                });
-                              } else {
-                                // TODO Verified OTP
-                                setState(() {
-                                  hasError = false;
-                                });
-                                Get.back();
-                              }
-                            },
-                            child: Center(
-                                child: Text(
-                              "VERIFY".toUpperCase(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                          )),
-                      SizedBox(
-                        height: 16.h,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
+      verificationId = verId;
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: "+91$phoneNo",
+        timeout: const Duration(seconds: 60),
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationfailed,
+        codeSent: smsSent,
+        codeAutoRetrievalTimeout: autoTimeout);
   }
 }

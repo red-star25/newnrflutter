@@ -44,18 +44,7 @@ class MainApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: Splash()
-            // FutureBuilder(
-            //     future: Firebase.initializeApp(),
-            //     builder: (context, snapshot) {
-            //       if (snapshot.connectionState == ConnectionState.done) {
-            //         return Splash();
-            //       }
-            //       return Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }),
-            ),
+        home: Scaffold(body: Splash()),
       ),
     );
   }

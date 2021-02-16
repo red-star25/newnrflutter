@@ -3,19 +3,23 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../view/Authentication/verifyLoading.dart';
 
 class AuthController extends GetxController {
   static final _emailController = TextEditingController();
   static final _passwordController = TextEditingController();
   static final _confirmpasswordController = TextEditingController();
-  static final _phoneNumberController = TextEditingController();
 
   TextEditingController get email => _emailController;
   TextEditingController get password => _passwordController;
   TextEditingController get confirmpassword => _confirmpasswordController;
-  TextEditingController get phonenumber => _phoneNumberController;
+
+  // ------------------------------------------------------------------------
+  // REGISTER USER WITH EMAIL
 
   Future registerUser(GlobalKey<FormState> key) async {
     if (key.currentState.validate()) {
@@ -29,26 +33,63 @@ class AuthController extends GetxController {
         });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
-          CustomWidgets.customSnackBar2();
+          CustomWidgets.customAuthSnackbar(
+              message: "Email already in use",
+              title: "Enter other email address");
         }
       } catch (e) {
         print(e);
-      } finally {}
+      }
     }
   }
 
-  Future loginUser() async {
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+  // ---------------------------------------------------------
+  // LOGIN USER WITH EMAIL
+
+  Future loginUser(GlobalKey<FormState> key) async {
+    if (key.currentState.validate()) {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text)
+            .then((value) async {
+          await SharedPrefs.setIsLoggedIn(isLoggedIn: true).then(
+            (value) => Get.toNamed("/home"),
+          );
+        });
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          CustomWidgets.customAuthSnackbar(
+              message: "User not found with entered email",
+              title: "Please enter valid email");
+        } else if (e.code == 'wrong-password') {
+          CustomWidgets.customAuthSnackbar(
+              message: "Entered password does not match",
+              title: "Incorrect Password");
+        }
       }
     }
+  }
+
+  // -------------------------------------------------------
+  //GOOGLE SIGN IN
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   String emailValidate(String email) {
@@ -94,6 +135,19 @@ class AuthController extends GetxController {
     }
     if (number.length > 10) {
       return "Number should be 10 digit long";
+    }
+    return null;
+  }
+
+  String otpValidator(String otp) {
+    if (otp.isEmpty) {
+      return "Please enter a valid OTP";
+    }
+    if (otp.length < 6) {
+      return "OTP should be 6 digit long";
+    }
+    if (otp.length > 6) {
+      return "OTP should be 10 digit long";
     }
     return null;
   }
