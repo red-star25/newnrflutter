@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
-import 'package:nrlifecare/model/ProductModel/productModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   ScrollController scrollController;
@@ -33,51 +32,91 @@ class HomeController extends GetxController {
     isLoggedIn.value = await SharedPrefs.getIsLoggedIn();
   }
 
-  void addProductToCartToggle({int id}) {
-    topProducts.update((product) {
-      final filteredProduct =
-          product.singleWhere((element) => element.id == id);
-      if (filteredProduct.isAdded == false) {
-        filteredProduct.isAdded = true;
-        cartController.cartItems.value.add(filteredProduct);
+  Future<void> addProductToCartToggle({String id}) async {
+    final isAlreadyAdded = await FirebaseFirestore.instance
+        .collection("TopProducts")
+        .doc(id)
+        .get()
+        .then((value) => value.data()["isAdded"] as bool);
 
-        print("Added: ");
-        print(Get.find<CartController>().cartItems);
-        print("\n");
-      } else {
-        filteredProduct.isAdded = false;
+    if (!isAlreadyAdded) {
+      await FirebaseFirestore.instance
+          .collection("TopProducts")
+          .doc(id)
+          .update({"isAdded": true}).then((value) async {
+        final uId = await SharedPrefs.getUid();
 
-        cartController.cartItems.value
-            .removeWhere((cartProduct) => cartProduct.id == filteredProduct.id);
+        CollectionReference collectionReference = FirebaseFirestore.instance
+            .collection("Users")
+            .doc(uId)
+            .collection("cartProducts");
 
-        print("Removed");
-        print(Get.find<CartController>().cartItems);
-        print("\n");
-      }
-    });
+        Map<String, dynamic> addedProductData = await FirebaseFirestore.instance
+            .collection("TopProducts")
+            .doc(id)
+            .get()
+            .then((value) => value.data());
+
+        await collectionReference.doc(id).set(addedProductData);
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection("TopProducts")
+          .doc(id)
+          .update({"isAdded": false}).then((value) async {
+        final uId = await SharedPrefs.getUid();
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(uId)
+            .collection("cartProducts")
+            .doc(id)
+            .delete();
+      });
+    }
   }
 
-  void addNewInProductToCart({int id}) {
-    newInProducts.update((product) {
-      final filteredProduct =
-          product.singleWhere((element) => element.id == id);
-      if (filteredProduct.isAdded == false) {
-        filteredProduct.isAdded = true;
-        cartController.cartItems.value.add(filteredProduct);
+  void addNewInProductToCart({String id}) async {
+    final isAlreadyAdded = await FirebaseFirestore.instance
+        .collection("NewProducts")
+        .doc(id)
+        .get()
+        .then((value) => value.data()["isAdded"] as bool);
 
-        print("Added: ");
-        print(Get.find<CartController>().cartItems);
-        print("\n");
-      } else {
-        filteredProduct.isAdded = false;
+    if (!isAlreadyAdded) {
+      await FirebaseFirestore.instance
+          .collection("NewProducts")
+          .doc(id)
+          .update({"isAdded": true}).then((value) async {
+        final uId = await SharedPrefs.getUid();
 
-        cartController.cartItems.value
-            .removeWhere((cartProduct) => cartProduct.id == filteredProduct.id);
+        CollectionReference collectionReference = FirebaseFirestore.instance
+            .collection("Users")
+            .doc(uId)
+            .collection("cartProducts");
 
-        print("Removed");
-        print(Get.find<CartController>().cartItems);
-        print("\n");
-      }
-    });
+        Map<String, dynamic> addedProductData = await FirebaseFirestore.instance
+            .collection("NewProducts")
+            .doc(id)
+            .get()
+            .then((value) => value.data());
+
+        await collectionReference.doc(id).set(addedProductData);
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection("NewProducts")
+          .doc(id)
+          .update({"isAdded": false}).then((value) async {
+        final uId = await SharedPrefs.getUid();
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(uId)
+            .collection("cartProducts")
+            .doc(id)
+            .delete();
+      });
+    }
   }
 }

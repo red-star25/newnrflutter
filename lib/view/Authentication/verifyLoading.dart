@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class _VerifyLoadingState extends State<VerifyLoading> {
   final auth = FirebaseAuth.instance;
   User user;
   Timer timer;
+
+  final authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -46,9 +49,13 @@ class _VerifyLoadingState extends State<VerifyLoading> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      await SharedPrefs.setIsLoggedIn(
-        isLoggedIn: true,
-      );
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user.uid)
+          .set({"uId": user.uid});
+      await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+      await SharedPrefs.setUid(uId: user.uid);
+      authController.isLoading.value = false;
       Get.toNamed("/home");
     }
   }
@@ -68,7 +75,7 @@ class _VerifyLoadingState extends State<VerifyLoading> {
               height: 0.2.sh,
               child: Center(
                 child: Text(
-                  "Verify by clicking the link sent in ${Get.find<AuthController>().email.text}\n\n You will be automatically redirected when email will be verified",
+                  "Verify by clicking the link sent in ${Get.find<AuthController>().email.text}\n\n You will be automatically redirected when email will be verified. You can close this windows",
                   style: AppTextDecoration.bodyText4,
                 ),
               ),

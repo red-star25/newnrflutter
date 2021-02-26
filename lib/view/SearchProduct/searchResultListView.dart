@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
@@ -36,7 +37,8 @@ class SearchResultsListView extends StatelessWidget {
       );
     }
 
-    return categoryController.searchedProducts.value.isNotEmpty
+    return categoryController.searchedProducts.value.isNotEmpty &&
+            !categoryController.isAddedToCart
         ? ListView.builder(
             itemCount: categoryController.searchedProducts.value.length,
             itemBuilder: (context, index) {
@@ -65,13 +67,21 @@ class SearchResultsListView extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Obx(() => Text(
-                                    categoryController.searchedProducts
-                                        .value[index].productName,
-                                    style: AppTextDecoration.bodyText6,
-                                  )),
+                              Text(
+                                categoryController.searchedProducts
+                                    .value[index]["productName"]
+                                    .toString(),
+                                style: AppTextDecoration.bodyText6,
+                              ),
                               SizedBox(
-                                height: 20.h,
+                                height: 5.h,
+                              ),
+                              Text(
+                                categoryController.searchedProducts
+                                    .value[index]["physicalForm"]
+                                    .toString(),
+                                style: AppTextDecoration.subtitle4,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,41 +92,25 @@ class SearchResultsListView extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Obx(() => Text(
-                                            "₹ ${categoryController.searchedProducts.value[index].productPrice.toString()}",
-                                            style: AppTextDecoration.bodyText4,
-                                          )),
                                       SizedBox(
                                         height: 10.h,
                                       ),
                                       Text(
-                                        "Quantity",
-                                        style: AppTextDecoration.bodyText2,
-                                      ),
-                                      SizedBox(
-                                        height: 5.h,
-                                      ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        height: 30.h,
-                                        child: Center(
-                                            child: TextFormField(
-                                          initialValue: "100",
-                                          onFieldSubmitted: (value) {
-                                            categoryController
-                                                .updateProductQuantity(
-                                                    index: index,
-                                                    quantity: int.parse(value));
-                                          },
-                                          decoration: InputDecoration(
-                                              border:
-                                                  const OutlineInputBorder(),
-                                              contentPadding:
-                                                  EdgeInsets.only(left: 15.w)),
-                                        )),
+                                        "₹ ${categoryController.searchedProducts.value[index]["productPrice"].toString()}",
+                                        style: AppTextDecoration.bodyText4,
                                       ),
                                       SizedBox(
                                         height: 10.h,
+                                      ),
+                                      Text(
+                                        categoryController.searchedProducts
+                                            .value[index]["productSize"]
+                                            .toString(),
+                                        style: AppTextDecoration.subtitle2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
                                       ),
                                       InkWell(
                                         onTap: () {
@@ -124,59 +118,56 @@ class SearchResultsListView extends StatelessWidget {
                                               .addProductToCartToggle(
                                                   id: categoryController
                                                       .searchedProducts
-                                                      .value[index]
-                                                      .id);
+                                                      .value[index]["id"]
+                                                      .toString(),
+                                                  index: index);
                                         },
-                                        child: Obx(
-                                          () => Container(
-                                            width: 100.w,
-                                            height: 30.h,
-                                            decoration: BoxDecoration(
-                                                color: categoryController
-                                                            .searchedProducts
-                                                            .value[index]
-                                                            .isAdded ==
-                                                        false
-                                                    ? AppColors.primaryColor
-                                                    : AppColors.secondaryColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: Center(
-                                              child: Obx(
-                                                () => Text(
-                                                  categoryController
+                                        child: Container(
+                                          width: 100.w,
+                                          height: 30.h,
+                                          decoration: BoxDecoration(
+                                              color: categoryController
                                                               .searchedProducts
                                                               .value[index]
-                                                              .isAdded ==
-                                                          false
-                                                      ? "Add to cart"
-                                                      : "Added",
-                                                  style: AppTextDecoration
-                                                      .bodyText2
-                                                      .copyWith(
-                                                    color: categoryController
+                                                          ["isAdded"] ==
+                                                      false
+                                                  ? AppColors.primaryColor
+                                                  : AppColors.secondaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Center(
+                                            child: Text(
+                                              categoryController
+                                                              .searchedProducts
+                                                              .value[index]
+                                                          ["isAdded"] ==
+                                                      false
+                                                  ? "Add to cart"
+                                                  : "Added",
+                                              style: AppTextDecoration.bodyText2
+                                                  .copyWith(
+                                                color: categoryController
                                                                 .searchedProducts
                                                                 .value[index]
-                                                                .isAdded ==
-                                                            false
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
+                                                            ["isAdded"] ==
+                                                        false
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
-                                  Obx(() => Image.asset(
-                                        categoryController.searchedProducts
-                                            .value[index].productImage,
-                                        height: 120.h,
-                                        width: 120.w,
-                                        fit: BoxFit.contain,
-                                      ))
+                                  Image.network(
+                                    categoryController.searchedProducts
+                                        .value[index]["productImage"]
+                                        .toString(),
+                                    height: 120.h,
+                                    width: 120.w,
+                                    fit: BoxFit.contain,
+                                  )
                                 ],
                               )
                             ],
@@ -189,8 +180,13 @@ class SearchResultsListView extends StatelessWidget {
               );
             },
           )
-        : Center(
-            child: Text("No product found"),
-          );
+        : categoryController.isAddedToCart
+            ? SpinKitRipple(
+                size: 80.h,
+                color: AppColors.primaryColor,
+              )
+            : const Center(
+                child: Text("No product found"),
+              );
   }
 }

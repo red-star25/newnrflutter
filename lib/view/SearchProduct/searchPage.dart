@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -14,6 +15,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   static const historyLength = 5;
+
+  final categoryController = Get.find<CategoryController>();
 
   List<String> _searchHistory = [
     'NRCOF-TR',
@@ -90,8 +93,20 @@ class _SearchPageState extends State<SearchPage> {
               size: 25.h,
               color: AppColors.primaryColor,
             ),
-            onPressed: () {
+            onPressed: () async {
               Get.find<CategoryController>().isSearchVisible.value = false;
+              await FirebaseFirestore.instance
+                  .collection("Categories")
+                  .get()
+                  .then((value) {
+                categoryController.setCategoryId(value
+                    .docs[Get.find<CategoryController>()
+                        .selectedCategoryIndex
+                        .value]
+                    .id
+                    .toString());
+              });
+              Get.toNamed("/category");
             },
           )
         ],
@@ -102,7 +117,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         transition: CircularFloatingSearchBarTransition(),
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         title: Text(
           selectedTerm ?? 'Search...',
           style: AppTextDecoration.bodyText4,

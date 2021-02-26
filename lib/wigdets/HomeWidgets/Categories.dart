@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -7,6 +8,8 @@ import 'package:nrlifecare/constants/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../ShimmerLoading/shimmerLoading.dart';
 
 class Categories extends StatelessWidget {
   final categoryController = Get.find<CategoryController>();
@@ -57,65 +60,101 @@ class Categories extends StatelessWidget {
             height: 0.16.sh,
             width: 1.sw,
             child: AnimationLimiter(
-              child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 800),
-                      child: SlideAnimation(
-                        horizontalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: InkWell(
-                            onTap: () {
-                              categoryController.setSelectedCategory(index);
-                              Get.find<HomeController>().selectedFabIcon.value =
-                                  2;
-                              Get.toNamed("/category");
-                            },
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    color: AppColors
-                                        .listColor["l${8 - (index + 1)}"],
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Categories")
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CategoriesShimmer();
+                    } else {
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 800),
+                            child: SlideAnimation(
+                              horizontalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: InkWell(
+                                  onTap: () {
+                                    categoryController
+                                        .setSelectedCategory(index);
+                                    categoryController.setCategoryId(snapshot
+                                        .data.docs[index]["id"]
+                                        .toString());
+                                    Get.find<HomeController>()
+                                        .selectedFabIcon
+                                        .value = 2;
+                                    Get.toNamed("/category");
+                                  },
+                                  child: SizedBox(
                                     width: 105.w,
-                                    height: 100.h,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Obx(() => Image.asset(
-                                            categoryController.categoryList
-                                                .value[index].categoryImage,
-                                          )),
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Container(
+                                            color: AppColors.listColor[
+                                                "l${8 - (index + 1)}"],
+                                            width: 105.w,
+                                            height: 100.h,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(6.0),
+                                              child: Image.network(
+                                                snapshot
+                                                    .data
+                                                    .docs[index]
+                                                        ["categoryImage"]
+                                                    .toString(),
+                                                loadingBuilder: (context, child,
+                                                    loadingProgress) {
+                                                  return loadingProgress == null
+                                                      ? child
+                                                      : SpinKitRipple(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                        );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        ),
+                                        Text(
+                                          snapshot
+                                              .data.docs[index]["categoryName"]
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: AppColors.primaryColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 0.7),
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                                FittedBox(
-                                  child: Obx(() => Text(
-                                        categoryController.categoryList
-                                            .value[index].categoryName,
-                                        style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 0.7),
-                                      )),
-                                )
-                              ],
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: 10.w,
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                        width: 10.w,
-                      ),
-                  itemCount: categoryController.categoryList.value.length),
+                        itemCount: int.parse(
+                          snapshot.data.docs.length.toString(),
+                        ),
+                      );
+                    }
+                  }),
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +19,8 @@ class AuthController extends GetxController {
   TextEditingController get password => _passwordController;
   TextEditingController get confirmpassword => _confirmpasswordController;
 
+  RxBool isLoading = false.obs;
+
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL
 
@@ -29,6 +32,7 @@ class AuthController extends GetxController {
                 email: _emailController.text,
                 password: _passwordController.text)
             .then((value) {
+          isLoading.value = true;
           Get.to(VerifyLoading());
         });
       } on FirebaseAuthException catch (e) {
@@ -49,24 +53,32 @@ class AuthController extends GetxController {
   Future loginUser(GlobalKey<FormState> key) async {
     if (key.currentState.validate()) {
       try {
+        isLoading.value = true;
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text)
-            .then((value) async {
-          await SharedPrefs.setIsLoggedIn(isLoggedIn: true).then(
-            (value) => Get.toNamed("/home"),
-          );
+            .then((UserCredential value) async {
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(value.user.uid)
+              .set({"uId": value.user.uid});
+          await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+          await SharedPrefs.setUid(uId: value.user.uid);
+          isLoading.value = false;
+          Get.toNamed("/home");
         });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           CustomWidgets.customAuthSnackbar(
               message: "User not found with entered email",
               title: "Please enter valid email");
+          isLoading.value = false;
         } else if (e.code == 'wrong-password') {
           CustomWidgets.customAuthSnackbar(
               message: "Entered password does not match",
               title: "Incorrect Password");
+          isLoading.value = false;
         }
       }
     }

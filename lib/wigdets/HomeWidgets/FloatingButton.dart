@@ -1,15 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 
 class FloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeController = Get.find<HomeController>();
+    final categoryController = Get.find<CategoryController>();
     return FabCircularMenu(
       animationDuration: const Duration(milliseconds: 500),
       ringColor: AppColors.primaryColor,
@@ -50,8 +53,14 @@ class FloatingButton extends StatelessWidget {
                   : Colors.white,
               size: 30.h,
             ),
-            onTap: () {
+            onTap: () async {
               homeController.updateSelectedFabIcon(2);
+              await FirebaseFirestore.instance
+                  .collection("Categories")
+                  .get()
+                  .then((value) {
+                categoryController.setCategoryId(value.docs[0].id.toString());
+              });
               Get.toNamed("/category");
             },
           ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,7 @@ import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 
 Widget ThirdPartyAuth(context) {
+  final authController = Get.find<AuthController>();
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
@@ -53,10 +55,17 @@ Widget ThirdPartyAuth(context) {
             await Get.find<AuthController>()
                 .signInWithGoogle()
                 .then((userCred) async {
+              authController.isLoading.value = true;
               if (userCred != null ||
                   !userCred.user.isBlank ||
                   userCred.user.email != null) {
+                await FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(userCred.user.uid)
+                    .set({"uId": userCred.user.uid});
                 await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+                await SharedPrefs.setUid(uId: userCred.user.uid);
+                authController.isLoading.value = false;
                 Get.toNamed("/home");
               } else {
                 CustomWidgets.customAuthSnackbar(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -77,6 +78,12 @@ class CustomAppBar extends StatelessWidget {
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
                       await SharedPrefs.setIsLoggedIn(isLoggedIn: false);
+                      final uId = await SharedPrefs.getUid();
+                      await FirebaseFirestore.instance
+                          .collection("Users")
+                          .doc(uId)
+                          .delete();
+                      await SharedPrefs.setUid();
                       Get.offAllNamed("/login");
                     },
                     icon: Icon(
