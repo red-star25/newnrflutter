@@ -119,6 +119,9 @@ class CategoryController extends GetxController {
             .then((value) => value.data());
 
         await collectionReference.doc(id).set(addedProductData);
+        await collectionReference
+            .doc(id)
+            .update({"categoryId": categoryId.value, "userQuantity": "1"});
       });
       isAddedToCart = false;
       update();

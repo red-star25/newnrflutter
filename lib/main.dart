@@ -37,6 +37,7 @@ class MainApp extends StatelessWidget {
       designSize: const Size(480, 800),
       allowFontScaling: true,
       builder: () => GetMaterialApp(
+        theme: ThemeData(fontFamily: "Roboto"),
         initialRoute: "/",
         unknownRoute: GetPage(name: "/notfound", page: () => PageNotFount()),
         getPages: NrRouter.pages,

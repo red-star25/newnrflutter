@@ -25,20 +25,24 @@ class ProductBottom extends StatelessWidget {
             //Name and Quantity
             Padding(
               padding: EdgeInsets.only(top: 30.h, left: 25.w, right: 25.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(
-                    () => Text(
-                      productController.selectedProduct.value.productName,
+              child: SizedBox(
+                width: 1.sw,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      productController.selectedProduct["productName"]
+                          .toString(),
                       style: AppTextDecoration.heading2,
                     ).tr(),
-                  ),
-                  Obx(() => Text(
-                        productController.selectedProduct.value.productSize,
-                        style: AppTextDecoration.bodyText5,
-                      ))
-                ],
+                    Text(
+                      productController.selectedProduct["productSize"]
+                          .toString(),
+                      style: AppTextDecoration.bodyText5,
+                    )
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -76,22 +80,24 @@ class ProductBottom extends StatelessWidget {
                             left: 25.w,
                             right: 25.w,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "product_price",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                  productController
-                                      .selectedProduct.value.productPrice
-                                      .toString(),
-                                  style: AppTextDecoration.bodyText5
-                                      .copyWith(fontSize: 16.sp)))
-                            ],
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "product_price",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                Text(
+                                    "₹${double.parse(productController.selectedProduct["productPrice"].toString())}",
+                                    style: AppTextDecoration.bodyText5
+                                        .copyWith(fontSize: 16.sp))
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -100,22 +106,24 @@ class ProductBottom extends StatelessWidget {
                             left: 25.w,
                             right: 25.w,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "minimum_order",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(
-                                () => Text(
-                                    "${productController.selectedProduct.value.minimumOrder}/pack",
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "minimum_order",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                Text(
+                                    "${productController.selectedProduct["minimumOrder"].toString()}/pack",
                                     style: AppTextDecoration.bodyText5
                                         .copyWith(fontSize: 16.sp)),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -151,7 +159,7 @@ class ProductBottom extends StatelessWidget {
                       ],
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
@@ -159,114 +167,134 @@ class ProductBottom extends StatelessWidget {
                             left: 25.w,
                             right: 25.w,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "drug_type",
-                                style: AppTextDecoration.bodyText5.copyWith(
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "drug_type",
+                                  style: AppTextDecoration.bodyText5.copyWith(
                                     color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                  productController
-                                      .selectedProduct.value.drugType,
-                                  style: AppTextDecoration.bodyText5
-                                      .copyWith(fontSize: 16.sp)))
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "recommended_for",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                  productController
-                                      .selectedProduct.value.recommendedFor,
-                                  style: AppTextDecoration.bodyText5
-                                      .copyWith(fontSize: 16.sp)))
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "storage_instruction",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                  productController
-                                      .selectedProduct.value.storageInstruction,
-                                  style: AppTextDecoration.bodyText5
-                                      .copyWith(fontSize: 16.sp)))
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "physical_form",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                  productController
-                                      .selectedProduct.value.physicalForm,
-                                  style: AppTextDecoration.bodyText5
-                                      .copyWith(fontSize: 16.sp)))
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "suitable_for",
-                                style: AppTextDecoration.bodyText5.copyWith(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ).tr(),
-                              Obx(() => Text(
-                                    productController
-                                        .selectedProduct.value.suitableFor,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ).tr(),
+                                Text("General Medicine",
                                     style: AppTextDecoration.bodyText5
-                                        .copyWith(fontSize: 16.sp),
-                                  ))
-                            ],
+                                        .copyWith(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.h,
+                            left: 25.w,
+                            right: 25.w,
+                          ),
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "recommended_for",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                FittedBox(
+                                  child: Text(
+                                      productController
+                                          .selectedProduct["recommendedFor"]
+                                          .toString(),
+                                      style: AppTextDecoration.bodyText5
+                                          .copyWith(fontSize: 16.sp)),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.h,
+                            left: 25.w,
+                            right: 25.w,
+                          ),
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "storage_instruction",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                Text("Dry Place",
+                                    style: AppTextDecoration.bodyText5
+                                        .copyWith(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.h,
+                            left: 25.w,
+                            right: 25.w,
+                          ),
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "physical_form",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                Text(
+                                    productController
+                                        .selectedProduct["physicalForm"]
+                                        .toString(),
+                                    style: AppTextDecoration.bodyText5
+                                        .copyWith(fontSize: 16.sp))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10.h,
+                            left: 25.w,
+                            right: 25.w,
+                          ),
+                          child: SizedBox(
+                            width: 1.sw,
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  "suitable_for",
+                                  style: AppTextDecoration.bodyText5.copyWith(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.normal),
+                                ).tr(),
+                                Text(
+                                  "Adults",
+                                  style: AppTextDecoration.bodyText5
+                                      .copyWith(fontSize: 16.sp),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -300,106 +328,18 @@ class ProductBottom extends StatelessWidget {
                             spreadRadius: 1.5)
                       ],
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Obx(() => Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "👉 Uses",
-                                    style: AppTextDecoration.bodyText5.copyWith(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ).tr(),
-                                  SizedBox(height: 10.h),
-                                  for (int i = 0;
-                                      i <
-                                          productController.selectedProduct
-                                              .value.uses.length;
-                                      i++)
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10.0.h),
-                                      child: Row(
-                                        children: [
-                                          Flexible(
-                                            child: Obx(() => Text(
-                                                  "💊 ${productController.selectedProduct.value.uses[i]}",
-                                                  style: AppTextDecoration
-                                                      .bodyText5
-                                                      .copyWith(
-                                                          fontSize: 16.sp),
-                                                )),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  Divider(
-                                    indent: 20.w,
-                                    endIndent: 20.w,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                ],
-                              )),
+                    child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 10.h,
+                          left: 25.w,
+                          right: 25.w,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10.h,
-                            left: 25.w,
-                            right: 25.w,
-                          ),
-                          child: Obx(() => Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "👉 How to use Cefpodoxime PROXETIL",
-                                    style: AppTextDecoration.bodyText5.copyWith(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ).tr(),
-                                  SizedBox(height: 10.h),
-                                  for (int i = 0;
-                                      i <
-                                          productController.selectedProduct
-                                              .value.howToUse.length;
-                                      i++)
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10.0.h),
-                                      child: Row(
-                                        children: [
-                                          Flexible(
-                                            child: Obx(() => Text(
-                                                  "💊 ${productController.selectedProduct.value.howToUse[i]}",
-                                                  style: AppTextDecoration
-                                                      .bodyText5
-                                                      .copyWith(
-                                                          fontSize: 16.sp),
-                                                )),
-                                          ),
-                                          Divider(
-                                            indent: 20.w,
-                                            endIndent: 20.w,
-                                            color: AppColors.primaryColor,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  SizedBox(height: 10.h),
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
+                        child: Text(
+                            productController
+                                .selectedProduct["productDescription"]
+                                .toString(),
+                            style: AppTextDecoration.bodyText5
+                                .copyWith(fontSize: 16.sp))),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -452,11 +392,10 @@ class ProductBottom extends StatelessWidget {
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    Obx(() => Text(
-                                        productController
-                                            .selectedProduct.value.paymentTerms,
+                                    Text(
+                                        "Cash in Advance (CID), Cash Advance (CA)",
                                         style: AppTextDecoration.bodyText5
-                                            .copyWith(fontSize: 16.sp))),
+                                            .copyWith(fontSize: 16.sp)),
                                     Divider(
                                       indent: 20.w,
                                       endIndent: 20.w,
@@ -472,11 +411,10 @@ class ProductBottom extends StatelessWidget {
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    Obx(() => Text(
-                                        "${productController.selectedProduct.value.supplyAbility} Piece Per Day",
+                                    Text("20,000 Piece Per Day",
                                         style: AppTextDecoration.bodyText5
                                             .copyWith(fontSize: 16.sp)
-                                            .copyWith(fontSize: 16.sp))),
+                                            .copyWith(fontSize: 16.sp)),
                                     Divider(
                                       indent: 20.w,
                                       endIndent: 20.w,
@@ -492,12 +430,9 @@ class ProductBottom extends StatelessWidget {
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    Obx(() => Text(
-                                        productController.selectedProduct.value
-                                                .mainDomesticMarket ??
-                                            "",
+                                    Text("All over India",
                                         style: AppTextDecoration.bodyText5
-                                            .copyWith(fontSize: 16.sp)))
+                                            .copyWith(fontSize: 16.sp))
                                   ],
                                 ),
                               ),

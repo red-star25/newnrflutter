@@ -59,7 +59,9 @@ class FloatingButton extends StatelessWidget {
                   .collection("Categories")
                   .get()
                   .then((value) {
-                categoryController.setCategoryId(value.docs[0].id.toString());
+                categoryController.setCategoryId(value
+                    .docs[categoryController.selectedCategoryIndex.value].id
+                    .toString());
               });
               Get.toNamed("/category");
             },

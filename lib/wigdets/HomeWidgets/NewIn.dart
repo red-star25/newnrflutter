@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -81,10 +82,9 @@ class NewIn extends StatelessWidget {
                                       child: InkWell(
                                         onTap: () {
                                           Get.find<ProductController>()
-                                                  .selectedProduct
-                                                  .value =
-                                              homeController
-                                                  .newInProducts.value[index];
+                                                  .selectedProduct =
+                                              snapshot.data.docs[index].data()
+                                                  as Map<String, dynamic>;
 
                                           Get.find<ProductController>()
                                               .selectedIndex
@@ -92,10 +92,6 @@ class NewIn extends StatelessWidget {
 
                                           Get.toNamed(
                                             "/product",
-                                            arguments: {
-                                              "productList": homeController
-                                                  .newInProducts.value
-                                            },
                                           );
                                         },
                                         child: Row(
@@ -114,25 +110,25 @@ class NewIn extends StatelessWidget {
                                                     color: AppColors.listColor[
                                                         "l${index + 1}"],
                                                   ),
-                                                  child: Image.network(
-                                                      snapshot
-                                                          .data
-                                                          .docs[index]
-                                                              ["productImage"]
-                                                          .toString(),
-                                                      height: 160.h,
-                                                      fit: BoxFit.contain,
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                    return loadingProgress ==
-                                                            null
-                                                        ? child
-                                                        : SpinKitRipple(
-                                                            color: AppColors
-                                                                .primaryColor,
-                                                          );
-                                                  }),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: snapshot
+                                                        .data
+                                                        .docs[index]
+                                                            ["productImage"]
+                                                        .toString(),
+                                                    placeholder: (_, __) =>
+                                                        SpinKitRipple(
+                                                      color: AppColors
+                                                          .primaryColor,
+                                                    ),
+                                                    fit: BoxFit.contain,
+                                                    errorWidget:
+                                                        (context, _, __) =>
+                                                            const Icon(
+                                                      Icons.error_outline,
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
                                                 ),
                                                 SizedBox(
                                                   width: 10.h,

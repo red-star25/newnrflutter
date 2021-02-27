@@ -17,6 +17,7 @@ class _CartTotalState extends State<CartTotal> {
   @override
   void initState() {
     super.initState();
+    cartController.getCartProducts();
     cartController.totalCartProductPrice();
   }
 
@@ -39,7 +40,7 @@ class _CartTotalState extends State<CartTotal> {
               width: 10.w,
             ),
             Text(
-              "₹ ${cartController.totalCartProductPrice().toString()} /-",
+              "₹ ${cartController.totalCartPrice} /-",
               style: AppTextDecoration.bodyText5
                   .copyWith(color: AppColors.primaryColor),
             )

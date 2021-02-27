@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class ProductController extends GetxController {
-  RxString productQuantity = "100".obs;
-
-  final selectedProduct = ProductModel().obs;
+  Map<String, dynamic> selectedProduct;
   RxInt selectedIndex = 0.obs;
 
   ScrollController scrollController;
@@ -14,7 +12,6 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     scrollController = ScrollController(keepScrollOffset: true);
-    quantityController = TextEditingController();
     super.onInit();
   }
 }

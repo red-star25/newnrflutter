@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -67,10 +68,9 @@ class TopProducts extends StatelessWidget {
                                   child: InkWell(
                                     onTap: () {
                                       Get.find<ProductController>()
-                                              .selectedProduct
-                                              .value =
-                                          homeController
-                                              .topProducts.value[index];
+                                              .selectedProduct =
+                                          snapshot.data.docs[index].data()
+                                              as Map<String, dynamic>;
 
                                       Get.find<ProductController>()
                                           .selectedIndex
@@ -78,10 +78,6 @@ class TopProducts extends StatelessWidget {
 
                                       Get.toNamed(
                                         "/product",
-                                        arguments: {
-                                          "productList":
-                                              homeController.topProducts.value
-                                        },
                                       );
                                     },
                                     child: Container(
@@ -153,21 +149,20 @@ class TopProducts extends StatelessWidget {
                                             ),
                                             SizedBox(
                                               height: 160.h,
-                                              child: Image.network(
-                                                snapshot.data
+                                              child: CachedNetworkImage(
+                                                imageUrl: snapshot.data
                                                     .docs[index]["productImage"]
                                                     .toString(),
-                                                height: 160.h,
+                                                placeholder: (_, __) =>
+                                                    SpinKitRipple(
+                                                  color: AppColors.primaryColor,
+                                                ),
                                                 fit: BoxFit.contain,
-                                                loadingBuilder: (context, child,
-                                                    loadingProgress) {
-                                                  return loadingProgress == null
-                                                      ? child
-                                                      : SpinKitRipple(
-                                                          color: AppColors
-                                                              .primaryColor,
-                                                        );
-                                                },
+                                                errorWidget: (context, _, __) =>
+                                                    const Icon(
+                                                  Icons.error_outline,
+                                                  color: Colors.red,
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
@@ -210,19 +205,10 @@ class TopProducts extends StatelessWidget {
                                                             width: 20.w,
                                                             height: 20.h,
                                                           )
-                                                        : Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.check,
-                                                                color: AppColors
-                                                                    .secondaryColor,
-                                                                size: 20.h,
-                                                              ),
-                                                              Text("Added",
-                                                                  style: AppTextDecoration
-                                                                      .subtitle2),
-                                                            ],
-                                                          ),
+                                                        : Text("Added",
+                                                            style:
+                                                                AppTextDecoration
+                                                                    .subtitle2),
                                                   )
                                                 ],
                                               ),

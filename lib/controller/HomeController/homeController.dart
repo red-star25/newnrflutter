@@ -11,6 +11,7 @@ class HomeController extends GetxController {
   final topProducts = FakeData.topProducts;
   final newInProducts = FakeData.newInProducts;
   RxBool isLoggedIn = false.obs;
+  bool isAddingToCart = false;
 
   get selectedFabIconIndex => selectedFabIcon;
 
@@ -33,6 +34,8 @@ class HomeController extends GetxController {
   }
 
   Future<void> addProductToCartToggle({String id}) async {
+    isAddingToCart = true;
+    update();
     final isAlreadyAdded = await FirebaseFirestore.instance
         .collection("TopProducts")
         .doc(id)
@@ -55,11 +58,25 @@ class HomeController extends GetxController {
             .collection("TopProducts")
             .doc(id)
             .get()
-            .then((value) => value.data());
+            .then((value) => {
+                  "id": value.data()["id"],
+                  "productName": value.data()["productName"],
+                  "productImage": value.data()["productImage"],
+                  "productPrice": value.data()["productPrice"],
+                  "productSize": value.data()["productSize"],
+                  "isAdded": value.data()["isAdded"],
+                  "categoryName": "TopProducts",
+                  "categoryId": null
+                });
 
         await collectionReference.doc(id).set(addedProductData);
+        await collectionReference.doc(id).update({"userQuantity": "1"});
+        isAddingToCart = false;
+        update();
       });
     } else {
+      isAddingToCart = true;
+      update();
       await FirebaseFirestore.instance
           .collection("TopProducts")
           .doc(id)
@@ -71,12 +88,23 @@ class HomeController extends GetxController {
             .doc(uId)
             .collection("cartProducts")
             .doc(id)
-            .delete();
+            .delete()
+            .then((value) async {
+          await FirebaseFirestore.instance
+              .collection("TopProducts")
+              .doc(id)
+              .update({"isAdded": false}).then((value) {
+            isAddingToCart = false;
+            update();
+          });
+        });
       });
     }
   }
 
   void addNewInProductToCart({String id}) async {
+    isAddingToCart = true;
+    update();
     final isAlreadyAdded = await FirebaseFirestore.instance
         .collection("NewProducts")
         .doc(id)
@@ -99,11 +127,24 @@ class HomeController extends GetxController {
             .collection("NewProducts")
             .doc(id)
             .get()
-            .then((value) => value.data());
+            .then((value) => {
+                  "id": value.data()["id"],
+                  "productName": value.data()["productName"],
+                  "productImage": value.data()["productImage"],
+                  "productPrice": value.data()["productPrice"],
+                  "productSize": value.data()["productSize"],
+                  "categoryName": "NewProducts",
+                  "categoryId": null
+                });
 
         await collectionReference.doc(id).set(addedProductData);
+        await collectionReference.doc(id).update({"userQuantity": "1"});
+        isAddingToCart = false;
+        update();
       });
     } else {
+      isAddingToCart = true;
+      update();
       await FirebaseFirestore.instance
           .collection("NewProducts")
           .doc(id)
@@ -115,7 +156,16 @@ class HomeController extends GetxController {
             .doc(uId)
             .collection("cartProducts")
             .doc(id)
-            .delete();
+            .delete()
+            .then((value) async {
+          await FirebaseFirestore.instance
+              .collection("NewProducts")
+              .doc(id)
+              .update({"isAdded": false}).then((value) {
+            isAddingToCart = false;
+            update();
+          });
+        });
       });
     }
   }

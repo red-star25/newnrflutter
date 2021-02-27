@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,21 +106,22 @@ class Categories extends StatelessWidget {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(6.0),
-                                              child: Image.network(
-                                                snapshot
+                                              child: CachedNetworkImage(
+                                                imageUrl: snapshot
                                                     .data
                                                     .docs[index]
                                                         ["categoryImage"]
                                                     .toString(),
-                                                loadingBuilder: (context, child,
-                                                    loadingProgress) {
-                                                  return loadingProgress == null
-                                                      ? child
-                                                      : SpinKitRipple(
-                                                          color: AppColors
-                                                              .primaryColor,
-                                                        );
-                                                },
+                                                placeholder: (_, __) =>
+                                                    SpinKitRipple(
+                                                  color: AppColors.primaryColor,
+                                                ),
+                                                fit: BoxFit.contain,
+                                                errorWidget: (context, _, __) =>
+                                                    const Icon(
+                                                  Icons.error_outline,
+                                                  color: Colors.red,
+                                                ),
                                               ),
                                             ),
                                           ),
