@@ -4,6 +4,8 @@ import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:nrlifecare/controller/CartController/cartController.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 
 class GlobalHeader extends StatelessWidget {
   String title;
@@ -45,7 +47,16 @@ class GlobalHeader extends StatelessWidget {
               ? Padding(
                   padding: EdgeInsets.only(right: 8.0.w),
                   child: RaisedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (Get.find<CartController>().totalCartPrice > 0.0) {
+                        Get.find<CartController>().openCheckout();
+                      } else {
+                        CustomWidgets.customPaymentSnackbar(
+                            message: "Add atleast one product to procees",
+                            title: "Please add product to cart",
+                            utfLogo: "❌");
+                      }
+                    },
                     label: Text("cart_checkout",
                             style: AppTextDecoration.bodyText4
                                 .copyWith(color: Colors.black))

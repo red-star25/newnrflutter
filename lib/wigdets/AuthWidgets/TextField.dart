@@ -10,14 +10,15 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool isObsecure;
   final Widget prefix;
-  const CustomTextField({
-    @required this.validateField,
-    this.onFieldSubmit,
-    @required this.controller,
-    this.hintText,
-    this.isObsecure = false,
-    this.prefix,
-  });
+  final TextInputType textInputType;
+  const CustomTextField(
+      {@required this.validateField,
+      this.onFieldSubmit,
+      @required this.controller,
+      this.hintText,
+      this.isObsecure = false,
+      this.prefix,
+      this.textInputType = TextInputType.text});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class CustomTextField extends StatelessWidget {
             return onFieldSubmit(value);
           },
           obscureText: isObsecure,
+          keyboardType: textInputType,
           decoration: InputDecoration(
             prefix: prefix,
             hintText: hintText,

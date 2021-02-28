@@ -74,19 +74,19 @@ class CategoryRightBody extends StatelessWidget {
                     : SizedBox(
                         width: 0.8.sw,
                         height: 0.74.sh,
-                        child: AnimationLimiter(
-                          child: StreamBuilder(
-                              stream: FirebaseFirestore.instance
-                                  .collection("Categories")
-                                  .doc(categoryController.categoryId.toString())
-                                  .collection("products")
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return CategoryRightShimmer();
-                                } else {
-                                  return !categoryController.isAddedToCart
-                                      ? ListView.builder(
+                        child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("Categories")
+                                .doc(categoryController.categoryId.toString())
+                                .collection("products")
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CategoryRightShimmer();
+                              } else {
+                                return !categoryController.isAddedToCart
+                                    ? AnimationLimiter(
+                                        child: ListView.builder(
                                           itemBuilder: (context, index) {
                                             return AnimationConfiguration
                                                 .staggeredList(
@@ -115,6 +115,11 @@ class CategoryRightBody extends StatelessWidget {
                                                                   ProductController>()
                                                               .selectedIndex
                                                               .value = index;
+
+                                                          Get.find<ProductController>()
+                                                                  .heroTag
+                                                                  .value =
+                                                              "catImage$index";
 
                                                           Get.toNamed(
                                                             "/product",
@@ -231,23 +236,22 @@ class CategoryRightBody extends StatelessWidget {
                                                                               )
                                                                             ],
                                                                           ),
-                                                                          CachedNetworkImage(
-                                                                            imageUrl:
-                                                                                snapshot.data.docs[index]["productImage"].toString(),
-                                                                            height:
-                                                                                120.h,
-                                                                            width:
-                                                                                120.w,
-                                                                            placeholder: (_, __) =>
-                                                                                SpinKitRipple(
-                                                                              color: AppColors.primaryColor,
-                                                                            ),
-                                                                            fit:
-                                                                                BoxFit.contain,
-                                                                            errorWidget: (context, _, __) =>
-                                                                                const Icon(
-                                                                              Icons.error_outline,
-                                                                              color: Colors.red,
+                                                                          Hero(
+                                                                            tag:
+                                                                                "catImage$index",
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              imageUrl: snapshot.data.docs[index]["productImage"].toString(),
+                                                                              height: 120.h,
+                                                                              width: 120.w,
+                                                                              placeholder: (_, __) => SpinKitRipple(
+                                                                                color: AppColors.primaryColor,
+                                                                              ),
+                                                                              fit: BoxFit.contain,
+                                                                              errorWidget: (context, _, __) => const Icon(
+                                                                                Icons.error_outline,
+                                                                                color: Colors.red,
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -270,13 +274,13 @@ class CategoryRightBody extends StatelessWidget {
                                             snapshot.data.docs.length
                                                 .toString(),
                                           ),
-                                        )
-                                      : SpinKitRipple(
-                                          color: AppColors.primaryColor,
-                                        );
-                                }
-                              }),
-                        ),
+                                        ),
+                                      )
+                                    : SpinKitRipple(
+                                        color: AppColors.primaryColor,
+                                      );
+                              }
+                            }),
                       ),
               ],
             ),

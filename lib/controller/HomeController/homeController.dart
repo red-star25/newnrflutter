@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
+import 'dart:math';
 
 class HomeController extends GetxController {
   ScrollController scrollController;
@@ -12,6 +13,42 @@ class HomeController extends GetxController {
   final newInProducts = FakeData.newInProducts;
   RxBool isLoggedIn = false.obs;
   bool isAddingToCart = false;
+  final random = Random();
+
+  final languageSettings = {"EN": true, "HI": false, "GU": false}.obs;
+  final selectedLanguage = "English".obs;
+
+  void setLanguage(String languageId) {
+    switch (languageId) {
+      case "EN":
+        languageSettings["EN"] = true;
+        languageSettings["HI"] = false;
+        languageSettings["GU"] = false;
+        selectedLanguage.value = "English";
+        Get.back();
+        break;
+      case "HI":
+        languageSettings["EN"] = false;
+        languageSettings["HI"] = true;
+        languageSettings["GU"] = false;
+        selectedLanguage.value = "Hindi";
+        Get.back();
+        break;
+      case "GU":
+        languageSettings["EN"] = false;
+        languageSettings["HI"] = false;
+        languageSettings["GU"] = true;
+        selectedLanguage.value = "Gujarati";
+        Get.back();
+        break;
+      default:
+        languageSettings["EN"] = true;
+        languageSettings["HI"] = false;
+        languageSettings["GU"] = false;
+        selectedLanguage.value = "English";
+        Get.back();
+    }
+  }
 
   get selectedFabIconIndex => selectedFabIcon;
 

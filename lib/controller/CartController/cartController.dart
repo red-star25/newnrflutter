@@ -1,34 +1,92 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class CartController extends GetxController {
   List<Map<String, dynamic>> cartItems = [];
   double totalCartPrice = 0.0;
   TextEditingController quantityController;
+  TextEditingController phoneNumberController;
+  bool isLoading = false;
 
-  String uId;
+  Razorpay _razorpay;
+  Uuid uuid;
+
+  String uId, userName, email;
 
   @override
   void onInit() {
     quantityController = TextEditingController(text: "1");
     getCartProducts();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.onInit();
+  }
+
+  Future<void> openCheckout() async {
+    // rzp_live_lpk9qpV9GInbUw
+    final options = {
+      'key': "rzp_test_7w5UEKTQKOkb0s",
+      'amount': (totalCartPrice * 100).roundToDouble().toString(),
+      'name': "NR Life Care",
+      'description': 'Online Order',
+      'prefill': {'contact': "", 'email': email},
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    CustomWidgets.customPaymentSnackbar(
+        message: "Order successfully placed", title: "Success", utfLogo: "✔");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print(response.message);
+    CustomWidgets.customPaymentSnackbar(
+        message: response.message.toString(),
+        title: response.code.toString(),
+        utfLogo: "❌");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Get.snackbar("External wallet", "",
+        snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.grey);
   }
 
   Future<void> getUid() async {
     uId = await SharedPrefs.getUid();
+    userName = await SharedPrefs.getUserName();
+    email = await SharedPrefs.getEmail();
   }
 
   Future<void> setUserQuantity({String pId, String quantity}) async {
+    isLoading = true;
+    update();
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(uId)
         .collection("cartProducts")
         .doc(pId)
-        .update({"userQuantity": quantity}).then(
-            (value) => totalCartProductPrice());
+        .update({"userQuantity": quantity}).then((value) {
+      totalCartProductPrice();
+      isLoading = false;
+      update();
+    });
   }
 
   Future<void> getCartProducts() async {
@@ -49,6 +107,8 @@ class CartController extends GetxController {
 
   void deleteCartProduct(
       {String id, String categoryId, String categoryName}) async {
+    isLoading = true;
+    update();
     if (categoryId == null) {
       if (categoryName == "TopProducts") {
         await FirebaseFirestore.instance
@@ -61,8 +121,11 @@ class CartController extends GetxController {
           await FirebaseFirestore.instance
               .collection("TopProducts")
               .doc(id)
-              .update({"isAdded": false}).then(
-                  (value) => totalCartProductPrice());
+              .update({"isAdded": false}).then((value) {
+            totalCartProductPrice();
+            isLoading = false;
+            update();
+          });
         });
       } else if (categoryName == "NewProducts") {
         await FirebaseFirestore.instance
@@ -76,7 +139,11 @@ class CartController extends GetxController {
               .collection("NewProducts")
               .doc(id)
               .update({"isAdded": false});
-        }).then((value) => totalCartProductPrice());
+        }).then((value) {
+          totalCartProductPrice();
+          isLoading = false;
+          update();
+        });
       }
     } else {
       await FirebaseFirestore.instance
@@ -91,10 +158,14 @@ class CartController extends GetxController {
             .doc(categoryId)
             .collection("products")
             .doc(id)
-            .update({"isAdded": false}).then(
-                (value) => totalCartProductPrice());
+            .update({"isAdded": false}).then((value) {
+          totalCartProductPrice();
+          isLoading = false;
+          update();
+        });
       });
     }
+    isLoading = false;
     update();
   }
 
@@ -113,5 +184,11 @@ class CartController extends GetxController {
       }
     });
     update();
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear();
+    super.dispose();
   }
 }

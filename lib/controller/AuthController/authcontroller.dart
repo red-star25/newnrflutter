@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../view/Authentication/verifyLoading.dart';
 
 class AuthController extends GetxController {
@@ -65,7 +64,12 @@ class AuthController extends GetxController {
               .set({"uId": value.user.uid});
           await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
           await SharedPrefs.setUid(uId: value.user.uid);
+          await SharedPrefs.setUserName(userName: value.user.displayName);
+          await SharedPrefs.setPhotoUrl(photoUrl: value.user.photoURL);
+          await SharedPrefs.setEmail(email: value.user.email);
           isLoading.value = false;
+          _emailController.clear();
+          _passwordController.clear();
           Get.toNamed("/home");
         });
       } on FirebaseAuthException catch (e) {

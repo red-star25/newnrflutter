@@ -73,4 +73,31 @@ class CustomWidgets {
       useSafeArea: true,
     );
   }
+
+  static dynamic customPaymentSnackbar(
+      {String message, String title, String utfLogo}) {
+    return Get.snackbar(
+      "",
+      "",
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: AppColors.primaryColor,
+      duration: Duration(milliseconds: 2000),
+      icon: Padding(
+        padding: EdgeInsets.only(left: 15.0.w),
+        child: Text(
+          utfLogo,
+          style: TextStyle(fontSize: 16.h),
+        ),
+      ),
+      isDismissible: true,
+      messageText: Text(
+        message,
+        style: AppTextDecoration.subtitle2.copyWith(color: Colors.white),
+      ),
+      titleText: Text(
+        title,
+        style: AppTextDecoration.subtitle2.copyWith(color: Colors.white),
+      ),
+    );
+  }
 }

@@ -65,6 +65,11 @@ Widget ThirdPartyAuth(context) {
                     .set({"uId": userCred.user.uid});
                 await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
                 await SharedPrefs.setUid(uId: userCred.user.uid);
+                await SharedPrefs.setUserName(
+                    userName: userCred.user.displayName);
+                await SharedPrefs.setPhotoUrl(photoUrl: userCred.user.photoURL);
+                await SharedPrefs.setEmail(email: userCred.user.email);
+
                 authController.isLoading.value = false;
                 Get.toNamed("/home");
               } else {

@@ -15,33 +15,36 @@ class _ProductState extends State<Product> {
   Widget build(BuildContext context) {
     final productController = Get.find<ProductController>();
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.lightBlue,
-        body: NestedScrollView(
-          controller: productController.scrollController,
-          headerSliverBuilder: (context, innerBoxIsScroller) => [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverSafeArea(
-                top: false,
-                sliver: SliverAppBar(
-                  leading: Container(),
-                  floating: true,
-                  backgroundColor: Colors.transparent,
-                  expandedHeight: 0.45.sh,
-                  titleSpacing: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: AnimatedContainer(
-                      // color: Colors.lightBlue,
-                      duration: const Duration(milliseconds: 200),
-                      child: ProductTop(),
+      child: Obx(
+        () => Scaffold(
+          backgroundColor: productController.imgBgColor.value,
+          body: NestedScrollView(
+            controller: productController.scrollController,
+            headerSliverBuilder: (context, innerBoxIsScroller) => [
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverSafeArea(
+                  top: false,
+                  sliver: SliverAppBar(
+                    leading: Container(),
+                    floating: true,
+                    backgroundColor: Colors.transparent,
+                    expandedHeight: 0.45.sh,
+                    titleSpacing: 0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: AnimatedContainer(
+                        // color: Colors.lightBlue,
+                        duration: const Duration(milliseconds: 200),
+                        child: ProductTop(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
-          body: ProductBottom(),
+              )
+            ],
+            body: ProductBottom(),
+          ),
         ),
       ),
     );

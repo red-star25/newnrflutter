@@ -92,12 +92,13 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                       height: 5.h,
                                     ),
                                     CustomTextField(
+                                      textInputType: TextInputType.number,
                                       validateField: (number) {
                                         authController
                                             .phoneNumberValidator(number);
                                       },
                                       controller: _phoneNumberController,
-                                      hintText: "989898989",
+                                      hintText: "9898989898",
                                       prefix: Text("+91",
                                           style: AppTextDecoration.bodyText3),
                                     ),

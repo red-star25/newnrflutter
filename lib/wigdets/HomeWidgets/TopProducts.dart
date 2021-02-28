@@ -42,16 +42,16 @@ class TopProducts extends StatelessWidget {
           Container(
               padding: EdgeInsets.only(left: 20.w),
               height: 0.36.sh,
-              child: AnimationLimiter(
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("TopProducts")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return TopProductShimmer();
-                      } else {
-                        return ListView.separated(
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("TopProducts")
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return TopProductShimmer();
+                    } else {
+                      return AnimationLimiter(
+                        child: ListView.separated(
                           separatorBuilder: (context, index) => SizedBox(
                             width: 15.w,
                           ),
@@ -75,6 +75,15 @@ class TopProducts extends StatelessWidget {
                                       Get.find<ProductController>()
                                           .selectedIndex
                                           .value = index;
+
+                                      Get.find<ProductController>()
+                                          .heroTag
+                                          .value = "productImage$index";
+
+                                      Get.find<ProductController>()
+                                              .imgBgColor
+                                              .value =
+                                          AppColors.listColor["l${index + 1}"];
 
                                       Get.toNamed(
                                         "/product",
@@ -149,19 +158,26 @@ class TopProducts extends StatelessWidget {
                                             ),
                                             SizedBox(
                                               height: 160.h,
-                                              child: CachedNetworkImage(
-                                                imageUrl: snapshot.data
-                                                    .docs[index]["productImage"]
-                                                    .toString(),
-                                                placeholder: (_, __) =>
-                                                    SpinKitRipple(
-                                                  color: AppColors.primaryColor,
-                                                ),
-                                                fit: BoxFit.contain,
-                                                errorWidget: (context, _, __) =>
-                                                    const Icon(
-                                                  Icons.error_outline,
-                                                  color: Colors.red,
+                                              child: Hero(
+                                                tag: "productImage$index",
+                                                child: CachedNetworkImage(
+                                                  imageUrl: snapshot
+                                                      .data
+                                                      .docs[index]
+                                                          ["productImage"]
+                                                      .toString(),
+                                                  placeholder: (_, __) =>
+                                                      SpinKitRipple(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                  ),
+                                                  fit: BoxFit.contain,
+                                                  errorWidget:
+                                                      (context, _, __) =>
+                                                          const Icon(
+                                                    Icons.error_outline,
+                                                    color: Colors.red,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -222,10 +238,10 @@ class TopProducts extends StatelessWidget {
                               ),
                             );
                           },
-                        );
-                      }
-                    }),
-              ))
+                        ),
+                      );
+                    }
+                  }))
         ],
       ),
     );

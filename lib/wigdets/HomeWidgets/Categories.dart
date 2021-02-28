@@ -35,8 +35,16 @@ class Categories extends StatelessWidget {
                 ).tr(),
               ),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   Get.find<HomeController>().selectedFabIcon.value = 2;
+                  await FirebaseFirestore.instance
+                      .collection("Categories")
+                      .get()
+                      .then((value) {
+                    categoryController.setCategoryId(value
+                        .docs[categoryController.selectedCategoryIndex.value].id
+                        .toString());
+                  });
                   Get.toNamed("/category");
                 },
                 child: Padding(
@@ -60,16 +68,16 @@ class Categories extends StatelessWidget {
           SizedBox(
             height: 0.16.sh,
             width: 1.sw,
-            child: AnimationLimiter(
-              child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection("Categories")
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return CategoriesShimmer();
-                    } else {
-                      return ListView.separated(
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Categories")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CategoriesShimmer();
+                  } else {
+                    return AnimationLimiter(
+                      child: ListView.separated(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -100,7 +108,7 @@ class Categories extends StatelessWidget {
                                               BorderRadius.circular(10),
                                           child: Container(
                                             color: AppColors.listColor[
-                                                "l${8 - (index + 1)}"],
+                                                "l${20 - (index + 1)}"],
                                             width: 105.w,
                                             height: 100.h,
                                             child: Padding(
@@ -154,10 +162,10 @@ class Categories extends StatelessWidget {
                         itemCount: int.parse(
                           snapshot.data.docs.length.toString(),
                         ),
-                      );
-                    }
-                  }),
-            ),
+                      ),
+                    );
+                  }
+                }),
           ),
         ],
       ),

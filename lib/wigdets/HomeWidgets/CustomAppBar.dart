@@ -67,7 +67,9 @@ class CustomAppBar extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Get.toNamed("/userProfile");
+                    },
                     icon: Icon(
                       Icons.person_outline_outlined,
                       color: AppColors.primaryColor,

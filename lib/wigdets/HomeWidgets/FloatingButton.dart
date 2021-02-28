@@ -40,7 +40,7 @@ class FloatingButton extends StatelessWidget {
             ),
             onTap: () {
               homeController.updateSelectedFabIcon(1);
-              Get.toNamed("/home");
+              Get.offNamed("/home");
             },
           ),
         ),
@@ -63,7 +63,7 @@ class FloatingButton extends StatelessWidget {
                     .docs[categoryController.selectedCategoryIndex.value].id
                     .toString());
               });
-              Get.toNamed("/category");
+              Get.offNamed("/category");
             },
           ),
         ),
@@ -71,7 +71,7 @@ class FloatingButton extends StatelessWidget {
           () => InkWell(
             onTap: () {
               homeController.updateSelectedFabIcon(3);
-              Get.toNamed("/cart");
+              Get.offNamed("/cart");
             },
             child: SvgPicture.asset(
               "assets/icons/shopping-basket.svg",
@@ -94,7 +94,7 @@ class FloatingButton extends StatelessWidget {
             ),
             onTap: () {
               homeController.updateSelectedFabIcon(4);
-              Get.toNamed("/aboutUs");
+              Get.offNamed("/aboutUs");
             },
           ),
         ),
@@ -109,7 +109,7 @@ class FloatingButton extends StatelessWidget {
             ),
             onTap: () {
               homeController.updateSelectedFabIcon(5);
-              Get.toNamed("/contactUs");
+              Get.offNamed("/contactUs");
             },
           ),
         )

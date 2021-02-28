@@ -55,6 +55,9 @@ class _VerifyLoadingState extends State<VerifyLoading> {
           .set({"uId": user.uid});
       await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
       await SharedPrefs.setUid(uId: user.uid);
+      await SharedPrefs.setUserName(userName: user.displayName);
+      await SharedPrefs.setPhotoUrl(photoUrl: user.photoURL);
+      await SharedPrefs.setEmail(email: user.email);
       authController.isLoading.value = false;
       Get.toNamed("/home");
     }

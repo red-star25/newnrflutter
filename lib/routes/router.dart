@@ -13,6 +13,7 @@ import 'package:nrlifecare/view/Product/Product.dart';
 import 'package:nrlifecare/view/SearchProduct/searchPage.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
 import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
+import 'package:nrlifecare/view/UserProfile/userProfile.dart';
 
 class NrRouter {
   static List<GetPage> pages = [
@@ -30,6 +31,10 @@ class NrRouter {
     GetPage(
       name: '/searchPage',
       page: () => SearchPage(),
+    ),
+    GetPage(
+      name: '/userProfile',
+      page: () => UserProfile(),
     ),
   ];
 }

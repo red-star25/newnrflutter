@@ -20,25 +20,28 @@ class ProductTop extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryColor),
                 onPressed: () {
                   Get.back();
                 }),
           ),
         ),
         Flexible(
-          child: CachedNetworkImage(
-            height: 300.h,
-            width: 300.h,
-            imageUrl:
-                productController.selectedProduct["productImage"].toString(),
-            placeholder: (_, __) => SpinKitRipple(
-              color: AppColors.primaryColor,
-            ),
-            fit: BoxFit.contain,
-            errorWidget: (context, _, __) => const Icon(
-              Icons.error_outline,
-              color: Colors.red,
+          child: Hero(
+            tag: productController.heroTag,
+            child: CachedNetworkImage(
+              height: 300.h,
+              width: 300.h,
+              imageUrl:
+                  productController.selectedProduct["productImage"].toString(),
+              placeholder: (_, __) => SpinKitRipple(
+                color: AppColors.primaryColor,
+              ),
+              fit: BoxFit.contain,
+              errorWidget: (context, _, __) => const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+              ),
             ),
           ),
         ),

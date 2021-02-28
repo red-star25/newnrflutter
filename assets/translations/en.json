@@ -83,7 +83,13 @@
     "yes_label":"Yes",
     "quantity_label":"Quantity",
     "close_label":"Close",
-    "submit_label":"Submit"
+    "submit_label":"Submit",
+
+    "customize_settings":"Customize your settings :",
+    "change_language":"Change Language",
+    "change_display_name":"Change Display Name",
+    "your_orders":"Your Orders",
+    "log_out":"Log Out"
 
 
 }

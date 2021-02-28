@@ -57,16 +57,16 @@ class NewIn extends StatelessWidget {
             Flexible(
               child: SizedBox(
                 height: 1.sh,
-                child: AnimationLimiter(
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection("NewProducts")
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return NewInShimmer();
-                        } else {
-                          return ListView.builder(
+                child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("NewProducts")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return NewInShimmer();
+                      } else {
+                        return AnimationLimiter(
+                          child: ListView.builder(
                             // scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
@@ -90,6 +90,10 @@ class NewIn extends StatelessWidget {
                                               .selectedIndex
                                               .value = index;
 
+                                          Get.find<ProductController>()
+                                              .heroTag
+                                              .value = "newProduct$index";
+
                                           Get.toNamed(
                                             "/product",
                                           );
@@ -110,23 +114,26 @@ class NewIn extends StatelessWidget {
                                                     color: AppColors.listColor[
                                                         "l${index + 1}"],
                                                   ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: snapshot
-                                                        .data
-                                                        .docs[index]
-                                                            ["productImage"]
-                                                        .toString(),
-                                                    placeholder: (_, __) =>
-                                                        SpinKitRipple(
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                    ),
-                                                    fit: BoxFit.contain,
-                                                    errorWidget:
-                                                        (context, _, __) =>
-                                                            const Icon(
-                                                      Icons.error_outline,
-                                                      color: Colors.red,
+                                                  child: Hero(
+                                                    tag: "newProduct$index",
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: snapshot
+                                                          .data
+                                                          .docs[index]
+                                                              ["productImage"]
+                                                          .toString(),
+                                                      placeholder: (_, __) =>
+                                                          SpinKitRipple(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                      ),
+                                                      fit: BoxFit.contain,
+                                                      errorWidget:
+                                                          (context, _, __) =>
+                                                              const Icon(
+                                                        Icons.error_outline,
+                                                        color: Colors.red,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -239,10 +246,10 @@ class NewIn extends StatelessWidget {
                             },
                             itemCount:
                                 int.parse(snapshot.data.docs.length.toString()),
-                          );
-                        }
-                      }),
-                ),
+                          ),
+                        );
+                      }
+                    }),
               ),
             ),
           ],
