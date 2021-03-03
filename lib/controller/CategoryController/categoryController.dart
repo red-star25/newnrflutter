@@ -63,21 +63,7 @@ class CategoryController extends GetxController {
     }
   }
 
-  // void updateProductQuantity({int quantity, String id}) async {
-  //   final uId = await SharedPrefs.getUid();
-
-  //   await FirebaseFirestore.instance
-  //       .collection("Users")
-  //       .doc(uId)
-  //       .collection("cartProducts")
-  //       .doc(categoryId.value.toString())
-  //       .update({"productQuantity": quantity});
-  // }
-
   void addProductToCartToggle({String id, int index}) async {
-    isAddedToCart = true;
-    update();
-
     if (index != null) {
       if (searchedProducts.value[index]["isAdded"] == false) {
         searchedProducts.value[index]["isAdded"] = true;
@@ -97,55 +83,73 @@ class CategoryController extends GetxController {
         .then((value) => value.data()["isAdded"] as bool);
 
     if (!isAlreadyAdded) {
-      await FirebaseFirestore.instance
-          .collection("Categories")
-          .doc(categoryId.value.toString())
-          .collection("products")
-          .doc(id)
-          .update({"isAdded": true}).then((value) async {
-        final uId = await SharedPrefs.getUid();
-
-        CollectionReference collectionReference = FirebaseFirestore.instance
-            .collection("Users")
-            .doc(uId)
-            .collection("cartProducts");
-
-        Map<String, dynamic> addedProductData = await FirebaseFirestore.instance
+      try {
+        isAddedToCart = true;
+        update();
+        await FirebaseFirestore.instance
             .collection("Categories")
             .doc(categoryId.value.toString())
             .collection("products")
             .doc(id)
-            .get()
-            .then((value) => value.data());
+            .update({"isAdded": true}).then((value) async {
+          final uId = await SharedPrefs.getUid();
 
-        await collectionReference.doc(id).set(addedProductData);
-        await collectionReference
-            .doc(id)
-            .update({"categoryId": categoryId.value, "userQuantity": "1"});
-      });
-      isAddedToCart = false;
-      update();
+          CollectionReference collectionReference = FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uId)
+              .collection("cartProducts");
+
+          Map<String, dynamic> addedProductData = await FirebaseFirestore
+              .instance
+              .collection("Categories")
+              .doc(categoryId.value.toString())
+              .collection("products")
+              .doc(id)
+              .get()
+              .then((value) => value.data());
+
+          await collectionReference.doc(id).set(addedProductData);
+          await collectionReference.doc(id).update({
+            "categoryId": categoryId.value,
+            "userQuantity": "1"
+          }).then((value) {
+            isAddedToCart = false;
+            update();
+          });
+        });
+      } catch (e) {
+        print(e);
+        isAddedToCart = false;
+        update();
+      }
     } else {
-      isAddedToCart = true;
-      update();
-
-      await FirebaseFirestore.instance
-          .collection("Categories")
-          .doc(categoryId.value.toString())
-          .collection("products")
-          .doc(id)
-          .update({"isAdded": false}).then((value) async {
-        final uId = await SharedPrefs.getUid();
-
+      try {
+        isAddedToCart = true;
+        update();
         await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(uId)
-            .collection("cartProducts")
+            .collection("Categories")
+            .doc(categoryId.value.toString())
+            .collection("products")
             .doc(id)
-            .delete();
-      });
-      isAddedToCart = false;
-      update();
+            .update({"isAdded": false}).then((value) async {
+          final uId = await SharedPrefs.getUid();
+
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uId)
+              .collection("cartProducts")
+              .doc(id)
+              .delete()
+              .then((value) {
+            isAddedToCart = false;
+            update();
+          });
+        });
+      } catch (e) {
+        print(e);
+        isAddedToCart = false;
+        update();
+      }
     }
   }
 

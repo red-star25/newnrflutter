@@ -1,0 +1,97 @@
+{
+    "signin_text":"સાઇન ઇન",
+    "access_account":"એક્સેસ અકાઉંટ",
+    "signin_option_text":"અથવા ઇમેઇલ દ્વારા સાઇન ઇન કરો",
+    "email_text":"ઇમેઇલ",
+    "password_text":"પાસવર્ડ",
+    "sign_in_btn_text":"સાઇન ઇન",
+    "goto_register_text":"ખાતું નથી? રજીસ્ટર કરો",
+
+    "signup_text":"સાઇન અપ",
+    "signup_option_text":"અથવા ઇમેઇલ સાથે સાઇન અપ કરો",
+    "confirm_password":"પાસવર્ડની પુષ્ટિ કરો",
+    "goto_login_text":"પહેલેથી ખાતું છે? સાઇન ઇન",
+
+    "phone_text":"OTP ચકાસણી",
+    "phone_number":"ફોન નંબર",
+    "phone_otp":"Otp",
+    "send_otp":"Otp મોકલો",
+
+    "nr_name":"NR Life Care",
+    "nr_subname":"Pharmaceutical Company",
+    "home_top_products":"ટોચના પ્રોડ્ક્સ",
+    "home_new_in":"નવી પ્રોડ્ક્સ",
+    "home_see_all":"બધા જુઓ",
+    "home_categories":"કેટેગરીજ",
+
+    "home_newin":"નવી પ્રોડ્ક્સ",
+
+    "category_title":"કેટેગરીજ",
+
+    "category_right_product":"પ્રોડ્ક્સ",
+
+    "cart_title":"કાર્ટ",
+    "cart_checkout":"ખરીદો",
+    "cart_total":"કુલ :",
+
+    "aboutus_title":"અમારા વિશે",
+
+    "product_price_and_quantity":"ભાવ અને જથ્થો",
+    "product_specifications":"પ્રોડ્ક્સ વિશિષ્ટતાઓ",
+    "product_description":"પ્રોડ્ક્સ વર્ણન",
+    "product_trade_information":"વેપાર માહિતી",
+    "payment_term":"ચુકવણી શરતો",
+    "supply_ability":"સપ્લાય ની ક્ષમતા",
+    "main_domestic_market":"મુખ્ય ઘરેલું બજાર",
+    "drug_type":"ડ્રગનો પ્રકાર",
+    "recommended_for":"કોના માટે",
+    "storage_instruction":"સંગ્રહ સૂચના",
+    "physical_form":"શારીરિક સ્વરૂપ",
+    "suitable_for":"કોના માટે યોગ્ય",
+    "product_price":"કીંમત",
+    "minimum_order":"ન્યૂનતમ ઓર્ડર",
+
+
+    "aboutus_1_title":"અમે કોણ છીએ ?",
+    "aboutus_1_subtitle":"અમે, એનઆર લાઇફ કેર, વિશ્વસનીય ફાર્માસ્યુટિકલ ઉત્પાદનો, એન્ટિબાયોટિક મેડિસિન, એનાલજેસિક અને એન્ટિપ્રાયરેટિક દવાઓ, ફાર્માસ્યુટિકલ દવાઓ, ફાર્માસ્યુટિકલ ઉત્પાદનો જેવા કે વિટામિન વગેરેના નિકાસકાર, જથ્થાબંધ વેપારી અને વેપારી તરીકે સામેલ એક વિશ્વસનીય ફાર્માસ્યુટિકલ કંપની છે.",
+    "aboutus_2_title":"પ્રીમિયમ ગુણવત્તા ઉત્પાદન",
+    "aboutus_2_subtitle":"અમે, એનઆર લાઇફ કેર, એક આશાસ્પદ અને વિશ્વસનીય સંસ્થા છે જેની સ્થાપના 2014 માં કરવામાં આવી છે. અમારા પ્રાપ્ત ઉત્પાદનોની નિયમિત ગુણવત્તાની તપાસ માટેના અવિનય પ્રયત્નો સાથે, અમે સલામત અને મુખ્ય ઉત્પાદનોવાળા ગ્રાહકોને સેવા આપીએ છીએ અને તેમની નિષ્ઠા મેળવીએ છીએ.",
+    "aboutus_3_title":"100% શ્રેષ્ઠ સેવા",
+    "aboutus_3_subtitle":"અમારું કુશળ સ્ટાફ ઉચ્ચ ક્લાસના પ્રોડક્ટ ઉત્પાદનોની સપ્લાય કરીને અમારા ક્લાયંટને સંતોષ આપવા માટે અમને સમર્થન આપે છે. ગ્રાહકોની માંગને સંતોષવા માટે અમે પૈસાની કિંમત સાથે દવાઓ સરળતાથી ઉપલબ્ધ કરીએ છીએ.",
+    "aboutus_4_title":"લવચીક ચુકવણી સ્થિતિઓ",
+    "aboutus_4_subtitle":"અમારી પાસે મુશ્કેલી વિનાના આર્થિક વ્યવહારો માટે રાહત ભરવાની સ્થિતિઓ છે. અમે અમારા ક્લાયન્ટોને દવાઓની ત્વરિત ડિલિવરી કરીએ છીએ. ગ્રાહકોની માંગને સંતોષવા માટે અમે દવાઓ સરળતાથી ઉપલબ્ધ કરાવીએ છીએ.",
+
+    "contactus":"સંપર્ક કરો",
+    "visit_website":"વેબસાઇટ ની મુલાકાત લો",
+    "email":"ઇમેઇલ દ્વારા સંપર્ક કરો",
+    "address":"અમે ક્યાં છીએ?",
+    "nature_of_business":"વ્યવસાયનો પ્રકાર",
+    "wholesale_trader":"હોલસેલ વેપારી",
+    "employement":"કુલ રોજગાર",
+    "total_employee":"10 લોકો સુધી",
+    "establishment":"સ્થાપના",
+    "year_of_est":"2014",
+    "annual_turnover":"વાર્ષિક ટર્નઓવર",
+    "total_turnover":"2 કરોડ સુધી",
+    "gst":"GST નંબર",
+    "gst_number":"24ADVPN9611L2ZU",
+    "firm":"ફ્ર્મ ની કાનૂની સ્થિતિ",
+    "status_of_firm":"વ્યક્તિગત",
+
+
+    "delete_label":"કાઢી નાખો",
+    "sure_to_delete_text":"શું તમે ખરેખર આ પ્રોડ્ક્ટ ને કાઢી નાખવા માંગો છો?",
+    "no_label":"ના",
+    "yes_label":"હા",
+    "quantity_label":"જથ્થો",
+    "close_label":"બંધ કરો",
+    "submit_label":"સબમિટ",
+
+    "customize_settings":"તમારી સેટિંગ્સને કસ્ટમાઇઝ કરો :",
+    "change_language":"ભાષા બદલો",
+    "change_display_name":"ડિસ્પ્લે નામ બદલો",
+    "your_orders":"તમારા ઓર્ડર",
+    "log_out":"બહાર નીકળો"
+
+
+}

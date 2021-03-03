@@ -19,6 +19,7 @@ class AuthController extends GetxController {
   TextEditingController get confirmpassword => _confirmpasswordController;
 
   RxBool isLoading = false.obs;
+  RxBool isResizeToAvoidBottom = false.obs;
 
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL

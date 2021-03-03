@@ -25,7 +25,7 @@ class Home extends StatelessWidget {
                   leading: Container(),
                   floating: true,
                   backgroundColor: Colors.white,
-                  expandedHeight: 0.81.sh,
+                  expandedHeight: 0.82.sh,
                   titleSpacing: 0,
                   flexibleSpace: FlexibleSpaceBar(
                     background: AnimatedContainer(

@@ -1,0 +1,97 @@
+{
+    "signin_text":"साइन इन",
+    "access_account":"एक्सेस अकाउंट",
+    "signin_option_text":"या ईमेल के साथ साइन इन करें",
+    "email_text":"ईमेल",
+    "password_text":"पासवर्ड",
+    "sign_in_btn_text":"साइन इन",
+    "goto_register_text":"खाता नहीं है? रजिस्टर करें",
+
+    "signup_text":"साइन अप",
+    "signup_option_text":"या ईमेल से साइनअप करें",
+    "confirm_password":"पासवर्ड की पुष्टि कीजिये",
+    "goto_login_text":"क्या आपके पास पहले से एक खाता मौजूद है ? लॉग इन करें",
+
+    "phone_text":"OTP वेरीफीकेशन",
+    "phone_number":"फ़ोन नंबर",
+    "phone_otp":"Otp",
+    "send_otp":"OTP भेजें",
+
+    "nr_name":"NR Life Care",
+    "nr_subname":"Pharmaceutical Company",
+    "home_top_products":"उच्च दवाए",
+    "home_new_in":"नई दवाए",
+    "home_see_all":"सब देखें",
+    "home_categories":"केटेगरीज",
+
+    "home_newin":"नई दवाए",
+
+    "category_title":"केटेगरीज",
+
+    "category_right_product":"प्रोड्क्टस",
+
+    "cart_title":"कार्ट",
+    "cart_checkout":"खरिदे",
+    "cart_total":"कुल :",
+
+    "aboutus_title":"हमारे बारेमें",
+
+    "product_price_and_quantity":"किंमत और मात्रा",
+    "product_specifications":"प्रोड्क्ट विशेष विवरण",
+    "product_description":"प्रोड्क्ट विवरण",
+    "product_trade_information":"व्यापार जानकारी",
+    "payment_term":"भुगतान की शर्तें",
+    "supply_ability":"सप्लाय कि क्षमता",
+    "main_domestic_market":"मुख्य घरेलू बाजार",
+    "drug_type":"दवा का प्रकार",
+    "recommended_for":"किसके लिये",
+    "storage_instruction":"स्टोरेज सुचना",
+    "physical_form":"भौतिक रूप",
+    "suitable_for":"किसके लिये उपयुक्त",
+    "product_price":"किंमत",
+    "minimum_order":"न्यूनतम ऑर्डर",
+
+
+    "aboutus_1_title":"हम कौन है ?",
+    "aboutus_1_subtitle":"हम, एनआर लाइफ़ केयर, एक भरोसेमंद फ़ार्मास्युटिकल कंपनी हैं, जो एक विस्तृत श्रेणी के औषधीय उत्पादों, एंटीबायोटिक मेडिसिन, एनाल्जेसिक और एंटीपायरेटिक मेडिसिन, फ़ार्मास्युटिकल फ़ार्मास्युटिकल्स जैसे विटामिन आदि के एक निर्यातक, थोक व्यापारी और व्यापारी के रूप में शामिल हैं।",
+    "aboutus_2_title":"प्रीमियम गुणवत्ता उत्पाद",
+    "aboutus_2_subtitle":"हम, एनआर लाइफ केयर, 2014 में स्थापित एक होनहार और विश्वसनीय संगठन हैं। हमारे खरीदे गए उत्पादों के नियमित गुणवत्ता निरीक्षण के प्रति अथक प्रयासों के साथ, हम ग्राहकों को सुरक्षित और प्रमुख उत्पादों के साथ सेवा देते हैं और उनकी वफादारी हासिल करते हैं।",
+    "aboutus_3_title":"100% सर्वश्रेष्ठ सेवा",
+    "aboutus_3_subtitle":"हमारे कुशल कर्मचारी उच्च ग्रेड औषधीय उत्पादों की आपूर्ति करके हमारे क्लाइंट को संतुष्ट करने में हमारा समर्थन करते हैं। हम ग्राहकों की मांगों को पूरा करने के लिए वैल्यू फॉर मनी के साथ आसानी से दवाएं उपलब्ध कराते हैं।",
+    "aboutus_4_title":"लचीला भुगतान मोड",
+    "aboutus_4_subtitle":"हमारे पास परेशानी मुक्त वित्तीय लेनदेन के लिए लचीले भुगतान मोड हैं। हम अपने ग्राहकों को दवाओं की त्वरित डिलीवरी प्रदान करते हैं। हम ग्राहकों की मांगों को पूरा करने के लिए दवाएं आसानी से उपलब्ध कराते हैं।",
+
+    "contactus":"संपर्क करें",
+    "visit_website":"हमारी वेबसाइट पर पधारें",
+    "email":"हमें ईमेल के माध्यम से पहुंचें",
+    "address":"हम कहाँ है ?",
+    "nature_of_business":"व्यवसाय की प्रकृति",
+    "wholesale_trader":"होलसेल व्यापारी",
+    "employement":"कुल रोजगार",
+    "total_employee":"10 लोग तक",
+    "establishment":"स्थापना वर्ष",
+    "year_of_est":"2014",
+    "annual_turnover":"वार्षिक कारोबार",
+    "total_turnover":"2 करोड़ तक",
+    "gst":"जीएसटी नंबर",
+    "gst_number":"24ADVPN9611L2ZU",
+    "firm":"फर्म की कानूनी स्थिति",
+    "status_of_firm":"निजी",
+
+
+    "delete_label":"हटाएं",
+    "sure_to_delete_text":"क्या आप वाकई इस प्रोडक्ट को हटाना चाहते हैं?",
+    "no_label":"नहीं",
+    "yes_label":"हां",
+    "quantity_label":"मात्रा :",
+    "close_label":"बंद करे",
+    "submit_label":"सबमिट करें",
+
+    "customize_settings":"अपनी सेटिंग्स को कस्टमाइज़ करें :",
+    "change_language":"भाषा बदलें",
+    "change_display_name":"प्रदर्शन नाम बदलें",
+    "your_orders":"तुम्हारे ऑर्डर",
+    "log_out":"लॉग आउट"
+
+
+}

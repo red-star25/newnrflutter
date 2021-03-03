@@ -35,6 +35,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
   final _auth = FirebaseAuth.instance;
 
   bool codeSent = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +108,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                     ),
                                     codeSent
                                         ? CustomTextField(
+                                            textInputType: TextInputType.number,
                                             validateField: (otp) {
                                               authController.otpValidator(otp);
                                             },
@@ -168,7 +170,10 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                               BorderRadius.circular(10)),
                                       color: Colors.transparent,
                                       onPressed: () async {
-                                        String smsCode = _otpController.text
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        final smsCode = _otpController.text
                                             .toString()
                                             .trim();
 
@@ -192,7 +197,6 @@ class _PhoneAuthState extends State<PhoneAuth> {
                             SizedBox(height: 15.h),
                             InkWell(
                               onTap: () {
-                                //TODO Navigate to Register Screen
                                 Get.toNamed("/register");
                               },
                               child: FittedBox(
@@ -219,7 +223,6 @@ class _PhoneAuthState extends State<PhoneAuth> {
 
   _login() async {
     try {
-      authController.isLoading.value = true;
       await FirebaseAuth.instance
           .signInWithCredential(_phoneAuthCredential)
           .then((authRes) async {
@@ -229,7 +232,9 @@ class _PhoneAuthState extends State<PhoneAuth> {
             .set({"uId": authRes.user.uid});
         await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
         await SharedPrefs.setUid(uId: authRes.user.uid);
-        authController.isLoading.value = false;
+        setState(() {
+          isLoading = false;
+        });
         Get.offAllNamed("/home");
       });
     } catch (e) {

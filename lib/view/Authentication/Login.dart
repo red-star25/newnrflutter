@@ -17,33 +17,34 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: AppColors.primaryColor,
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: 1.sh,
-          child: Column(
-            children: [
-              const Heading(
-                headingText: "signin_text",
-              ),
-              SizedBox(
-                height: 40.h,
-              ),
-              Expanded(
-                child: Obx(
-                  () => Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
+    return Obx(
+      () => Scaffold(
+        resizeToAvoidBottomInset: authController.isResizeToAvoidBottom.value,
+        backgroundColor: AppColors.primaryColor,
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: 1.sh,
+            width: 1.sw,
+            child: Column(
+              children: [
+                const Heading(
+                  headingText: "signin_text",
+                ),
+                SizedBox(
+                  height: 40.h,
+                ),
+                Obx(
+                  () => Flexible(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
                       ),
-                    ),
-                    child: !authController.isLoading.value
-                        ? SingleChildScrollView(
-                            child: Column(
+                      child: !authController.isLoading.value
+                          ? Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Column(
@@ -157,6 +158,8 @@ class Login extends StatelessWidget {
                                     InkWell(
                                       onTap: () {
                                         authController.clearTextField();
+                                        authController
+                                            .isResizeToAvoidBottom.value = true;
                                         Get.toNamed("/register");
                                       },
                                       child: FittedBox(
@@ -168,15 +171,15 @@ class Login extends StatelessWidget {
                                   ],
                                 ),
                               ],
+                            )
+                          : SpinKitRipple(
+                              color: AppColors.primaryColor,
                             ),
-                          )
-                        : SpinKitRipple(
-                            color: AppColors.primaryColor,
-                          ),
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

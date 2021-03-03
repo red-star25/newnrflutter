@@ -28,6 +28,8 @@
 
     "category_title":"Categories",
 
+    "category_right_product":"Products",
+
     "cart_title":"Cart",
     "cart_checkout":"Checkout",
     "cart_total":"Total:",

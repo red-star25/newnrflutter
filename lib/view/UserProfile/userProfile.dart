@@ -61,14 +61,11 @@ class _UserProfileState extends State<UserProfile> {
                       )),
                 ),
               ),
-              photoURL != null
-                  ? CircleAvatar(
-                      radius: 80.h,
-                      backgroundImage: NetworkImage(photoURL),
-                    )
-                  : CircleAvatar(
-                      radius: 80.h,
-                    ),
+              CircleAvatar(
+                radius: 80.h,
+                backgroundImage:
+                    photoURL != null ? NetworkImage(photoURL) : null,
+              ),
               SizedBox(
                 height: 20.h,
               ),
@@ -138,6 +135,10 @@ class _UserProfileState extends State<UserProfile> {
                                                       onTap: () {
                                                         homeController
                                                             .setLanguage("EN");
+                                                        setState(() {
+                                                          context.locale =
+                                                              Locale("en");
+                                                        });
                                                       },
                                                       leading: Text(
                                                         "EN",
@@ -188,6 +189,10 @@ class _UserProfileState extends State<UserProfile> {
                                                           homeController
                                                               .setLanguage(
                                                                   "HI");
+                                                          setState(() {
+                                                            context.locale =
+                                                                Locale("hi");
+                                                          });
                                                         },
                                                         leading: Text(
                                                           "HI",
@@ -240,6 +245,10 @@ class _UserProfileState extends State<UserProfile> {
                                                           homeController
                                                               .setLanguage(
                                                                   "GU");
+                                                          setState(() {
+                                                            context.locale =
+                                                                Locale("gu");
+                                                          });
                                                         },
                                                         leading: Text(
                                                           "GU",

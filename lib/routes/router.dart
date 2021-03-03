@@ -14,6 +14,7 @@ import 'package:nrlifecare/view/SearchProduct/searchPage.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
 import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 import 'package:nrlifecare/view/UserProfile/userProfile.dart';
+import 'package:nrlifecare/view/Cart/cashOnDelivery.dart';
 
 class NrRouter {
   static List<GetPage> pages = [
@@ -35,6 +36,10 @@ class NrRouter {
     GetPage(
       name: '/userProfile',
       page: () => UserProfile(),
+    ),
+    GetPage(
+      name: '/cashOnDelivery',
+      page: () => CashOnDelivery(),
     ),
   ];
 }

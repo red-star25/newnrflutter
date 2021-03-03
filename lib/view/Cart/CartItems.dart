@@ -70,14 +70,19 @@ class CartItems extends StatelessWidget {
                                                           const Text('no_label')
                                                               .tr(),
                                                       onPressed: () =>
-                                                          Navigator.of(context)
-                                                              .pop(false),
+                                                          Get.back(),
                                                     ),
                                                     FlatButton(
                                                       child: Text('yes_label')
                                                           .tr(),
                                                       onPressed: () {
-                                                        cartController.deleteCartProduct(
+                                                        if (snapshot.data
+                                                                    .docs[index]
+                                                                [
+                                                                "categoryId"] !=
+                                                            null) {
+                                                          cartController
+                                                              .deleteCartProduct(
                                                             id: snapshot
                                                                 .data
                                                                 .docs[index]
@@ -87,9 +92,40 @@ class CartItems extends StatelessWidget {
                                                                 .data
                                                                 .docs[index][
                                                                     "categoryId"]
-                                                                .toString());
-                                                        Navigator.of(context)
-                                                            .pop(true);
+                                                                .toString(),
+                                                          );
+                                                        } else if (snapshot.data
+                                                                    .docs[index]
+                                                                [
+                                                                "categoryName"] ==
+                                                            "TopProducts") {
+                                                          cartController
+                                                              .deleteCartProduct(
+                                                                  id: snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          ["id"]
+                                                                      .toString(),
+                                                                  categoryName:
+                                                                      "TopProducts");
+                                                        } else if (snapshot.data
+                                                                    .docs[index]
+                                                                [
+                                                                "categoryName"] ==
+                                                            "NewProducts") {
+                                                          cartController
+                                                              .deleteCartProduct(
+                                                                  id: snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          ["id"]
+                                                                      .toString(),
+                                                                  categoryName:
+                                                                      "NewProducts");
+                                                        }
+                                                        Get.back();
                                                       },
                                                     ),
                                                   ],

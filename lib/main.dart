@@ -12,7 +12,7 @@ import 'package:nrlifecare/view/PageNotFound/pagenotfound.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
 import 'package:nrlifecare/bindings/HomeBindings/homeBindings.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   AuthBindings().dependencies();
@@ -23,7 +23,7 @@ void main() async {
   runApp(
     EasyLocalization(
       child: MainApp(),
-      supportedLocales: const [Locale("en")],
+      supportedLocales: const [Locale("en"), Locale("hi"), Locale("gu")],
       path: "assets/translations",
       fallbackLocale: const Locale("en"),
     ),

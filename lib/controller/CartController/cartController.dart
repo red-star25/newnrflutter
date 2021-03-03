@@ -6,13 +6,26 @@ import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:telephony/telephony.dart';
 
 class CartController extends GetxController {
   List<Map<String, dynamic>> cartItems = [];
   double totalCartPrice = 0.0;
+
   TextEditingController quantityController;
-  TextEditingController phoneNumberController;
+  TextEditingController phoneNumberController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController addressController = new TextEditingController();
+
+  final Telephony telephony = Telephony.instance;
+
+  String smsMessage = "";
+
   bool isLoading = false;
+
+  bool isSendingSms = false;
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Razorpay _razorpay;
   Uuid uuid;
@@ -28,6 +41,27 @@ class CartController extends GetxController {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     super.onInit();
+  }
+
+  Future<void> smsSend() async {
+    final SmsSendStatusListener listener = (SendStatus status) {
+      if (status == SendStatus.SENT) {
+        CustomWidgets.customPaymentSnackbar(
+            message: "Order Placed Successfully",
+            title: "Congratulation",
+            utfLogo: "✔");
+      }
+    };
+
+    await telephony
+        .sendSms(
+      to: "6353369354",
+      message: smsMessage,
+      statusListener: listener,
+    )
+        .then((value) {
+      Get.offNamed("/cart");
+    });
   }
 
   Future<void> openCheckout() async {
@@ -107,10 +141,10 @@ class CartController extends GetxController {
 
   void deleteCartProduct(
       {String id, String categoryId, String categoryName}) async {
-    isLoading = true;
-    update();
     if (categoryId == null) {
       if (categoryName == "TopProducts") {
+        isLoading = true;
+        update();
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(uId)
@@ -128,6 +162,8 @@ class CartController extends GetxController {
           });
         });
       } else if (categoryName == "NewProducts") {
+        isLoading = true;
+        update();
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(uId)
@@ -146,6 +182,8 @@ class CartController extends GetxController {
         });
       }
     } else {
+      isLoading = true;
+      update();
       await FirebaseFirestore.instance
           .collection("Users")
           .doc(uId)

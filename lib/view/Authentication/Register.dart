@@ -22,6 +22,7 @@ class Register extends StatelessWidget {
       body: SingleChildScrollView(
         child: SizedBox(
           height: 1.sh,
+          width: 1.sw,
           child: Column(
             children: [
               Heading(

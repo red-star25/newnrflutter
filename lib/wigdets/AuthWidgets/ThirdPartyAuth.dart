@@ -12,44 +12,10 @@ import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 Widget ThirdPartyAuth(context) {
   final authController = Get.find<AuthController>();
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Expanded(
-        child: InkWell(
-          onTap: () {
-            // TODO FB Login
-          },
-          child: Container(
-            margin: EdgeInsets.only(left: 30.w, top: 10.h),
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primaryColor.withOpacity(0.2),
-                  offset: const Offset(0, 5),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                "assets/images/facebook_logo.svg",
-                height: 30.h,
-                width: 30.w,
-                color: AppColors.primaryColor,
-                semanticsLabel: "facebook login",
-              ),
-            ),
-          ),
-        ),
-      ),
       SizedBox(
-        width: 50.w,
-      ),
-      Expanded(
+        width: 0.4.sw,
         child: InkWell(
           onTap: () async {
             await Get.find<AuthController>()
@@ -103,7 +69,8 @@ Widget ThirdPartyAuth(context) {
           ),
         ),
       ),
-      Expanded(
+      SizedBox(
+        width: 0.4.sw,
         child: InkWell(
           onTap: () {
             Get.toNamed("/phone");
@@ -131,9 +98,6 @@ Widget ThirdPartyAuth(context) {
             )),
           ),
         ),
-      ),
-      SizedBox(
-        width: 50.w,
       ),
     ],
   );

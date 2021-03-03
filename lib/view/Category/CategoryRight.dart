@@ -12,6 +12,7 @@ import 'package:nrlifecare/controller/CategoryController/categoryController.dart
 import 'package:nrlifecare/controller/ProductController/productController.dart';
 import 'package:nrlifecare/view/SearchProduct/searchPage.dart';
 import 'package:nrlifecare/wigdets/ShimmerLoading/shimmerLoading.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CategoryRightBody extends StatelessWidget {
   // final categoryController = Get.find<CategoryController>();
@@ -40,9 +41,9 @@ class CategoryRightBody extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(left: 20.0.w, top: 20.h),
                             child: Text(
-                              "Products",
+                              "category_right_product",
                               style: AppTextDecoration.heading2,
-                            ),
+                            ).tr(),
                           ),
                           InkWell(
                             onTap: () {
