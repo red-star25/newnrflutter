@@ -56,18 +56,19 @@ class CategoryLeftBody extends StatelessWidget {
                                             .data.docs[index]["categoryName"]
                                             .toString(),
                                         style: AppTextDecoration.bodyText6),
-                                    categoryController.categoryList.value[index]
-                                                .isSelected ==
-                                            true
-                                        ? RotatedBox(
-                                            quarterTurns: 1,
-                                            child: Text(
-                                              "⫶",
-                                              style: AppTextDecoration.bodyText5
-                                                  .copyWith(fontSize: 50.sp),
-                                            ),
-                                          )
-                                        : Container()
+                                    if (categoryController.categoryList
+                                            .value[index].isSelected ==
+                                        true)
+                                      RotatedBox(
+                                        quarterTurns: 1,
+                                        child: Text(
+                                          "⫶",
+                                          style: AppTextDecoration.bodyText5
+                                              .copyWith(fontSize: 50.sp),
+                                        ),
+                                      )
+                                    else
+                                      Container()
                                   ],
                                 ),
                               ),

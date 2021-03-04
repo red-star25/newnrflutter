@@ -59,7 +59,7 @@ class CashOnDelivery extends StatelessWidget {
                               return null;
                             },
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 hintText: 'Enter your name',
                                 icon: Icon(
                                   Icons.person,
@@ -67,7 +67,7 @@ class CashOnDelivery extends StatelessWidget {
                                 )),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10.0,
                         ),
                         Padding(
@@ -82,7 +82,7 @@ class CashOnDelivery extends StatelessWidget {
                               return null;
                             },
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 hintText: 'Please enter 10 Digit Mobile number',
                                 icon: Icon(
                                   Icons.phone,
@@ -90,7 +90,7 @@ class CashOnDelivery extends StatelessWidget {
                                 )),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20.0,
                         ),
                         Padding(
@@ -104,7 +104,7 @@ class CashOnDelivery extends StatelessWidget {
                               return null;
                             },
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 hintText: 'Enter your address',
                                 icon: Icon(
                                   Icons.location_on,
@@ -112,7 +112,7 @@ class CashOnDelivery extends StatelessWidget {
                                 )),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20.0,
                         ),
                         RaisedButton.icon(
@@ -126,9 +126,8 @@ class CashOnDelivery extends StatelessWidget {
                                   .collection("cartProducts")
                                   .get()
                                   .then((value) {
-                                Map<String, dynamic> msgMap = {};
-                                List<String> productName = [];
-                                List<String> productQuantity = [];
+                                final productName = [];
+                                final productQuantity = [];
 
                                 for (var i = 0; i < value.docs.length; i++) {
                                   productName.add(
@@ -138,34 +137,21 @@ class CashOnDelivery extends StatelessWidget {
                                 }
 
                                 final product = productName.reduce(
+                                    // ignore: prefer_interpolation_to_compose_strings
                                     (value, element) => value + "," + element);
 
                                 final quantity = productQuantity.reduce(
+                                    // ignore: prefer_interpolation_to_compose_strings
                                     (value, element) => value + "," + element);
 
                                 cartController.smsMessage =
-                                    "Cash On Delivery:" +
-                                        "\n" +
-                                        "Products:\n" +
-                                        product.toString() +
-                                        "\n\nQuantity:\n" +
-                                        quantity.toString() +
-                                        "\n\n" +
-                                        "Name: " +
-                                        cartController.userName +
-                                        "\n" +
-                                        "Address :" +
-                                        cartController.addressController.text +
-                                        "\n" +
-                                        "Phone Number :" +
-                                        cartController
-                                            .phoneNumberController.text;
+                                    "Cash On Delivery:\nProducts:\n$product\n\nQuantity:\n$quantity\n\nName: ${cartController.userName}\nAddress :${cartController.addressController.text}\nPhone Number :${cartController.phoneNumberController.text}";
                               }).then((value) {
                                 cartController.smsSend();
                               });
                             }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delivery_dining,
                             color: Colors.white,
                           ),

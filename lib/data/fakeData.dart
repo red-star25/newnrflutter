@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/model/CategoryModel/categoryModel.dart';
 import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class FakeData {
   static final topProducts = RxList<ProductModel>([
     ProductModel.fromJson({

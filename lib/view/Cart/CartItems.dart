@@ -50,8 +50,6 @@ class CartItems extends StatelessWidget {
                                         key: Key(snapshot.data.docs[index]["id"]
                                             .toString()),
                                         dismissal: SlidableDismissal(
-                                          child:
-                                              const SlidableDrawerDismissal(),
                                           onDismissed: (_) {},
                                           onWillDismiss: (actionType) {
                                             return showDialog<bool>(
@@ -66,15 +64,13 @@ class CartItems extends StatelessWidget {
                                                       .tr(),
                                                   actions: <Widget>[
                                                     FlatButton(
+                                                      onPressed: () =>
+                                                          Get.back(),
                                                       child:
                                                           const Text('no_label')
                                                               .tr(),
-                                                      onPressed: () =>
-                                                          Get.back(),
                                                     ),
                                                     FlatButton(
-                                                      child: Text('yes_label')
-                                                          .tr(),
                                                       onPressed: () {
                                                         if (snapshot.data
                                                                     .docs[index]
@@ -127,12 +123,17 @@ class CartItems extends StatelessWidget {
                                                         }
                                                         Get.back();
                                                       },
+                                                      child: const Text(
+                                                              'yes_label')
+                                                          .tr(),
                                                     ),
                                                   ],
                                                 );
                                               },
                                             );
                                           },
+                                          child:
+                                              const SlidableDrawerDismissal(),
                                         ),
                                         actionPane:
                                             const SlidableDrawerActionPane(),

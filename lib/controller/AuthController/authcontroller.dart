@@ -27,7 +27,7 @@ class AuthController extends GetxController {
   Future registerUser(GlobalKey<FormState> key) async {
     if (key.currentState.validate()) {
       try {
-        final userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text)
@@ -42,7 +42,7 @@ class AuthController extends GetxController {
               title: "Enter other email address");
         }
       } catch (e) {
-        print(e);
+        debugPrint(e.toString());
       }
     }
   }
@@ -54,7 +54,7 @@ class AuthController extends GetxController {
     if (key.currentState.validate()) {
       try {
         isLoading.value = true;
-        UserCredential userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text)

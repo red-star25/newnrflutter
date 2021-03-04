@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nrlifecare/constants/colors.dart';
@@ -9,7 +8,8 @@ import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 
-Widget ThirdPartyAuth(context) {
+// ignore: non_constant_identifier_names
+Widget ThirdPartyAuth(BuildContext context) {
   final authController = Get.find<AuthController>();
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

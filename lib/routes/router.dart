@@ -16,6 +16,7 @@ import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 import 'package:nrlifecare/view/UserProfile/userProfile.dart';
 import 'package:nrlifecare/view/Cart/cashOnDelivery.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class NrRouter {
   static List<GetPage> pages = [
     GetPage(name: '/', page: () => Splash()),

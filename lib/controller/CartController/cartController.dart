@@ -13,9 +13,9 @@ class CartController extends GetxController {
   double totalCartPrice = 0.0;
 
   TextEditingController quantityController;
-  TextEditingController phoneNumberController = new TextEditingController();
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController addressController = new TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   final Telephony telephony = Telephony.instance;
 
@@ -90,7 +90,7 @@ class CartController extends GetxController {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print(response.message);
+    debugPrint(response.message);
     CustomWidgets.customPaymentSnackbar(
         message: response.message.toString(),
         title: response.code.toString(),
@@ -139,7 +139,7 @@ class CartController extends GetxController {
     });
   }
 
-  void deleteCartProduct(
+  Future<void> deleteCartProduct(
       {String id, String categoryId, String categoryName}) async {
     if (categoryId == null) {
       if (categoryName == "TopProducts") {

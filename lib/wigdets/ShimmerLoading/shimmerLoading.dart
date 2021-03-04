@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 final baseColor = Colors.grey[300];
 final highlightColor = Colors.grey[100];
+// ignore: non_constant_identifier_names
 Widget TopProductShimmer() {
   return Shimmer.fromColors(
     baseColor: baseColor,
@@ -52,6 +53,7 @@ Widget TopProductShimmer() {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget CategoriesShimmer() {
   return Shimmer.fromColors(
     baseColor: baseColor,
@@ -79,6 +81,7 @@ Widget CategoriesShimmer() {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget NewInShimmer() {
   return Shimmer.fromColors(
     baseColor: baseColor,
@@ -137,6 +140,7 @@ Widget NewInShimmer() {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget CategoryLeftShimmer() {
   return Shimmer.fromColors(
     baseColor: baseColor,
@@ -151,6 +155,7 @@ Widget CategoryLeftShimmer() {
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget CategoryRightShimmer() {
   return Shimmer.fromColors(
     baseColor: baseColor,

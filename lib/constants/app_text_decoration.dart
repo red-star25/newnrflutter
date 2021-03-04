@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class AppTextDecoration {
-  static final robotoFontFamily = "Roboto";
+  static const robotoFontFamily = "Roboto";
 
   //Heading
   static final heading1 = TextStyle(

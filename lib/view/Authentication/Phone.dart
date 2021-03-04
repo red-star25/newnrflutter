@@ -29,10 +29,8 @@ class _PhoneAuthState extends State<PhoneAuth> {
 
   AuthCredential _phoneAuthCredential;
 
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _otpController = TextEditingController();
-
-  final _auth = FirebaseAuth.instance;
+  final _phoneNumberController = TextEditingController();
+  final _otpController = TextEditingController();
 
   bool codeSent = false;
   bool isLoading = false;
@@ -44,7 +42,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
       backgroundColor: AppColors.primaryColor,
       body: Column(
         children: [
-          Heading(headingText: "phone_text"),
+          const Heading(headingText: "phone_text"),
           SizedBox(
             height: 40.h,
           ),
@@ -94,6 +92,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                     ),
                                     CustomTextField(
                                       textInputType: TextInputType.number,
+                                      // ignore: missing_return
                                       validateField: (number) {
                                         authController
                                             .phoneNumberValidator(number);
@@ -106,16 +105,18 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    codeSent
-                                        ? CustomTextField(
-                                            textInputType: TextInputType.number,
-                                            validateField: (otp) {
-                                              authController.otpValidator(otp);
-                                            },
-                                            controller: _otpController,
-                                            hintText: "Enter 6 digit OTP",
-                                          )
-                                        : Container()
+                                    if (codeSent)
+                                      CustomTextField(
+                                        textInputType: TextInputType.number,
+                                        // ignore: missing_return
+                                        validateField: (otp) {
+                                          authController.otpValidator(otp);
+                                        },
+                                        controller: _otpController,
+                                        hintText: "Enter 6 digit OTP",
+                                      )
+                                    else
+                                      Container()
                                   ],
                                 ),
                               ),
@@ -221,7 +222,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
     );
   }
 
-  _login() async {
+  Future<void> _login() async {
     try {
       await FirebaseAuth.instance
           .signInWithCredential(_phoneAuthCredential)
@@ -239,23 +240,24 @@ class _PhoneAuthState extends State<PhoneAuth> {
       });
     } catch (e) {
       authController.isLoading.value = false;
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
   void signInWithOTP(String smsCode, String verId) {
     try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
+      PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: smsCode,
       );
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
-  Future<void> verifyPhone(phoneNo) async {
-    PhoneVerificationCompleted verificationCompleted =
+  Future<void> verifyPhone(String phoneNo) async {
+    // ignore: prefer_function_declarations_over_variables
+    final verificationCompleted =
         (PhoneAuthCredential phoneAuthCredential) async {
       setState(() {
         _phoneAuthCredential = phoneAuthCredential;
@@ -263,23 +265,23 @@ class _PhoneAuthState extends State<PhoneAuth> {
       _login();
     };
 
-    final PhoneVerificationFailed verificationfailed =
-        (Exception authException) {
-      print('$authException');
+    // ignore: prefer_function_declarations_over_variables
+    final verificationfailed = (Exception authException) {
+      debugPrint('$authException');
     };
 
-    final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
+    // ignore: prefer_function_declarations_over_variables
+    final smsSent = (String verId, [int forceResend]) {
       setState(() {
         verificationId = verId;
         codeSent = true;
       });
     };
 
-    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
-      setState(() {
-        verificationId = verId;
-      });
-    };
+    // ignore: prefer_function_declarations_over_variables
+    final autoTimeout = (String verId) => setState(() {
+          verificationId = verId;
+        });
 
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "+91$phoneNo",

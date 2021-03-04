@@ -33,9 +33,7 @@ class CustomTextField extends StatelessWidget {
             return validateField(value);
           },
           controller: controller,
-          onFieldSubmitted: (value) {
-            return onFieldSubmit(value);
-          },
+          onFieldSubmitted: (value) => onFieldSubmit(value),
           obscureText: isObsecure,
           keyboardType: textInputType,
           decoration: InputDecoration(

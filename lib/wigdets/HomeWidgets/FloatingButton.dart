@@ -31,6 +31,10 @@ class FloatingButton extends StatelessWidget {
       children: <Widget>[
         Obx(
           () => InkWell(
+            onTap: () {
+              homeController.updateSelectedFabIcon(1);
+              Get.offNamed("/home");
+            },
             child: Icon(
               Icons.home,
               color: homeController.selectedFabIcon.value == 1
@@ -38,21 +42,10 @@ class FloatingButton extends StatelessWidget {
                   : Colors.white,
               size: 30.h,
             ),
-            onTap: () {
-              homeController.updateSelectedFabIcon(1);
-              Get.offNamed("/home");
-            },
           ),
         ),
         Obx(
           () => InkWell(
-            child: Icon(
-              Icons.category_outlined,
-              color: homeController.selectedFabIcon.value == 2
-                  ? AppColors.secondaryColor
-                  : Colors.white,
-              size: 30.h,
-            ),
             onTap: () async {
               homeController.updateSelectedFabIcon(2);
               await FirebaseFirestore.instance
@@ -65,6 +58,13 @@ class FloatingButton extends StatelessWidget {
               });
               Get.offNamed("/category");
             },
+            child: Icon(
+              Icons.category_outlined,
+              color: homeController.selectedFabIcon.value == 2
+                  ? AppColors.secondaryColor
+                  : Colors.white,
+              size: 30.h,
+            ),
           ),
         ),
         Obx(
@@ -85,6 +85,10 @@ class FloatingButton extends StatelessWidget {
         ),
         Obx(
           () => InkWell(
+            onTap: () {
+              homeController.updateSelectedFabIcon(4);
+              Get.offNamed("/aboutUs");
+            },
             child: Icon(
               Icons.people_alt_outlined,
               color: homeController.selectedFabIcon.value == 4
@@ -92,14 +96,14 @@ class FloatingButton extends StatelessWidget {
                   : Colors.white,
               size: 30.h,
             ),
-            onTap: () {
-              homeController.updateSelectedFabIcon(4);
-              Get.offNamed("/aboutUs");
-            },
           ),
         ),
         Obx(
           () => InkWell(
+            onTap: () {
+              homeController.updateSelectedFabIcon(5);
+              Get.offNamed("/contactUs");
+            },
             child: Icon(
               Icons.business_sharp,
               color: homeController.selectedFabIcon.value == 5
@@ -107,10 +111,6 @@ class FloatingButton extends StatelessWidget {
                   : Colors.white,
               size: 30.h,
             ),
-            onTap: () {
-              homeController.updateSelectedFabIcon(5);
-              Get.offNamed("/contactUs");
-            },
           ),
         )
       ],

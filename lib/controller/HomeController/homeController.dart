@@ -1,10 +1,10 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
-import 'dart:math';
 
 class HomeController extends GetxController {
   ScrollController scrollController;
@@ -50,9 +50,9 @@ class HomeController extends GetxController {
     }
   }
 
-  get selectedFabIconIndex => selectedFabIcon;
+  void get selectedFabIconIndex => selectedFabIcon;
 
-  updateSelectedFabIcon(int value) {
+  void updateSelectedFabIcon(int value) {
     selectedFabIcon = RxInt(value);
     // update();
   }
@@ -86,12 +86,12 @@ class HomeController extends GetxController {
           .update({"isAdded": true}).then((value) async {
         final uId = await SharedPrefs.getUid();
 
-        CollectionReference collectionReference = FirebaseFirestore.instance
+        final collectionReference = FirebaseFirestore.instance
             .collection("Users")
             .doc(uId)
             .collection("cartProducts");
 
-        Map<String, dynamic> addedProductData = await FirebaseFirestore.instance
+        final addedProductData = await FirebaseFirestore.instance
             .collection("TopProducts")
             .doc(id)
             .get()
@@ -139,7 +139,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void addNewInProductToCart({String id}) async {
+  Future<void> addNewInProductToCart({String id}) async {
     isAddingToCart = true;
     update();
     final isAlreadyAdded = await FirebaseFirestore.instance
@@ -155,12 +155,12 @@ class HomeController extends GetxController {
           .update({"isAdded": true}).then((value) async {
         final uId = await SharedPrefs.getUid();
 
-        CollectionReference collectionReference = FirebaseFirestore.instance
+        final collectionReference = FirebaseFirestore.instance
             .collection("Users")
             .doc(uId)
             .collection("cartProducts");
 
-        Map<String, dynamic> addedProductData = await FirebaseFirestore.instance
+        final addedProductData = await FirebaseFirestore.instance
             .collection("NewProducts")
             .doc(id)
             .get()

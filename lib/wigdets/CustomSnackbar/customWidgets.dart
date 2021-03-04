@@ -11,7 +11,7 @@ class CustomWidgets {
       "",
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: AppColors.primaryColor,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
       icon: Padding(
         padding: EdgeInsets.only(left: 15.0.w),
         child: Text(
@@ -37,7 +37,7 @@ class CustomWidgets {
       "",
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: AppColors.primaryColor,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
       icon: Padding(
         padding: EdgeInsets.only(left: 15.0.w),
         child: Text(
@@ -59,7 +59,7 @@ class CustomWidgets {
 
   static dynamic customDialogRegister() {
     return Get.dialog(
-      Container(
+      SizedBox(
         width: 0.8.sw,
         height: 0.3.sh,
         child: Center(
@@ -81,7 +81,7 @@ class CustomWidgets {
       "",
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: AppColors.primaryColor,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
       icon: Padding(
         padding: EdgeInsets.only(left: 15.0.w),
         child: Text(

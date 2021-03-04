@@ -26,7 +26,7 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
   }
 
-  void getUserDetails() async {
+  Future<void> getUserDetails() async {
     userName = await SharedPrefs.getUserName();
     photoURL = await SharedPrefs.getPhotoURL();
     email = await SharedPrefs.getEmail();
@@ -137,7 +137,8 @@ class _UserProfileState extends State<UserProfile> {
                                                             .setLanguage("EN");
                                                         setState(() {
                                                           context.locale =
-                                                              Locale("en");
+                                                              const Locale(
+                                                                  "en");
                                                         });
                                                       },
                                                       leading: Text(
@@ -165,7 +166,8 @@ class _UserProfileState extends State<UserProfile> {
                                                                       .languageSettings[
                                                                   "EN"] ==
                                                               true
-                                                          ? Icon(Icons.check,
+                                                          ? const Icon(
+                                                              Icons.check,
                                                               color:
                                                                   Colors.white)
                                                           : Icon(Icons.language,
@@ -191,7 +193,8 @@ class _UserProfileState extends State<UserProfile> {
                                                                   "HI");
                                                           setState(() {
                                                             context.locale =
-                                                                Locale("hi");
+                                                                const Locale(
+                                                                    "hi");
                                                           });
                                                         },
                                                         leading: Text(
@@ -221,7 +224,8 @@ class _UserProfileState extends State<UserProfile> {
                                                                         .languageSettings[
                                                                     "HI"] ==
                                                                 true
-                                                            ? Icon(Icons.check,
+                                                            ? const Icon(
+                                                                Icons.check,
                                                                 color: Colors
                                                                     .white)
                                                             : Icon(
@@ -247,7 +251,8 @@ class _UserProfileState extends State<UserProfile> {
                                                                   "GU");
                                                           setState(() {
                                                             context.locale =
-                                                                Locale("gu");
+                                                                const Locale(
+                                                                    "gu");
                                                           });
                                                         },
                                                         leading: Text(
@@ -277,7 +282,8 @@ class _UserProfileState extends State<UserProfile> {
                                                                         .languageSettings[
                                                                     "GU"] ==
                                                                 true
-                                                            ? Icon(Icons.check,
+                                                            ? const Icon(
+                                                                Icons.check,
                                                                 color: Colors
                                                                     .white)
                                                             : Icon(

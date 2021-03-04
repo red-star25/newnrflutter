@@ -1,14 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/Heading.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/ThirdPartyAuth.dart';
-import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
-import '../../wigdets/AuthWidgets/TextField.dart';
+
 import '../../wigdets/AuthWidgets/AuthButton.dart';
+import '../../wigdets/AuthWidgets/TextField.dart';
 
 class Register extends StatelessWidget {
   final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
@@ -25,7 +26,7 @@ class Register extends StatelessWidget {
           width: 1.sw,
           child: Column(
             children: [
-              Heading(
+              const Heading(
                 headingText: "signup_text",
               ),
               SizedBox(

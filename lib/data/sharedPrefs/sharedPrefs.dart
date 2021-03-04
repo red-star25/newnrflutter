@@ -1,10 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class SharedPrefs {
+  // ignore: non_constant_identifier_names
   static String IS_LOGGEDIN = "IS_LOGGEDIN";
+  // ignore: non_constant_identifier_names
   static String UID = "UID";
+  // ignore: non_constant_identifier_names
   static String USERNAME = "USERNAME";
+  // ignore: non_constant_identifier_names
   static String USERIMAGE = "USERIMAGE";
+  // ignore: non_constant_identifier_names
   static String USEREMAIL = "USEREMAIL";
 
   static Future<void> setIsLoggedIn({bool isLoggedIn}) async {

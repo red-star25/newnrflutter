@@ -63,7 +63,7 @@ class CategoryController extends GetxController {
     }
   }
 
-  void addProductToCartToggle({String id, int index}) async {
+  Future<void> addProductToCartToggle({String id, int index}) async {
     if (index != null) {
       if (searchedProducts.value[index]["isAdded"] == false) {
         searchedProducts.value[index]["isAdded"] = true;
@@ -94,13 +94,12 @@ class CategoryController extends GetxController {
             .update({"isAdded": true}).then((value) async {
           final uId = await SharedPrefs.getUid();
 
-          CollectionReference collectionReference = FirebaseFirestore.instance
+          final collectionReference = FirebaseFirestore.instance
               .collection("Users")
               .doc(uId)
               .collection("cartProducts");
 
-          Map<String, dynamic> addedProductData = await FirebaseFirestore
-              .instance
+          final addedProductData = await FirebaseFirestore.instance
               .collection("Categories")
               .doc(categoryId.value.toString())
               .collection("products")
@@ -118,7 +117,6 @@ class CategoryController extends GetxController {
           });
         });
       } catch (e) {
-        print(e);
         isAddedToCart = false;
         update();
       }
@@ -146,7 +144,6 @@ class CategoryController extends GetxController {
           });
         });
       } catch (e) {
-        print(e);
         isAddedToCart = false;
         update();
       }

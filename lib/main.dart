@@ -22,10 +22,10 @@ Future<void> main() async {
   ProductBindings().dependencies();
   runApp(
     EasyLocalization(
-      child: MainApp(),
       supportedLocales: const [Locale("en"), Locale("hi"), Locale("gu")],
       path: "assets/translations",
       fallbackLocale: const Locale("en"),
+      child: MainApp(),
     ),
   );
 }
