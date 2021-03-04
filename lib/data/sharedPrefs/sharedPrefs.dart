@@ -12,6 +12,8 @@ class SharedPrefs {
   static String USERIMAGE = "USERIMAGE";
   // ignore: non_constant_identifier_names
   static String USEREMAIL = "USEREMAIL";
+  // ignore: non_constant_identifier_names
+  static String LOCALE = "LOCALE";
 
   static Future<void> setIsLoggedIn({bool isLoggedIn}) async {
     final _prefs = await SharedPreferences.getInstance();
@@ -66,5 +68,16 @@ class SharedPrefs {
     final _prefs = await SharedPreferences.getInstance();
     final email = _prefs.getString(USEREMAIL);
     return email;
+  }
+
+  static Future<void> setLocale({String locale}) async {
+    final _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString(LOCALE, locale);
+  }
+
+  static Future<String> getLocale() async {
+    final _prefs = await SharedPreferences.getInstance();
+    final locale = _prefs.getString(LOCALE);
+    return locale;
   }
 }

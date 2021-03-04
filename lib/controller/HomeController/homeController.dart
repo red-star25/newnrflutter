@@ -14,38 +14,30 @@ class HomeController extends GetxController {
   RxBool isLoggedIn = false.obs;
   bool isAddingToCart = false;
   final random = Random();
+  final selectedLanguage = "".obs;
 
-  final languageSettings = {"EN": true, "HI": false, "GU": false}.obs;
-  final selectedLanguage = "English".obs;
+  Locale locale;
 
-  void setLanguage(String languageId) {
+  Future<void> setLanguage(String languageId) async {
     switch (languageId) {
       case "EN":
-        languageSettings["EN"] = true;
-        languageSettings["HI"] = false;
-        languageSettings["GU"] = false;
         selectedLanguage.value = "English";
+        await SharedPrefs.setLocale(locale: "English");
         Get.back();
         break;
       case "HI":
-        languageSettings["EN"] = false;
-        languageSettings["HI"] = true;
-        languageSettings["GU"] = false;
         selectedLanguage.value = "Hindi";
+        await SharedPrefs.setLocale(locale: "Hindi");
         Get.back();
         break;
       case "GU":
-        languageSettings["EN"] = false;
-        languageSettings["HI"] = false;
-        languageSettings["GU"] = true;
         selectedLanguage.value = "Gujarati";
+        await SharedPrefs.setLocale(locale: "Gujarati");
         Get.back();
         break;
       default:
-        languageSettings["EN"] = true;
-        languageSettings["HI"] = false;
-        languageSettings["GU"] = false;
         selectedLanguage.value = "English";
+        await SharedPrefs.setLocale(locale: "English");
         Get.back();
     }
   }
@@ -61,9 +53,14 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    getLocale();
     scrollController = ScrollController();
     getIsLoggedInState();
     super.onInit();
+  }
+
+  Future<void> getLocale() async {
+    selectedLanguage.value = await SharedPrefs.getLocale() ?? "English";
   }
 
   Future<void> getIsLoggedInState() async {

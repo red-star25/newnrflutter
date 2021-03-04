@@ -125,9 +125,9 @@ class _UserProfileState extends State<UserProfile> {
                                             child: Column(children: [
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "EN"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "English"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -145,9 +145,9 @@ class _UserProfileState extends State<UserProfile> {
                                                         "EN",
                                                         style: TextStyle(
                                                           color: homeController
-                                                                          .languageSettings[
-                                                                      "EN"] ==
-                                                                  true
+                                                                      .selectedLanguage
+                                                                      .toString() ==
+                                                                  "English"
                                                               ? Colors.white
                                                               : AppColors
                                                                   .primaryColor,
@@ -156,16 +156,16 @@ class _UserProfileState extends State<UserProfile> {
                                                       title: Text("English",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "EN"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "English"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor)),
                                                       trailing: homeController
-                                                                      .languageSettings[
-                                                                  "EN"] ==
-                                                              true
+                                                                  .selectedLanguage
+                                                                  .toString() ==
+                                                              "English"
                                                           ? const Icon(
                                                               Icons.check,
                                                               color:
@@ -180,9 +180,9 @@ class _UserProfileState extends State<UserProfile> {
                                               ),
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "HI"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "Hindi"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -201,9 +201,9 @@ class _UserProfileState extends State<UserProfile> {
                                                           "HI",
                                                           style: TextStyle(
                                                             color: homeController
-                                                                            .languageSettings[
-                                                                        "HI"] ==
-                                                                    true
+                                                                        .selectedLanguage
+                                                                        .toString() ==
+                                                                    "Hindi"
                                                                 ? Colors.white
                                                                 : AppColors
                                                                     .primaryColor,
@@ -213,17 +213,17 @@ class _UserProfileState extends State<UserProfile> {
                                                           "Hindi",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "HI"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "Hindi"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor),
                                                         ),
                                                         trailing: homeController
-                                                                        .languageSettings[
-                                                                    "HI"] ==
-                                                                true
+                                                                    .selectedLanguage
+                                                                    .toString() ==
+                                                                "Hindi"
                                                             ? const Icon(
                                                                 Icons.check,
                                                                 color: Colors
@@ -238,9 +238,9 @@ class _UserProfileState extends State<UserProfile> {
                                               ),
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "GU"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "Gujarati"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -259,9 +259,9 @@ class _UserProfileState extends State<UserProfile> {
                                                           "GU",
                                                           style: TextStyle(
                                                             color: homeController
-                                                                            .languageSettings[
-                                                                        "GU"] ==
-                                                                    true
+                                                                        .selectedLanguage
+                                                                        .toString() ==
+                                                                    "Gujarati"
                                                                 ? Colors.white
                                                                 : AppColors
                                                                     .primaryColor,
@@ -271,17 +271,17 @@ class _UserProfileState extends State<UserProfile> {
                                                           "Gujarati",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "GU"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "Gujarati"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor),
                                                         ),
                                                         trailing: homeController
-                                                                        .languageSettings[
-                                                                    "GU"] ==
-                                                                true
+                                                                    .selectedLanguage
+                                                                    .toString() ==
+                                                                "Gujarati"
                                                             ? const Icon(
                                                                 Icons.check,
                                                                 color: Colors
