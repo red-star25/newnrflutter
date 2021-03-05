@@ -25,9 +25,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
 
   final authController = Get.find<AuthController>();
 
-  String verificationId, smsCode;
-
-  AuthCredential _phoneAuthCredential;
+  String _verificationCode;
 
   final _phoneNumberController = TextEditingController();
   final _otpController = TextEditingController();
@@ -55,7 +53,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                   topRight: Radius.circular(40),
                 ),
               ),
-              child: !authController.isLoading.value
+              child: !isLoading
                   ? Column(
                       children: [
                         Column(
@@ -152,10 +150,9 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                       onPressed: () {
                                         // Sign In User
                                         codeSent
-                                            ? signInWithOTP(
-                                                smsCode, verificationId)
-                                            : verifyPhone(
-                                                _phoneNumberController.text);
+                                            ? signInWithOTP(_verificationCode,
+                                                _otpController.text)
+                                            : _verifyPhone();
                                       },
                                       child: Text(
                                         "send_otp",
@@ -171,19 +168,8 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                               BorderRadius.circular(10)),
                                       color: Colors.transparent,
                                       onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        final smsCode = _otpController.text
-                                            .toString()
-                                            .trim();
-
-                                        _phoneAuthCredential =
-                                            PhoneAuthProvider.credential(
-                                                verificationId: verificationId,
-                                                smsCode: smsCode);
-
-                                        _login();
+                                        signInWithOTP(_otpController.text,
+                                            _verificationCode);
                                       },
                                       child: Text(
                                         "Verify",
@@ -222,73 +208,64 @@ class _PhoneAuthState extends State<PhoneAuth> {
     );
   }
 
-  Future<void> _login() async {
+  Future<void> signInWithOTP(String smsCode, String _verificationCode) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await FirebaseAuth.instance
-          .signInWithCredential(_phoneAuthCredential)
-          .then((authRes) async {
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(authRes.user.uid)
-            .set({"uId": authRes.user.uid});
-        await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
-        await SharedPrefs.setUid(uId: authRes.user.uid);
-        setState(() {
-          isLoading = false;
-        });
-        Get.offAllNamed("/home");
+          .signInWithCredential(PhoneAuthProvider.credential(
+              verificationId: _verificationCode, smsCode: smsCode))
+          .then((value) async {
+        if (value.user != null) {
+          setState(() {
+            isLoading = false;
+          });
+          Get.offAllNamed("/home");
+        }
       });
     } catch (e) {
-      authController.isLoading.value = false;
-      debugPrint(e.toString());
+      FocusScope.of(context).unfocus();
     }
   }
 
-  void signInWithOTP(String smsCode, String verId) {
-    try {
-      PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  Future<void> verifyPhone(String phoneNo) async {
-    // ignore: prefer_function_declarations_over_variables
-    final verificationCompleted =
-        (PhoneAuthCredential phoneAuthCredential) async {
-      setState(() {
-        _phoneAuthCredential = phoneAuthCredential;
-      });
-      _login();
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final verificationfailed = (Exception authException) {
-      debugPrint('$authException');
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final smsSent = (String verId, [int forceResend]) {
-      setState(() {
-        verificationId = verId;
-        codeSent = true;
-      });
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final autoTimeout = (String verId) => setState(() {
-          verificationId = verId;
-        });
-
+  Future<void> _verifyPhone() async {
+    setState(() {
+      isLoading = true;
+    });
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: "+91$phoneNo",
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationfailed,
-        codeSent: smsSent,
-        codeAutoRetrievalTimeout: autoTimeout);
+        phoneNumber: '+91${_phoneNumberController.text}',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await FirebaseAuth.instance
+              .signInWithCredential(credential)
+              .then((authRes) async {
+            await FirebaseFirestore.instance
+                .collection("Users")
+                .doc(authRes.user.uid)
+                .set({"uId": authRes.user.uid});
+            await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+            await SharedPrefs.setUid(uId: authRes.user.uid);
+            setState(() {
+              isLoading = false;
+            });
+            Get.offAllNamed("/home");
+          });
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          debugPrint(e.message);
+        },
+        codeSent: (String verficationID, int resendToken) {
+          setState(() {
+            _verificationCode = verficationID;
+            codeSent = true;
+            isLoading = false;
+          });
+        },
+        codeAutoRetrievalTimeout: (String verificationID) {
+          setState(() {
+            _verificationCode = verificationID;
+          });
+        },
+        timeout: const Duration(seconds: 120));
   }
 }
