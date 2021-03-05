@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
@@ -48,8 +49,9 @@ class GlobalHeader extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(right: 8.0.w),
               child: RaisedButton.icon(
-                onPressed: () {
+                onPressed: () async {
                   if (Get.find<CartController>().totalCartPrice > 0.0) {
+                    await Geolocator.requestPermission();
                     Get.defaultDialog(
                         radius: 5,
                         title: "Select Mode of Payment",

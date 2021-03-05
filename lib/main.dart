@@ -7,8 +7,10 @@ import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 import 'package:nrlifecare/bindings/CartBindings/cartBindings.dart';
 import 'package:nrlifecare/bindings/CategoryBindings/categoryBindings.dart';
 import 'package:nrlifecare/bindings/ProductBindings/productBindings.dart';
+import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
 import 'package:nrlifecare/routes/router.dart';
 import 'package:nrlifecare/view/PageNotFound/pagenotfound.dart';
+import 'package:nrlifecare/view/Splash/OnBoardingScreen.dart';
 import 'package:nrlifecare/view/Splash/Splash.dart';
 import 'package:nrlifecare/bindings/HomeBindings/homeBindings.dart';
 
@@ -16,8 +18,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   AuthBindings().dependencies();
-  HomeBindings().dependencies();
   CartBindings().dependencies();
+  HomeBindings().dependencies();
   CategoryBindings().dependencies();
   ProductBindings().dependencies();
   runApp(
@@ -33,6 +35,8 @@ Future<void> main() async {
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
+
     return ScreenUtilInit(
       designSize: const Size(480, 800),
       allowFontScaling: true,
@@ -45,7 +49,12 @@ class MainApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.locale,
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: Splash()),
+        home: Scaffold(
+          body: authController.isOnBoard.value == null ||
+                  authController.isOnBoard.value == false
+              ? OnBoardingScreen()
+              : Splash(),
+        ),
       ),
     );
   }

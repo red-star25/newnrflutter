@@ -20,6 +20,7 @@ class AuthController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isResizeToAvoidBottom = false.obs;
+  RxBool isOnBoard = false.obs;
 
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL
@@ -179,6 +180,10 @@ class AuthController extends GetxController {
     _confirmpasswordController.text = "";
   }
 
+  Future<void> getOnBoardState() async {
+    isOnBoard.value = await SharedPrefs.getOnBoard();
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -187,5 +192,11 @@ class AuthController extends GetxController {
     _passwordController.dispose();
     _confirmpasswordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void onInit() {
+    getOnBoardState();
+    super.onInit();
   }
 }

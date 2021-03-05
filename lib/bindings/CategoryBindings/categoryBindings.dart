@@ -4,6 +4,6 @@ import 'package:nrlifecare/controller/CategoryController/categoryController.dart
 class CategoryBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => CategoryController());
+    Get.put<CategoryController>(CategoryController());
   }
 }

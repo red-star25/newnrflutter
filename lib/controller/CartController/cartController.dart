@@ -65,7 +65,6 @@ class CartController extends GetxController {
   }
 
   Future<void> openCheckout() async {
-    // rzp_live_lpk9qpV9GInbUw
     final options = {
       'key': "rzp_test_7w5UEKTQKOkb0s",
       'amount': (totalCartPrice * 100).roundToDouble().toString(),
