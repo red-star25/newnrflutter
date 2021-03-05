@@ -120,6 +120,13 @@ class CategoryRightBody extends StatelessWidget {
                                                               .value =
                                                           "catImage$index";
 
+                                                      Get.find<
+                                                              ProductController>()
+                                                          .imgBgColor
+                                                          .value = AppColors
+                                                              .listColor[
+                                                          "l${index + 1}"];
+
                                                       Get.toNamed(
                                                         "/product",
                                                       );
@@ -254,27 +261,31 @@ class CategoryRightBody extends StatelessWidget {
                                                                         tag:
                                                                             "catImage$index",
                                                                         child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl: snapshot
-                                                                              .data
-                                                                              .docs[index]["productImage"]
-                                                                              .toString(),
-                                                                          height:
-                                                                              120.h,
-                                                                          width:
-                                                                              120.w,
-                                                                          placeholder: (_, __) =>
-                                                                              SpinKitRipple(
+                                                                            Container(
+                                                                          decoration: BoxDecoration(
+                                                                              color: AppColors.listColor["l${index + 1}"],
+                                                                              borderRadius: BorderRadius.circular(10)),
+                                                                          child:
+                                                                              CachedNetworkImage(
                                                                             color:
-                                                                                AppColors.primaryColor,
-                                                                          ),
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                          errorWidget: (context, _, __) =>
-                                                                              const Icon(
-                                                                            Icons.error_outline,
-                                                                            color:
-                                                                                Colors.red,
+                                                                                AppColors.listColor[index],
+                                                                            imageUrl:
+                                                                                snapshot.data.docs[index]["productImage"].toString(),
+                                                                            height:
+                                                                                120.h,
+                                                                            width:
+                                                                                120.w,
+                                                                            placeholder: (_, __) =>
+                                                                                SpinKitRipple(
+                                                                              color: AppColors.primaryColor,
+                                                                            ),
+                                                                            fit:
+                                                                                BoxFit.contain,
+                                                                            errorWidget: (context, _, __) =>
+                                                                                const Icon(
+                                                                              Icons.error_outline,
+                                                                              color: Colors.red,
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ),

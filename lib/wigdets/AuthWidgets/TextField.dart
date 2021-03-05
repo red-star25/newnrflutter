@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final bool isObsecure;
   final Widget prefix;
   final TextInputType textInputType;
+  final int maxLength;
   const CustomTextField(
       {@required this.validateField,
       this.onFieldSubmit,
@@ -18,7 +19,8 @@ class CustomTextField extends StatelessWidget {
       this.hintText,
       this.isObsecure = false,
       this.prefix,
-      this.textInputType = TextInputType.text});
+      this.textInputType = TextInputType.text,
+      this.maxLength});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
           onFieldSubmitted: (value) => onFieldSubmit(value),
           obscureText: isObsecure,
           keyboardType: textInputType,
+          maxLength: maxLength,
           decoration: InputDecoration(
             prefix: prefix,
             hintText: hintText,

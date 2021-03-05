@@ -94,6 +94,12 @@ class NewIn extends StatelessWidget {
                                               .heroTag
                                               .value = "newProduct$index";
 
+                                          Get.find<ProductController>()
+                                                  .imgBgColor
+                                                  .value =
+                                              AppColors
+                                                  .listColor["l${index + 1}"];
+
                                           Get.toNamed(
                                             "/product",
                                           );

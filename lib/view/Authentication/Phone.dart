@@ -14,6 +14,7 @@ import 'package:nrlifecare/wigdets/AuthWidgets/Heading.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/TextField.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/ThirdPartyAuth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 
 class PhoneAuth extends StatefulWidget {
   @override
@@ -89,6 +90,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                       height: 5.h,
                                     ),
                                     CustomTextField(
+                                      maxLength: 10,
                                       textInputType: TextInputType.number,
                                       // ignore: missing_return
                                       validateField: (number) {
@@ -96,7 +98,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                             .phoneNumberValidator(number);
                                       },
                                       controller: _phoneNumberController,
-                                      hintText: "9898989898",
+                                      hintText: "1234567890",
                                       prefix: Text("+91",
                                           style: AppTextDecoration.bodyText3),
                                     ),
@@ -105,6 +107,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                     ),
                                     if (codeSent)
                                       CustomTextField(
+                                        maxLength: 6,
                                         textInputType: TextInputType.number,
                                         // ignore: missing_return
                                         validateField: (otp) {
@@ -216,8 +219,14 @@ class _PhoneAuthState extends State<PhoneAuth> {
       await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: _verificationCode, smsCode: smsCode))
-          .then((value) async {
-        if (value.user != null) {
+          .then((authRes) async {
+        if (authRes.user != null) {
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(authRes.user.uid)
+              .set({"uId": authRes.user.uid});
+          await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+          await SharedPrefs.setUid(uId: authRes.user.uid);
           setState(() {
             isLoading = false;
           });
@@ -225,6 +234,12 @@ class _PhoneAuthState extends State<PhoneAuth> {
         }
       });
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      CustomWidgets.customAuthSnackbar(
+          message: "Invalid OTP", title: "Error Occured");
       FocusScope.of(context).unfocus();
     }
   }
@@ -233,39 +248,53 @@ class _PhoneAuthState extends State<PhoneAuth> {
     setState(() {
       isLoading = true;
     });
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91${_phoneNumberController.text}',
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
-              .then((authRes) async {
-            await FirebaseFirestore.instance
-                .collection("Users")
-                .doc(authRes.user.uid)
-                .set({"uId": authRes.user.uid});
-            await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
-            await SharedPrefs.setUid(uId: authRes.user.uid);
+    if (_phoneNumberController.text.isPhoneNumber) {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: '+91${_phoneNumberController.text}',
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await FirebaseAuth.instance
+                .signInWithCredential(credential)
+                .then((authRes) async {
+              await FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(authRes.user.uid)
+                  .set({"uId": authRes.user.uid});
+              await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+              await SharedPrefs.setUid(uId: authRes.user.uid);
+              setState(() {
+                isLoading = false;
+              });
+              Get.offAllNamed("/home");
+            });
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            CustomWidgets.customAuthSnackbar(
+                message: e.message, title: "Error Occured");
+            Get.offAllNamed("/phone");
             setState(() {
               isLoading = false;
             });
-            Get.offAllNamed("/home");
-          });
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          debugPrint(e.message);
-        },
-        codeSent: (String verficationID, int resendToken) {
-          setState(() {
-            _verificationCode = verficationID;
-            codeSent = true;
-            isLoading = false;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationID) {
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        timeout: const Duration(seconds: 120));
+          },
+          codeSent: (String verficationID, int resendToken) {
+            setState(() {
+              _verificationCode = verficationID;
+              codeSent = true;
+              isLoading = false;
+            });
+          },
+          codeAutoRetrievalTimeout: (String verificationID) {
+            setState(() {
+              _verificationCode = verificationID;
+            });
+          },
+          timeout: const Duration(seconds: 120));
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      CustomWidgets.customAuthSnackbar(
+          message: "Please Provide valid phone number",
+          title: "Invalid Phone Number");
+    }
   }
 }

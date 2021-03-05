@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:nrlifecare/bindings/CartBindings/cartBindings.dart';
+import 'package:nrlifecare/bindings/CategoryBindings/categoryBindings.dart';
 import 'package:nrlifecare/bindings/ProductBindings/productBindings.dart';
 import 'package:nrlifecare/view/AboutUs/AboutUs.dart';
 import 'package:nrlifecare/view/Authentication/Login.dart';
@@ -19,17 +20,69 @@ import 'package:nrlifecare/view/Cart/cashOnDelivery.dart';
 // ignore: avoid_classes_with_only_static_members
 class NrRouter {
   static List<GetPage> pages = [
-    GetPage(name: '/', page: () => Splash()),
-    GetPage(name: '/login', page: () => Login(), binding: AuthBindings()),
-    GetPage(name: '/register', page: () => Register(), binding: AuthBindings()),
-    GetPage(name: '/home', page: () => Home()),
-    GetPage(name: '/phone', page: () => PhoneAuth(), binding: AuthBindings()),
     GetPage(
-        name: '/product', page: () => Product(), binding: ProductBindings()),
-    GetPage(name: '/category', page: () => NrCategory()),
-    GetPage(name: '/cart', page: () => Cart(), binding: CartBindings()),
-    GetPage(name: '/aboutUs', page: () => AboutUs()),
-    GetPage(name: '/contactUs', page: () => ContactUs()),
+      name: '/',
+      page: () => Splash(),
+    ),
+    GetPage(
+      name: '/login',
+      page: () => Login(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+      binding: AuthBindings(),
+    ),
+    GetPage(
+      name: '/register',
+      page: () => Register(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+      binding: AuthBindings(),
+    ),
+    GetPage(
+      name: '/phone',
+      page: () => PhoneAuth(),
+      binding: AuthBindings(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: '/home',
+      page: () => Home(),
+      transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+        name: '/product',
+        page: () => Product(),
+        binding: ProductBindings(),
+        transition: Transition.rightToLeft,
+        transitionDuration: const Duration(milliseconds: 400)),
+    GetPage(
+      name: '/category',
+      page: () => NrCategory(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+      binding: CategoryBindings(),
+    ),
+    GetPage(
+      name: '/cart',
+      page: () => Cart(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+      binding: CartBindings(),
+    ),
+    GetPage(
+      name: '/aboutUs',
+      page: () => AboutUs(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: '/contactUs',
+      page: () => ContactUs(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
     GetPage(
       name: '/searchPage',
       page: () => SearchPage(),
@@ -37,10 +90,14 @@ class NrRouter {
     GetPage(
       name: '/userProfile',
       page: () => UserProfile(),
+      transition: Transition.upToDown,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: '/cashOnDelivery',
       page: () => CashOnDelivery(),
+      transition: Transition.upToDown,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
   ];
 }
