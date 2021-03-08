@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 
@@ -26,26 +28,36 @@ class CategoryController extends GetxController {
     update();
   }
 
+  Future<bool> onBackPress() {
+    Get.offAllNamed("/home");
+    Get.find<HomeController>().updateSelectedFabIcon(1);
+    return Future.value(true);
+  }
+
   Future<void> addSearchedProducts(String term) async {
     searchedProducts.value.clear();
-    FirebaseFirestore.instance
-        .collection("Categories")
-        .doc(categoryId.toString())
-        .collection("products")
-        .get()
-        .then((value) {
-      for (var i = 0; i < value.docs.length; i++) {
-        if (value.docs[i]
-            .data()["productName"]
-            .toString()
-            .toLowerCase()
-            .contains(term.toLowerCase())) {
-          searchedProducts.value.add(value.docs[i].data());
-          break;
+    try {
+      await FirebaseFirestore.instance
+          .collection("Categories")
+          .doc(categoryId.toString())
+          .collection("products")
+          .get()
+          .then((value) {
+        for (var i = 0; i < value.docs.length; i++) {
+          if (value.docs[i]
+              .data()["productName"]
+              .toString()
+              .toLowerCase()
+              .contains(term.toLowerCase())) {
+            searchedProducts.value.add(value.docs[i].data());
+            break;
+          }
         }
-      }
-      update();
-    });
+        update();
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   RxInt selectedCategoryIndex = 0.obs;
@@ -149,10 +161,4 @@ class CategoryController extends GetxController {
       }
     }
   }
-
-  // getSearchResults(String searchQuery) {
-  //   productList.value.forEach((productDetail) {
-  //     if (productDetail.values.contains(searchQuery)) searchList.add();
-  //   });
-  // }
 }

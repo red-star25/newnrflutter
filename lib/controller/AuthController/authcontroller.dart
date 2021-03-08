@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class AuthController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isResizeToAvoidBottom = false.obs;
   RxBool isOnBoard = false.obs;
+  RxBool isConnecting = false.obs;
 
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL
@@ -184,6 +186,22 @@ class AuthController extends GetxController {
     isOnBoard.value = await SharedPrefs.getOnBoard();
   }
 
+  bool isConnected = false;
+
+  Future<void> checkConnect() async {
+    try {
+      isConnecting.value = true;
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+      }
+      isConnecting.value = false;
+    } on SocketException catch (_) {
+      isConnected = false;
+      isConnecting.value = false;
+    }
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -196,6 +214,7 @@ class AuthController extends GetxController {
 
   @override
   void onInit() {
+    checkConnect();
     getOnBoardState();
     super.onInit();
   }

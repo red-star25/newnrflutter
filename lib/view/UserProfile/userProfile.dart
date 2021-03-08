@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
+import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +17,7 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final homeController = Get.find<HomeController>();
+  final cartController = Get.find<CartController>();
   String userName = "";
   String photoURL = "";
   String email = "";
@@ -23,6 +25,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     getUserDetails();
+    cartController.getCartProducts();
     super.initState();
   }
 
@@ -43,29 +46,17 @@ class _UserProfileState extends State<UserProfile> {
           width: 1.sw,
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  Get.offNamed("/home");
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 20.w,
-                    top: 10.h,
-                  ),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.primaryColor,
-                        size: 30.h,
-                      )),
+              if (photoURL != null)
+                CircleAvatar(
+                  radius: 80.h,
+                  backgroundImage: NetworkImage(photoURL),
+                )
+              else
+                CircleAvatar(
+                  radius: 80.h,
+                  backgroundImage:
+                      const AssetImage("assets/images/userImage.png"),
                 ),
-              ),
-              CircleAvatar(
-                radius: 80.h,
-                backgroundImage:
-                    photoURL != null ? NetworkImage(photoURL) : null,
-              ),
               SizedBox(
                 height: 20.h,
               ),
@@ -309,23 +300,32 @@ class _UserProfileState extends State<UserProfile> {
                                     ).tr(),
                                   ),
                                 ),
-                                Card(
-                                  elevation: 5,
-                                  child: ListTile(
-                                    onTap: () {},
-                                    subtitle: Text(
-                                      "0",
-                                      style: AppTextDecoration.bodyText1,
-                                    ),
-                                    leading: Icon(
-                                      Icons.shopping_bag_outlined,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                    title: Text(
-                                      "your_orders",
-                                      style: AppTextDecoration.bodyText3,
-                                    ).tr(),
-                                  ),
+                                GetBuilder<CartController>(
+                                  init: CartController(),
+                                  builder: (_) {
+                                    return Card(
+                                      elevation: 5,
+                                      child: ListTile(
+                                        onTap: () {
+                                          Get.offAllNamed("/cart");
+                                          homeController
+                                              .updateSelectedFabIcon(3);
+                                        },
+                                        subtitle: Text(
+                                          _.cartItems.length.toString(),
+                                          style: AppTextDecoration.bodyText1,
+                                        ),
+                                        leading: Icon(
+                                          Icons.shopping_bag_outlined,
+                                          color: AppColors.primaryColor,
+                                        ),
+                                        title: Text(
+                                          "your_orders",
+                                          style: AppTextDecoration.bodyText3,
+                                        ).tr(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

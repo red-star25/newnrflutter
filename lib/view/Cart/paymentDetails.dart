@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 import 'package:nrlifecare/wigdets/HomeWidgets/CustomAppBar.dart';
 import 'package:nrlifecare/wigdets/HomeWidgets/FloatingButton.dart';
 
-class CashOnDelivery extends StatelessWidget {
+class PaymentDetails extends StatelessWidget {
   final cartController = Get.find<CartController>();
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,7 @@ class CashOnDelivery extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            textInputAction: TextInputAction.next,
                             controller: cartController.nameController,
                             validator: (value) {
                               if (value.isEmpty) {
@@ -73,6 +75,7 @@ class CashOnDelivery extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            textInputAction: TextInputAction.next,
                             controller: cartController.phoneNumberController,
                             keyboardType: TextInputType.phone,
                             validator: (value) {
@@ -96,6 +99,7 @@ class CashOnDelivery extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            textInputAction: TextInputAction.done,
                             controller: cartController.addressController,
                             validator: (value) {
                               if (value.isEmpty) {
@@ -118,37 +122,65 @@ class CashOnDelivery extends StatelessWidget {
                         RaisedButton.icon(
                           color: AppColors.primaryColor,
                           onPressed: () async {
-                            if (cartController.formKey.currentState
-                                .validate()) {
-                              await FirebaseFirestore.instance
-                                  .collection("Users")
-                                  .doc(cartController.uId)
-                                  .collection("cartProducts")
-                                  .get()
-                                  .then((value) {
-                                final productName = [];
-                                final productQuantity = [];
-
-                                for (var i = 0; i < value.docs.length; i++) {
-                                  productName.add(
-                                      value.docs[i]["productName"].toString());
-                                  productQuantity.add(
-                                      value.docs[i]["userQuantity"].toString());
-                                }
-
-                                final product = productName.reduce(
-                                    // ignore: prefer_interpolation_to_compose_strings
-                                    (value, element) => value + "," + element);
-
-                                final quantity = productQuantity.reduce(
-                                    // ignore: prefer_interpolation_to_compose_strings
-                                    (value, element) => value + "," + element);
-
-                                cartController.smsMessage =
-                                    "Cash On Delivery:\nProducts:\n$product\n\nQuantity:\n$quantity\n\nName: ${cartController.userName}\nAddress :${cartController.addressController.text}\nPhone Number :${cartController.phoneNumberController.text}";
-                              }).then((value) {
-                                cartController.smsSend();
-                              });
+                            if (cartController.totalCartPrice > 0.0) {
+                              if (cartController.formKey.currentState
+                                  .validate()) {
+                                Get.defaultDialog(
+                                    radius: 5,
+                                    title: "Select Mode of Payment",
+                                    titleStyle: AppTextDecoration.bodyText4,
+                                    content: Column(
+                                      children: [
+                                        RaisedButton.icon(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          onPressed: () {
+                                            Get.back();
+                                            cartController.openCheckout();
+                                          },
+                                          color: AppColors.primaryColor,
+                                          icon: const Icon(
+                                              Icons.payment_rounded,
+                                              color: Colors.white),
+                                          label: const Text("Online Payment",
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                        ),
+                                        Divider(
+                                          color: AppColors.primaryColor,
+                                          endIndent: 20.w,
+                                          indent: 20.w,
+                                          thickness: 0.8,
+                                        ),
+                                        RaisedButton.icon(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          onPressed: () {
+                                            Get.back();
+                                            cartController.setMessage(
+                                                mode: "Cash on Delivery");
+                                          },
+                                          color: AppColors.secondaryColor,
+                                          icon: const Icon(
+                                            Icons.home_filled,
+                                            color: Colors.white,
+                                          ),
+                                          label: const Text(
+                                            "Cash On Delivery",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ));
+                              }
+                            } else {
+                              CustomWidgets.customPaymentSnackbar(
+                                  message: "Add atleast one product to procees",
+                                  title: "Please add product to cart",
+                                  utfLogo: "❌");
                             }
                           },
                           icon: const Icon(

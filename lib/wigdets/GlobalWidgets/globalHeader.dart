@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
@@ -50,57 +49,7 @@ class GlobalHeader extends StatelessWidget {
               padding: EdgeInsets.only(right: 8.0.w),
               child: RaisedButton.icon(
                 onPressed: () async {
-                  if (Get.find<CartController>().totalCartPrice > 0.0) {
-                    await Geolocator.requestPermission();
-                    Get.defaultDialog(
-                        radius: 5,
-                        title: "Select Mode of Payment",
-                        titleStyle: AppTextDecoration.bodyText4,
-                        content: Column(
-                          children: [
-                            RaisedButton.icon(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              onPressed: () {
-                                Get.find<CartController>().openCheckout();
-                              },
-                              color: AppColors.primaryColor,
-                              icon: const Icon(Icons.payment_rounded,
-                                  color: Colors.white),
-                              label: const Text("Online Payment",
-                                  style: TextStyle(color: Colors.white)),
-                            ),
-                            Divider(
-                              color: AppColors.primaryColor,
-                              endIndent: 20.w,
-                              indent: 20.w,
-                              thickness: 0.8,
-                            ),
-                            RaisedButton.icon(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              onPressed: () {
-                                Get.back();
-                                Get.toNamed("/cashOnDelivery");
-                              },
-                              color: AppColors.secondaryColor,
-                              icon: const Icon(
-                                Icons.home_filled,
-                                color: Colors.white,
-                              ),
-                              label: const Text(
-                                "Cash On Delivery",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            )
-                          ],
-                        ));
-                  } else {
-                    CustomWidgets.customPaymentSnackbar(
-                        message: "Add atleast one product to procees",
-                        title: "Please add product to cart",
-                        utfLogo: "❌");
-                  }
+                  Get.toNamed("/paymentDetails");
                 },
                 label: Text("cart_checkout",
                         style: AppTextDecoration.bodyText4
