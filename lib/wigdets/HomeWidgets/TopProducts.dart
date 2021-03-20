@@ -97,141 +97,143 @@ class TopProducts extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 14.0,
-                                            left: 8,
-                                            right: 8,
-                                            bottom: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                FittedBox(
-                                                  child: Text(
+                                          padding: const EdgeInsets.only(
+                                              top: 14.0,
+                                              left: 8,
+                                              right: 8,
+                                              bottom: 10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  FittedBox(
+                                                    child: Text(
+                                                        snapshot
+                                                            .data
+                                                            .docs[index]
+                                                                ["productName"]
+                                                            .toString(),
+                                                        style: AppTextDecoration
+                                                            .bodyText4),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5.h,
+                                                  ),
+                                                  FittedBox(
+                                                    child: Text(
                                                       snapshot
                                                           .data
                                                           .docs[index]
-                                                              ["productName"]
+                                                              ["physicalForm"]
                                                           .toString(),
                                                       style: AppTextDecoration
-                                                          .bodyText4),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.h,
-                                                ),
-                                                FittedBox(
+                                                          .subtitle1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 8.h,
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topLeft,
+                                                child: FittedBox(
                                                   child: Text(
                                                     snapshot
                                                         .data
                                                         .docs[index]
-                                                            ["physicalForm"]
+                                                            ["productSize"]
                                                         .toString(),
                                                     style: AppTextDecoration
-                                                        .subtitle1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8.h,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.topLeft,
-                                              child: FittedBox(
-                                                child: Text(
-                                                  snapshot
-                                                      .data
-                                                      .docs[index]
-                                                          ["productSize"]
-                                                      .toString(),
-                                                  style: AppTextDecoration
-                                                      .bodyText1,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            SizedBox(
-                                              height: 160.h,
-                                              child: Hero(
-                                                tag: "productImage$index",
-                                                child: CachedNetworkImage(
-                                                  imageUrl: snapshot
-                                                      .data
-                                                      .docs[index]
-                                                          ["productImage"]
-                                                      .toString(),
-                                                  placeholder: (_, __) =>
-                                                      SpinKitRipple(
-                                                    color:
-                                                        AppColors.primaryColor,
-                                                  ),
-                                                  fit: BoxFit.contain,
-                                                  errorWidget:
-                                                      (context, _, __) =>
-                                                          const Icon(
-                                                    Icons.error_outline,
-                                                    color: Colors.red,
+                                                        .bodyText1,
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 15.h,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  FittedBox(
-                                                    child: Text(
-                                                      "₹${double.parse(snapshot.data.docs[index]["productPrice"].toString())}",
-                                                      style: AppTextDecoration
-                                                          .bodyText3,
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
+                                              SizedBox(
+                                                height: 160.h,
+                                                child: Hero(
+                                                  tag: "productImage$index",
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: snapshot
+                                                        .data
+                                                        .docs[index]
+                                                            ["productImage"]
+                                                        .toString(),
+                                                    placeholder: (_, __) =>
+                                                        SpinKitRipple(
+                                                      color:
+                                                          AppColors.primaryColor,
+                                                    ),
+                                                    fit: BoxFit.contain,
+                                                    errorWidget:
+                                                        (context, _, __) =>
+                                                            const Icon(
+                                                      Icons.error_outline,
+                                                      color: Colors.red,
                                                     ),
                                                   ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      homeController
-                                                          .addProductToCartToggle(
-                                                              id: snapshot
-                                                                  .data
-                                                                  .docs[index]
-                                                                      ["id"]
-                                                                  .toString());
-                                                    },
-                                                    child: snapshot.data
-                                                                    .docs[index]
-                                                                ["isAdded"] ==
-                                                            false
-                                                        ? SvgPicture.asset(
-                                                            "assets/icons/shopping-basket.svg",
-                                                            color: AppColors
-                                                                .primaryColor,
-                                                            width: 20.w,
-                                                            height: 20.h,
-                                                          )
-                                                        : Text("Added",
-                                                            style:
-                                                                AppTextDecoration
-                                                                    .subtitle2),
-                                                  )
-                                                ],
+                                                ),
                                               ),
-                                            )
-                                          ],
+                                              SizedBox(
+                                                height: 15.h,
+                                              ),
+                                              Flexible(
+                                                      child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      FittedBox(
+                                                        child: Text(
+                                                          "₹${double.parse(snapshot.data.docs[index]["productPrice"].toString())}",
+                                                          style: AppTextDecoration
+                                                              .bodyText3,
+                                                        ),
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          homeController
+                                                              .addProductToCartToggle(
+                                                                  id: snapshot
+                                                                      .data
+                                                                      .docs[index]
+                                                                          ["id"]
+                                                                      .toString());
+                                                        },
+                                                        child: snapshot.data
+                                                                        .docs[index]
+                                                                    ["isAdded"] ==
+                                                                false
+                                                            ? SvgPicture.asset(
+                                                                "assets/icons/shopping-basket.svg",
+                                                                color: AppColors
+                                                                    .primaryColor,
+                                                                width: 20.w,
+                                                                height: 20.h,
+                                                              )
+                                                            : Text("Added",
+                                                                style:
+                                                                    AppTextDecoration
+                                                                        .subtitle2),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                     ),
                                   ),
                                 ),

@@ -35,68 +35,73 @@ class CartItems extends StatelessWidget {
                     return Center(child: CategoryRightShimmer());
                   } else {
                     return AnimationLimiter(
-                      child: !cartController.isLoading
-                          ? ListView.builder(
-                              itemCount: int.parse(
-                                  snapshot.data.docs.length.toString()),
-                              itemBuilder: (context, index) {
-                                return AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 800),
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                      child: Slidable(
-                                        key: Key(snapshot.data.docs[index]["id"]
-                                            .toString()),
-                                        dismissal: SlidableDismissal(
-                                          onDismissed: (_) {},
-                                          onWillDismiss: (actionType) {
-                                            return showDialog<bool>(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title:
-                                                      const Text('delete_label')
+                      child:
+                          !cartController.isLoading &&
+                                  cartController.cartItems.isNotEmpty
+                              ? ListView.builder(
+                                  itemCount: int.parse(
+                                      snapshot.data.docs.length.toString()),
+                                  itemBuilder: (context, index) {
+                                    return AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration:
+                                          const Duration(milliseconds: 800),
+                                      child: SlideAnimation(
+                                        verticalOffset: 50.0,
+                                        child: FadeInAnimation(
+                                          child: Slidable(
+                                            key: Key(snapshot
+                                                .data.docs[index]["id"]
+                                                .toString()),
+                                            dismissal: SlidableDismissal(
+                                              onDismissed: (_) {},
+                                              onWillDismiss: (actionType) {
+                                                return showDialog<bool>(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: const Text(
+                                                              'delete_label')
                                                           .tr(),
-                                                  content: const Text(
-                                                          'sure_to_delete_text')
-                                                      .tr(),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                      onPressed: () =>
-                                                          Get.back(),
-                                                      child:
-                                                          const Text('no_label')
+                                                      content: const Text(
+                                                              'sure_to_delete_text')
+                                                          .tr(),
+                                                      actions: <Widget>[
+                                                        FlatButton(
+                                                          onPressed: () =>
+                                                              Get.back(),
+                                                          child: const Text(
+                                                                  'no_label')
                                                               .tr(),
-                                                    ),
-                                                    FlatButton(
-                                                      onPressed: () {
-                                                        if (snapshot.data
+                                                        ),
+                                                        FlatButton(
+                                                          onPressed: () {
+                                                            if (snapshot.data
+                                                                            .docs[
+                                                                        index][
+                                                                    "categoryId"] !=
+                                                                null) {
+                                                              cartController
+                                                                  .deleteCartProduct(
+                                                                id: snapshot
+                                                                    .data
                                                                     .docs[index]
-                                                                [
-                                                                "categoryId"] !=
-                                                            null) {
-                                                          cartController
-                                                              .deleteCartProduct(
-                                                            id: snapshot
-                                                                .data
-                                                                .docs[index]
-                                                                    ["id"]
-                                                                .toString(),
-                                                            categoryId: snapshot
-                                                                .data
-                                                                .docs[index][
-                                                                    "categoryId"]
-                                                                .toString(),
-                                                          );
-                                                        } else if (snapshot.data
+                                                                        ["id"]
+                                                                    .toString(),
+                                                                categoryId: snapshot
+                                                                    .data
                                                                     .docs[index]
-                                                                [
-                                                                "categoryName"] ==
-                                                            "TopProducts") {
-                                                          cartController
-                                                              .deleteCartProduct(
+                                                                        [
+                                                                        "categoryId"]
+                                                                    .toString(),
+                                                              );
+                                                            } else if (snapshot
+                                                                            .data
+                                                                            .docs[
+                                                                        index][
+                                                                    "categoryName"] ==
+                                                                "TopProducts") {
+                                                              cartController.deleteCartProduct(
                                                                   id: snapshot
                                                                       .data
                                                                       .docs[
@@ -105,13 +110,13 @@ class CartItems extends StatelessWidget {
                                                                       .toString(),
                                                                   categoryName:
                                                                       "TopProducts");
-                                                        } else if (snapshot.data
-                                                                    .docs[index]
-                                                                [
-                                                                "categoryName"] ==
-                                                            "NewProducts") {
-                                                          cartController
-                                                              .deleteCartProduct(
+                                                            } else if (snapshot
+                                                                            .data
+                                                                            .docs[
+                                                                        index][
+                                                                    "categoryName"] ==
+                                                                "NewProducts") {
+                                                              cartController.deleteCartProduct(
                                                                   id: snapshot
                                                                       .data
                                                                       .docs[
@@ -120,311 +125,302 @@ class CartItems extends StatelessWidget {
                                                                       .toString(),
                                                                   categoryName:
                                                                       "NewProducts");
-                                                        }
-                                                        Get.back();
-                                                      },
-                                                      child: const Text(
-                                                              'yes_label')
-                                                          .tr(),
-                                                    ),
-                                                  ],
+                                                            }
+                                                            Get.back();
+                                                          },
+                                                          child: const Text(
+                                                                  'yes_label')
+                                                              .tr(),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
                                                 );
                                               },
-                                            );
-                                          },
-                                          child:
-                                              const SlidableDrawerDismissal(),
-                                        ),
-                                        actionPane:
-                                            const SlidableDrawerActionPane(),
-                                        secondaryActions: [
-                                          IconSlideAction(
-                                            caption: 'Delete',
-                                            color: AppColors.primaryColor,
-                                            icon: Icons.delete,
-                                            onTap: () {
-                                              if (snapshot.data.docs[index]
-                                                      ["categoryId"] !=
-                                                  null) {
-                                                cartController
-                                                    .deleteCartProduct(
-                                                  id: snapshot
-                                                      .data.docs[index]["id"]
-                                                      .toString(),
-                                                  categoryId: snapshot.data
-                                                      .docs[index]["categoryId"]
-                                                      .toString(),
-                                                );
-                                              } else if (snapshot
-                                                          .data.docs[index]
-                                                      ["categoryName"] ==
-                                                  "TopProducts") {
-                                                cartController
-                                                    .deleteCartProduct(
-                                                        id: snapshot.data
-                                                            .docs[index]["id"]
-                                                            .toString(),
-                                                        categoryName:
-                                                            "TopProducts");
-                                              } else if (snapshot
-                                                          .data.docs[index]
-                                                      ["categoryName"] ==
-                                                  "NewProducts") {
-                                                cartController
-                                                    .deleteCartProduct(
-                                                        id: snapshot.data
-                                                            .docs[index]["id"]
-                                                            .toString(),
-                                                        categoryName:
-                                                            "NewProducts");
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.0.w),
-                                          child: Card(
-                                            elevation: 3,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    CachedNetworkImage(
-                                                      imageUrl: snapshot
+                                              child:
+                                                  const SlidableDrawerDismissal(),
+                                            ),
+                                            actionPane:
+                                                const SlidableDrawerActionPane(),
+                                            secondaryActions: [
+                                              IconSlideAction(
+                                                caption: 'Delete',
+                                                color: AppColors.primaryColor,
+                                                icon: Icons.delete,
+                                                onTap: () {
+                                                  if (snapshot.data.docs[index]
+                                                          ["categoryId"] !=
+                                                      null) {
+                                                    cartController
+                                                        .deleteCartProduct(
+                                                      id: snapshot.data
+                                                          .docs[index]["id"]
+                                                          .toString(),
+                                                      categoryId: snapshot
                                                           .data
                                                           .docs[index]
-                                                              ["productImage"]
+                                                              ["categoryId"]
                                                           .toString(),
-                                                      height: 100.h,
-                                                      width: 100.w,
-                                                      placeholder: (_, __) =>
-                                                          SpinKitRipple(
-                                                        color: AppColors
-                                                            .primaryColor,
-                                                      ),
-                                                      fit: BoxFit.contain,
-                                                      errorWidget:
-                                                          (context, _, __) =>
-                                                              const Icon(
-                                                        Icons.error_outline,
-                                                        color: Colors.red,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10.w,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                    );
+                                                  } else if (snapshot
+                                                              .data.docs[index]
+                                                          ["categoryName"] ==
+                                                      "TopProducts") {
+                                                    cartController
+                                                        .deleteCartProduct(
+                                                            id: snapshot
+                                                                .data
+                                                                .docs[index]
+                                                                    ["id"]
+                                                                .toString(),
+                                                            categoryName:
+                                                                "TopProducts");
+                                                  } else if (snapshot
+                                                              .data.docs[index]
+                                                          ["categoryName"] ==
+                                                      "NewProducts") {
+                                                    cartController
+                                                        .deleteCartProduct(
+                                                            id: snapshot
+                                                                .data
+                                                                .docs[index]
+                                                                    ["id"]
+                                                                .toString(),
+                                                            categoryName:
+                                                                "NewProducts");
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.0.w),
+                                              child: Card(
+                                                elevation: 3,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
                                                       children: [
-                                                        FittedBox(
-                                                          child: SizedBox(
-                                                            width: 0.40.sw,
-                                                            child: Text(
-                                                              snapshot
-                                                                  .data
-                                                                  .docs[index][
-                                                                      "productName"]
-                                                                  .toString(),
+                                                        CachedNetworkImage(
+                                                          imageUrl: snapshot
+                                                              .data
+                                                              .docs[index][
+                                                                  "productImage"]
+                                                              .toString(),
+                                                          height: 100.h,
+                                                          width: 100.w,
+                                                          placeholder:
+                                                              (_, __) =>
+                                                                  SpinKitRipple(
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                          ),
+                                                          fit: BoxFit.contain,
+                                                          errorWidget: (context,
+                                                                  _, __) =>
+                                                              const Icon(
+                                                            Icons.error_outline,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            FittedBox(
+                                                              child: SizedBox(
+                                                                width: 0.40.sw,
+                                                                child: Text(
+                                                                  snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          [
+                                                                          "productName"]
+                                                                      .toString(),
+                                                                  style: AppTextDecoration
+                                                                      .bodyText4,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5.h,
+                                                            ),
+                                                            FittedBox(
+                                                              child: Text(
+                                                                  snapshot
+                                                                      .data
+                                                                      .docs[
+                                                                          index]
+                                                                          [
+                                                                          "productSize"]
+                                                                      .toString(),
+                                                                  style: AppTextDecoration
+                                                                      .subtitle2,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 10.h,
+                                                            ),
+                                                            Text(
+                                                              "₹${snapshot.data.docs[index]["productPrice"].toString()} /-",
                                                               style:
                                                                   AppTextDecoration
                                                                       .bodyText4,
-                                                            ),
-                                                          ),
+                                                            )
+                                                          ],
                                                         ),
-                                                        SizedBox(
-                                                          height: 5.h,
-                                                        ),
-                                                        FittedBox(
-                                                          child: Text(
-                                                              snapshot
-                                                                  .data
-                                                                  .docs[index][
-                                                                      "productSize"]
-                                                                  .toString(),
-                                                              style:
-                                                                  AppTextDecoration
-                                                                      .subtitle2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10.h,
-                                                        ),
-                                                        Text(
-                                                          "₹${snapshot.data.docs[index]["productPrice"].toString()} /-",
-                                                          style:
-                                                              AppTextDecoration
-                                                                  .bodyText4,
-                                                        )
                                                       ],
                                                     ),
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 20.w),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 10.h,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                        "assets/icons/swipe-left.svg",
-                                                        width: 30.w,
-                                                        height: 30.h,
-                                                        color: AppColors
-                                                            .primaryColor,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 20.h,
-                                                      ),
-                                                      Row(
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 20.w),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
                                                         children: [
-                                                          Text(
-                                                            "quantity_label",
-                                                            style:
-                                                                AppTextDecoration
-                                                                    .bodyText2,
-                                                          ).tr(),
-                                                          Text(
-                                                            snapshot
-                                                                .data
-                                                                .docs[index][
-                                                                    "userQuantity"]
-                                                                .toString(),
-                                                            style:
-                                                                AppTextDecoration
-                                                                    .bodyText3,
+                                                          SizedBox(
+                                                            height: 10.h,
+                                                          ),
+                                                          SvgPicture.asset(
+                                                            "assets/icons/swipe-left.svg",
+                                                            width: 30.w,
+                                                            height: 30.h,
+                                                            color: AppColors
+                                                                .primaryColor,
                                                           ),
                                                           SizedBox(
-                                                            width: 10.w,
+                                                            height: 20.h,
                                                           ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              Get.defaultDialog(
-                                                                  barrierDismissible:
-                                                                      true,
-                                                                  middleText:
-                                                                      "Enter quantity of product",
-                                                                  title: "",
-                                                                  cancel: OutlineButton
-                                                                      .icon(
-                                                                          onPressed:
-                                                                              () {
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "quantity_label",
+                                                                style: AppTextDecoration
+                                                                    .bodyText2,
+                                                              ).tr(),
+                                                              Text(
+                                                                snapshot
+                                                                    .data
+                                                                    .docs[index]
+                                                                        [
+                                                                        "userQuantity"]
+                                                                    .toString(),
+                                                                style: AppTextDecoration
+                                                                    .bodyText3,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 10.w,
+                                                              ),
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  Get.defaultDialog(
+                                                                      barrierDismissible: true,
+                                                                      middleText: "Enter quantity of product",
+                                                                      title: "",
+                                                                      cancel: OutlineButton.icon(
+                                                                          onPressed: () {
                                                                             cartController.quantityController.clear();
                                                                             Get.back();
                                                                           },
-                                                                          icon: const Icon(
-                                                                              Icons.close,
-                                                                              color: Colors.red),
+                                                                          icon: const Icon(Icons.close, color: Colors.red),
                                                                           label: const Text("close_label").tr()),
-                                                                  confirm: RaisedButton.icon(
-                                                                      color: AppColors.primaryColor,
-                                                                      icon: const Icon(
-                                                                        Icons
-                                                                            .check,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      label: const Text(
-                                                                        "submit_label",
-                                                                        style: TextStyle(
+                                                                      confirm: RaisedButton.icon(
+                                                                          color: AppColors.primaryColor,
+                                                                          icon: const Icon(
+                                                                            Icons.check,
                                                                             color:
-                                                                                Colors.white),
-                                                                      ).tr(),
-                                                                      onPressed: () async {
-                                                                        if (int.parse(cartController.quantityController.text) >
-                                                                            0) {
-                                                                          await cartController.setUserQuantity(
-                                                                              pId: snapshot.data.docs[index]["id"].toString(),
-                                                                              quantity: cartController.quantityController.text);
-                                                                          cartController
-                                                                              .quantityController
-                                                                              .clear();
-                                                                          Get.back();
-                                                                        } else {
-                                                                          CustomWidgets.customAuthSnackbar(
-                                                                              message: "Please add quantity above 1",
-                                                                              title: "Invalid quantity");
-                                                                        }
-                                                                      }),
-                                                                  actions: [
-                                                                    Padding(
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .only(
-                                                                        left: 15.0
-                                                                            .w,
-                                                                        right:
-                                                                            15.w,
-                                                                        bottom:
-                                                                            15.h,
-                                                                      ),
-                                                                      child:
-                                                                          TextField(
-                                                                        keyboardType:
-                                                                            TextInputType.number,
-                                                                        controller:
-                                                                            cartController.quantityController,
-                                                                        onSubmitted:
-                                                                            (value) async {
-                                                                          if (int.parse(cartController.quantityController.text) >
-                                                                              0) {
-                                                                            await cartController.setUserQuantity(
-                                                                                pId: snapshot.data.docs[index]["id"].toString(),
-                                                                                quantity: cartController.quantityController.text);
-                                                                            cartController.quantityController.clear();
-                                                                            Get.back();
-                                                                          } else {
-                                                                            CustomWidgets.customAuthSnackbar(
-                                                                                message: "Please add quantity above 1",
-                                                                                title: "Invalid quantity");
-                                                                          }
-                                                                        },
-                                                                        decoration: const InputDecoration(
-                                                                            labelText:
-                                                                                "Quantity",
-                                                                            border:
-                                                                                OutlineInputBorder()),
-                                                                      ),
-                                                                    ),
-                                                                  ]);
-                                                            },
-                                                            child: Icon(
-                                                              Icons.edit,
-                                                              color: AppColors
-                                                                  .primaryColor,
-                                                              size: 20.h,
-                                                            ),
-                                                          ),
+                                                                                Colors.white,
+                                                                          ),
+                                                                          label: const Text(
+                                                                            "submit_label",
+                                                                            style:
+                                                                                TextStyle(color: Colors.white),
+                                                                          ).tr(),
+                                                                          onPressed: () async {
+                                                                            if (int.parse(cartController.quantityController.text) >
+                                                                                0) {
+                                                                              await cartController.setUserQuantity(pId: snapshot.data.docs[index]["id"].toString(), quantity: cartController.quantityController.text);
+                                                                              cartController.quantityController.clear();
+                                                                              Get.back();
+                                                                            } else {
+                                                                              CustomWidgets.customAuthSnackbar(message: "Please add quantity above 1", title: "Invalid quantity");
+                                                                            }
+                                                                          }),
+                                                                      actions: [
+                                                                        Padding(
+                                                                          padding:
+                                                                              EdgeInsets.only(
+                                                                            left:
+                                                                                15.0.w,
+                                                                            right:
+                                                                                15.w,
+                                                                            bottom:
+                                                                                15.h,
+                                                                          ),
+                                                                          child:
+                                                                              TextField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            controller:
+                                                                                cartController.quantityController,
+                                                                            onSubmitted:
+                                                                                (value) async {
+                                                                              if (int.parse(cartController.quantityController.text) > 0) {
+                                                                                await cartController.setUserQuantity(pId: snapshot.data.docs[index]["id"].toString(), quantity: cartController.quantityController.text);
+                                                                                cartController.quantityController.clear();
+                                                                                Get.back();
+                                                                              } else {
+                                                                                CustomWidgets.customAuthSnackbar(message: "Please add quantity above 1", title: "Invalid quantity");
+                                                                              }
+                                                                            },
+                                                                            decoration:
+                                                                                const InputDecoration(labelText: "Quantity", border: OutlineInputBorder()),
+                                                                          ),
+                                                                        ),
+                                                                      ]);
+                                                                },
+                                                                child: Icon(
+                                                                  Icons.edit,
+                                                                  color: AppColors
+                                                                      .primaryColor,
+                                                                  size: 20.h,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
+                                    );
+                                  },
+                                )
+                              : cartController.cartItems.isNotEmpty
+                                  ? Center(
+                                      child: SpinKitRipple(
+                                          color: AppColors.primaryColor),
+                                    )
+                                  : Image.asset(
+                                      "assets/images/empty_cart.png",
+                                      fit: BoxFit.contain,
                                     ),
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child:
-                                  SpinKitRipple(color: AppColors.primaryColor),
-                            ),
                     );
                   }
                 })),

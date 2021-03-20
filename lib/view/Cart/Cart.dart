@@ -15,6 +15,7 @@ class Cart extends StatelessWidget {
       child: WillPopScope(
         onWillPop: () => Get.find<CartController>().onBackPress(),
         child: Scaffold(
+          backgroundColor: Colors.white,
           floatingActionButton: FloatingButton(),
           body: RefreshIndicator(
             onRefresh: () {
