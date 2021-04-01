@@ -38,17 +38,17 @@ class SearchResultsListView extends StatelessWidget {
       );
     }
 
-    return categoryController.searchedProducts.value.isNotEmpty &&
+    return categoryController.searchedProducts.isNotEmpty &&
             !categoryController.isAddedToCart
         ? ListView.builder(
-            itemCount: categoryController.searchedProducts.value.length,
+            itemCount: categoryController.searchedProducts.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w, top: 80.h),
                 child: InkWell(
                   onTap: () {
                     Get.find<ProductController>().selectedProduct =
-                        categoryController.searchedProducts.value[index];
+                        categoryController.searchedProducts[index];
 
                     Get.find<ProductController>().selectedIndex.value = index;
 
@@ -80,18 +80,16 @@ class SearchResultsListView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  categoryController.searchedProducts
-                                      .value[index]["productName"]
-                                      .toString(),
+                                  categoryController
+                                      .searchedProducts[index].productName,
                                   style: AppTextDecoration.bodyText6,
                                 ),
                                 SizedBox(
                                   height: 5.h,
                                 ),
                                 Text(
-                                  categoryController.searchedProducts
-                                      .value[index]["physicalForm"]
-                                      .toString(),
+                                  categoryController
+                                      .searchedProducts[index].physicalForm,
                                   style: AppTextDecoration.subtitle4,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -108,16 +106,16 @@ class SearchResultsListView extends StatelessWidget {
                                           height: 10.h,
                                         ),
                                         Text(
-                                          "₹ ${categoryController.searchedProducts.value[index]["productPrice"].toString()}",
+                                          "₹ ${categoryController.searchedProducts[index].productPrice.toString()}",
                                           style: AppTextDecoration.bodyText4,
                                         ),
                                         SizedBox(
                                           height: 10.h,
                                         ),
                                         Text(
-                                          categoryController.searchedProducts
-                                              .value[index]["productSize"]
-                                              .toString(),
+                                          categoryController
+                                              .searchedProducts[index]
+                                              .productSize,
                                           style: AppTextDecoration.subtitle2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -129,9 +127,8 @@ class SearchResultsListView extends StatelessWidget {
                                             categoryController
                                                 .addProductToCartToggle(
                                                     id: categoryController
-                                                        .searchedProducts
-                                                        .value[index]["id"]
-                                                        .toString(),
+                                                        .searchedProducts[index]
+                                                        .id,
                                                     index: index);
                                           },
                                           child: Container(
@@ -139,9 +136,9 @@ class SearchResultsListView extends StatelessWidget {
                                             height: 30.h,
                                             decoration: BoxDecoration(
                                                 color: categoryController
-                                                                .searchedProducts
-                                                                .value[index]
-                                                            ["isAdded"] ==
+                                                            .searchedProducts[
+                                                                index]
+                                                            .isAdded ==
                                                         false
                                                     ? AppColors.primaryColor
                                                     : AppColors.secondaryColor,
@@ -150,9 +147,9 @@ class SearchResultsListView extends StatelessWidget {
                                             child: Center(
                                               child: Text(
                                                 categoryController
-                                                                .searchedProducts
-                                                                .value[index]
-                                                            ["isAdded"] ==
+                                                            .searchedProducts[
+                                                                index]
+                                                            .isAdded ==
                                                         false
                                                     ? "Add to cart"
                                                     : "Added",
@@ -160,9 +157,9 @@ class SearchResultsListView extends StatelessWidget {
                                                     .bodyText2
                                                     .copyWith(
                                                   color: categoryController
-                                                                  .searchedProducts
-                                                                  .value[index]
-                                                              ["isAdded"] ==
+                                                              .searchedProducts[
+                                                                  index]
+                                                              .isAdded ==
                                                           false
                                                       ? Colors.white
                                                       : Colors.black,
@@ -174,9 +171,8 @@ class SearchResultsListView extends StatelessWidget {
                                       ],
                                     ),
                                     Image.network(
-                                      categoryController.searchedProducts
-                                          .value[index]["productImage"]
-                                          .toString(),
+                                      categoryController
+                                          .searchedProducts[index].productImage,
                                       height: 120.h,
                                       width: 120.w,
                                       fit: BoxFit.contain,

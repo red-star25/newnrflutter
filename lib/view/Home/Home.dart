@@ -32,12 +32,12 @@ class Home extends StatelessWidget {
                   sliver: SliverAppBar(
                     leading: Container(),
                     floating: true,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.white,
                     expandedHeight: 0.82.sh,
                     titleSpacing: 0,
                     flexibleSpace: FlexibleSpaceBar(
                       background: AnimatedContainer(
-                        // color: Colors.lightBlue,
+                        color: Colors.white,
                         duration: const Duration(milliseconds: 200),
                         child: Column(
                           children: [

@@ -32,13 +32,11 @@ class ProductBottom extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
-                      productController.selectedProduct["productName"]
-                          .toString(),
+                      productController.selectedProduct.productName.toString(),
                       style: AppTextDecoration.heading2,
                     ).tr(),
                     Text(
-                      productController.selectedProduct["productSize"]
-                          .toString(),
+                      productController.selectedProduct.productSize.toString(),
                       style: AppTextDecoration.bodyText5,
                     )
                   ],
@@ -93,7 +91,7 @@ class ProductBottom extends StatelessWidget {
                                       fontWeight: FontWeight.normal),
                                 ).tr(),
                                 Text(
-                                    "₹${double.parse(productController.selectedProduct["productPrice"].toString())}",
+                                    "₹${double.parse(productController.selectedProduct.productPrice.toString())}",
                                     style: AppTextDecoration.bodyText5
                                         .copyWith(fontSize: 16.sp))
                               ],
@@ -119,7 +117,7 @@ class ProductBottom extends StatelessWidget {
                                       fontWeight: FontWeight.normal),
                                 ).tr(),
                                 Text(
-                                    "${productController.selectedProduct["minimumOrder"].toString()}/pack",
+                                    "${productController.selectedProduct.minimumOrder.toString()}/pack",
                                     style: AppTextDecoration.bodyText5
                                         .copyWith(fontSize: 16.sp)),
                               ],
@@ -208,8 +206,7 @@ class ProductBottom extends StatelessWidget {
                                 FittedBox(
                                   child: Text(
                                       productController
-                                          .selectedProduct["recommendedFor"]
-                                          .toString(),
+                                          .selectedProduct.recommendedFor,
                                       style: AppTextDecoration.bodyText5
                                           .copyWith(fontSize: 16.sp)),
                                 )
@@ -262,8 +259,7 @@ class ProductBottom extends StatelessWidget {
                                 ).tr(),
                                 Text(
                                     productController
-                                        .selectedProduct["physicalForm"]
-                                        .toString(),
+                                        .selectedProduct.physicalForm,
                                     style: AppTextDecoration.bodyText5
                                         .copyWith(fontSize: 16.sp))
                               ],
@@ -336,8 +332,7 @@ class ProductBottom extends StatelessWidget {
                         ),
                         child: Text(
                             productController
-                                .selectedProduct["productDescription"]
-                                .toString(),
+                                .selectedProduct.productDescription,
                             style: AppTextDecoration.bodyText5
                                 .copyWith(fontSize: 16.sp))),
                   ),

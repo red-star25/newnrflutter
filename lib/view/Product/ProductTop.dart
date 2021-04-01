@@ -30,8 +30,7 @@ class ProductTop extends StatelessWidget {
             child: CachedNetworkImage(
               height: 300.h,
               width: 300.h,
-              imageUrl:
-                  productController.selectedProduct["productImage"].toString(),
+              imageUrl: productController.selectedProduct.productImage,
               placeholder: (_, __) => SpinKitRipple(
                 color: AppColors.primaryColor,
               ),

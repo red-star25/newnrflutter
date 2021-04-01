@@ -10,6 +10,7 @@ import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/ProductController/productController.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 import 'package:nrlifecare/view/SearchProduct/searchPage.dart';
 import 'package:nrlifecare/wigdets/ShimmerLoading/shimmerLoading.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -74,13 +75,10 @@ class CategoryRightBody extends StatelessWidget {
                   SizedBox(
                     width: 0.8.sw,
                     height: 0.74.sh,
-                    child: StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection("Categories")
-                            .doc(categoryController.categoryId.toString())
-                            .collection("products")
-                            .snapshots(),
-                        builder: (context, snapshot) {
+                    child: StreamBuilder<List<ProductModel>>(
+                        stream: categoryController.getcategoryProduct(),
+                        builder: (context,
+                            AsyncSnapshot<List<ProductModel>> snapshot) {
                           if (!snapshot.hasData) {
                             return CategoryRightShimmer();
                           } else {
@@ -104,11 +102,7 @@ class CategoryRightBody extends StatelessWidget {
                                                     onTap: () {
                                                       Get.find<ProductController>()
                                                               .selectedProduct =
-                                                          snapshot.data
-                                                                  .docs[index]
-                                                                  .data()
-                                                              as Map<String,
-                                                                  dynamic>;
+                                                          snapshot.data[index];
 
                                                       Get.find<
                                                               ProductController>()
@@ -164,12 +158,9 @@ class CategoryRightBody extends StatelessWidget {
                                                                 children: [
                                                                   Text(
                                                                     snapshot
-                                                                        .data
-                                                                        .docs[
+                                                                        .data[
                                                                             index]
-                                                                            [
-                                                                            "productName"]
-                                                                        .toString(),
+                                                                        .productName,
                                                                     style: AppTextDecoration
                                                                         .bodyText6,
                                                                     overflow:
@@ -181,12 +172,9 @@ class CategoryRightBody extends StatelessWidget {
                                                                   ),
                                                                   Text(
                                                                     snapshot
-                                                                        .data
-                                                                        .docs[
+                                                                        .data[
                                                                             index]
-                                                                            [
-                                                                            "physicalForm"]
-                                                                        .toString(),
+                                                                        .physicalForm,
                                                                     style: AppTextDecoration
                                                                         .subtitle4,
                                                                     overflow:
@@ -210,7 +198,7 @@ class CategoryRightBody extends StatelessWidget {
                                                                                 10.h,
                                                                           ),
                                                                           Text(
-                                                                            "₹${double.parse(snapshot.data.docs[index]["productPrice"].toString())}",
+                                                                            "₹${double.parse(snapshot.data[index].productPrice.toString())}",
                                                                             style:
                                                                                 AppTextDecoration.bodyText4,
                                                                             overflow:
@@ -221,7 +209,7 @@ class CategoryRightBody extends StatelessWidget {
                                                                                 10.h,
                                                                           ),
                                                                           Text(
-                                                                            snapshot.data.docs[index]["productSize"].toString(),
+                                                                            snapshot.data[index].productSize,
                                                                             style:
                                                                                 AppTextDecoration.subtitle2,
                                                                             overflow:
@@ -234,21 +222,21 @@ class CategoryRightBody extends StatelessWidget {
                                                                           InkWell(
                                                                             onTap:
                                                                                 () {
-                                                                              categoryController.addProductToCartToggle(id: snapshot.data.docs[index]["id"].toString());
+                                                                              categoryController.addProductToCartToggle(id: snapshot.data[index].id);
                                                                             },
                                                                             child:
                                                                                 Container(
                                                                               width: 100.w,
                                                                               height: 30.h,
                                                                               decoration: BoxDecoration(
-                                                                                color: snapshot.data.docs[index]["isAdded"] == false ? AppColors.primaryColor : AppColors.secondaryColor,
+                                                                                color: snapshot.data[index].isAdded == false ? AppColors.primaryColor : AppColors.secondaryColor,
                                                                                 borderRadius: BorderRadius.circular(5),
                                                                               ),
                                                                               child: Center(
                                                                                 child: Text(
-                                                                                  snapshot.data.docs[index]["isAdded"] == false ? "Add to cart" : "Added",
+                                                                                  snapshot.data[index].isAdded == false ? "Add to cart" : "Added",
                                                                                   style: AppTextDecoration.bodyText2.copyWith(
-                                                                                    color: snapshot.data.docs[index]["isAdded"] == false ? Colors.white : Colors.black,
+                                                                                    color: snapshot.data[index].isAdded == false ? Colors.white : Colors.black,
                                                                                   ),
                                                                                   overflow: TextOverflow.ellipsis,
                                                                                 ),
@@ -270,7 +258,7 @@ class CategoryRightBody extends StatelessWidget {
                                                                             color:
                                                                                 AppColors.listColor[index],
                                                                             imageUrl:
-                                                                                snapshot.data.docs[index]["productImage"].toString(),
+                                                                                snapshot.data[index].productImage,
                                                                             height:
                                                                                 120.h,
                                                                             width:
@@ -305,9 +293,7 @@ class CategoryRightBody extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      itemCount: int.parse(
-                                        snapshot.data.docs.length.toString(),
-                                      ),
+                                      itemCount: snapshot.data.length,
                                     ),
                                   )
                                 : SpinKitRipple(

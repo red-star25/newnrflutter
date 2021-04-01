@@ -2,17 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
-import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
+import 'package:nrlifecare/model/CategoryModel/categoryModel.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class CategoryController extends GetxController {
-  final searchedProducts = RxList<Map<String, dynamic>>().obs;
-
-  // final productList = FakeData.productList;
-
+  List<ProductModel> searchedProducts = [];
   RxString categoryId = RxString();
 
-  final categoryList = FakeData.categoryList.obs;
+  List<CategoryModel> categoryList;
+  List<ProductModel> productList;
 
   RxBool isSearchVisible = false.obs;
 
@@ -28,6 +27,32 @@ class CategoryController extends GetxController {
     update();
   }
 
+  List<CategoryModel> categories(QuerySnapshot snapshot) {
+    categoryList =
+        snapshot.docs.map((e) => CategoryModel.fromJson(e.data())).toList();
+    return categoryList;
+  }
+
+  Stream<List<CategoryModel>> getCategories() {
+    final firebaseFirestore =
+        FirebaseFirestore.instance.collection("Categories");
+    return firebaseFirestore.snapshots().map(categories);
+  }
+
+  List<ProductModel> categoryProduct(QuerySnapshot snapshot) {
+    productList =
+        snapshot.docs.map((e) => ProductModel.fromJson(e.data())).toList();
+    return productList;
+  }
+
+  Stream<List<ProductModel>> getcategoryProduct() {
+    final firebaseFirestore = FirebaseFirestore.instance
+        .collection("Categories")
+        .doc(categoryId.value)
+        .collection("products");
+    return firebaseFirestore.snapshots().map(categoryProduct);
+  }
+
   Future<bool> onBackPress() {
     Get.offAllNamed("/home");
     Get.find<HomeController>().updateSelectedFabIcon(1);
@@ -35,41 +60,32 @@ class CategoryController extends GetxController {
   }
 
   Future<void> addSearchedProducts(String term) async {
-    searchedProducts.value.clear();
     try {
-      await FirebaseFirestore.instance
-          .collection("Categories")
-          .doc(categoryId.toString())
-          .collection("products")
-          .get()
-          .then((value) {
-        for (var i = 0; i < value.docs.length; i++) {
-          if (value.docs[i]
-              .data()["productName"]
-              .toString()
-              .toLowerCase()
-              .contains(term.toLowerCase())) {
-            searchedProducts.value.add(value.docs[i].data());
-            break;
-          }
+      for (var i = 0; i < productList.length; i++) {
+        if (productList[i]
+            .productName
+            .toLowerCase()
+            .contains(term.toLowerCase())) {
+          searchedProducts.add(productList[i]);
+
+          break;
         }
-        update();
-      });
+      }
+      update();
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
   RxInt selectedCategoryIndex = 0.obs;
-
   void setSelectedCategory(int index) {
-    for (int i = 0; i < categoryList.value.length; i++) {
+    for (int i = 0; i < categoryList.length; i++) {
       if (i == index) {
-        categoryList.value[i].isSelected = true;
+        categoryList[i].isSelected = true;
         selectedCategoryIndex.value = index;
         update();
       } else {
-        categoryList.value[i].isSelected = false;
+        categoryList[i].isSelected = false;
         update();
       }
     }
@@ -77,11 +93,11 @@ class CategoryController extends GetxController {
 
   Future<void> addProductToCartToggle({String id, int index}) async {
     if (index != null) {
-      if (searchedProducts.value[index]["isAdded"] == false) {
-        searchedProducts.value[index]["isAdded"] = true;
+      if (searchedProducts[index].isAdded == false) {
+        searchedProducts[index].isAdded = true;
         update();
       } else {
-        searchedProducts.value[index]["isAdded"] = false;
+        searchedProducts[index].isAdded = false;
         update();
       }
     }

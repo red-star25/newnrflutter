@@ -4,15 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/controller/CartController/cartController.dart';
-import 'package:nrlifecare/data/fakeData.dart';
+// import 'package:nrlifecare/data/fakeData.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
-import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class HomeController extends GetxController {
   ScrollController scrollController;
   RxInt selectedFabIcon = 1.obs;
-  final topProducts = FakeData.topProducts;
-  final newInProducts = FakeData.newInProducts;
+  // final topProducts = FakeData.topProducts;
+  // final newInProducts = FakeData.newInProducts;
   RxBool isLoggedIn = false.obs;
   bool isAddingToCart = false;
   final random = Random();
@@ -223,5 +223,15 @@ class HomeController extends GetxController {
         print(e.toString());
       }
     }
+  }
+
+  List<ProductModel> products(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) => ProductModel.fromJson(e.data())).toList();
+  }
+
+  Stream<List<ProductModel>> getProducts(String categoryName) {
+    final firebaseFirestore =
+        FirebaseFirestore.instance.collection(categoryName);
+    return firebaseFirestore.snapshots().map(products);
   }
 }

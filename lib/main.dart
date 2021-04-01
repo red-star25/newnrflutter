@@ -21,6 +21,7 @@ import 'constants/colors.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await EasyLocalization.ensureInitialized();
   AuthBindings().dependencies();
   CartBindings().dependencies();
   HomeBindings().dependencies();

@@ -62,43 +62,44 @@ class CustomAppBar extends StatelessWidget {
                 ),
               ],
             ),
+            const Spacer(),
             Flexible(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        Get.toNamed("/userProfile");
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Get.toNamed("/userProfile");
+                    },
+                    child: Icon(
+                      Icons.person_outline_outlined,
+                      color: AppColors.primaryColor,
+                      size: 30.h,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.w,
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      onTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                        await SharedPrefs.setIsLoggedIn(isLoggedIn: false);
+                        final uId = await SharedPrefs.getUid();
+                        await FirebaseFirestore.instance
+                            .collection("Users")
+                            .doc(uId)
+                            .delete();
+                        await SharedPrefs.setUid(uId: uId);
+                        Get.offAllNamed("/login");
                       },
-                      icon: Icon(
-                        Icons.person_outline_outlined,
+                      child: Icon(
+                        Icons.exit_to_app_rounded,
                         color: AppColors.primaryColor,
                         size: 30.h,
                       ),
                     ),
-                    Flexible(
-                      child: IconButton(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          await SharedPrefs.setIsLoggedIn(isLoggedIn: false);
-                          final uId = await SharedPrefs.getUid();
-                          await FirebaseFirestore.instance
-                              .collection("Users")
-                              .doc(uId)
-                              .delete();
-                          await SharedPrefs.setUid();
-                          Get.offAllNamed("/login");
-                        },
-                        icon: Icon(
-                          Icons.exit_to_app_rounded,
-                          color: AppColors.primaryColor,
-                          size: 30.h,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             )
           ],

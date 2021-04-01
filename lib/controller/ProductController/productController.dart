@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 
 class ProductController extends GetxController {
-  Map<String, dynamic> selectedProduct;
+  ProductModel selectedProduct;
   RxInt selectedIndex = 0.obs;
   final imgBgColor = const Color(0xffffffff).obs;
   final heroTag = "".obs;

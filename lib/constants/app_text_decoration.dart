@@ -8,7 +8,7 @@ class AppTextDecoration {
   static final primaryColor = AppColors.primaryColor;
   //Heading
   static final heading1 = TextStyle(
-    fontSize: 35.sp,
+    fontSize: 40.sp,
     color: Colors.white,
     fontWeight: FontWeight.bold,
     fontFamily: "Roboto",

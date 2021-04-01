@@ -5,13 +5,12 @@ part 'categoryModel.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CategoryModel {
-  int id;
+  String id;
   String categoryName;
   bool isSelected;
   String categoryImage;
-  List<ProductModel> products;
 
-  CategoryModel({this.categoryName, this.id, this.products, this.isSelected});
+  CategoryModel({this.categoryName, this.id, this.isSelected});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);

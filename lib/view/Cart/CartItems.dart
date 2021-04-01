@@ -325,70 +325,92 @@ class CartItems extends StatelessWidget {
                                                               InkWell(
                                                                 onTap: () {
                                                                   Get.defaultDialog(
-                                                                      barrierDismissible: true,
-                                                                      middleText: "Enter quantity of product",
-                                                                      title: "",
-                                                                      cancel: OutlineButton.icon(
-                                                                          onPressed: () {
+                                                                    barrierDismissible:
+                                                                        true,
+                                                                    middleText:
+                                                                        "Enter quantity of product",
+                                                                    title:
+                                                                        "Enter quantity of product",
+                                                                    titleStyle:
+                                                                        AppTextDecoration
+                                                                            .bodyText4,
+                                                                    cancel: OutlineButton.icon(
+                                                                        onPressed: () {
+                                                                          cartController
+                                                                              .quantityController
+                                                                              .clear();
+                                                                          Get.back();
+                                                                        },
+                                                                        icon: const Icon(Icons.close, color: Colors.red),
+                                                                        label: const Text("close_label").tr()),
+                                                                    confirm: RaisedButton.icon(
+                                                                        color: AppColors.primaryColor,
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .check,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                        label: const Text(
+                                                                          "submit_label",
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        ).tr(),
+                                                                        onPressed: () async {
+                                                                          if (int.parse(cartController.quantityController.text) >
+                                                                              0) {
+                                                                            await cartController.setUserQuantity(
+                                                                                pId: snapshot.data.docs[index]["id"].toString(),
+                                                                                quantity: cartController.quantityController.text);
                                                                             cartController.quantityController.clear();
                                                                             Get.back();
-                                                                          },
-                                                                          icon: const Icon(Icons.close, color: Colors.red),
-                                                                          label: const Text("close_label").tr()),
-                                                                      confirm: RaisedButton.icon(
-                                                                          color: AppColors.primaryColor,
-                                                                          icon: const Icon(
-                                                                            Icons.check,
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                          label: const Text(
-                                                                            "submit_label",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ).tr(),
-                                                                          onPressed: () async {
-                                                                            if (int.parse(cartController.quantityController.text) >
-                                                                                0) {
-                                                                              await cartController.setUserQuantity(pId: snapshot.data.docs[index]["id"].toString(), quantity: cartController.quantityController.text);
-                                                                              cartController.quantityController.clear();
-                                                                              Get.back();
-                                                                            } else {
-                                                                              CustomWidgets.customAuthSnackbar(message: "Please add quantity above 1", title: "Invalid quantity");
-                                                                            }
-                                                                          }),
-                                                                      actions: [
+                                                                          } else {
+                                                                            CustomWidgets.customAuthSnackbar(
+                                                                                message: "Please add quantity above 1",
+                                                                                title: "Invalid quantity");
+                                                                          }
+                                                                        }),
+                                                                    content:
                                                                         Padding(
-                                                                          padding:
-                                                                              EdgeInsets.only(
-                                                                            left:
-                                                                                15.0.w,
-                                                                            right:
-                                                                                15.w,
-                                                                            bottom:
-                                                                                15.h,
-                                                                          ),
-                                                                          child:
-                                                                              TextField(
-                                                                            keyboardType:
-                                                                                TextInputType.number,
-                                                                            controller:
-                                                                                cartController.quantityController,
-                                                                            onSubmitted:
-                                                                                (value) async {
-                                                                              if (int.parse(cartController.quantityController.text) > 0) {
-                                                                                await cartController.setUserQuantity(pId: snapshot.data.docs[index]["id"].toString(), quantity: cartController.quantityController.text);
-                                                                                cartController.quantityController.clear();
-                                                                                Get.back();
-                                                                              } else {
-                                                                                CustomWidgets.customAuthSnackbar(message: "Please add quantity above 1", title: "Invalid quantity");
-                                                                              }
-                                                                            },
-                                                                            decoration:
-                                                                                const InputDecoration(labelText: "Quantity", border: OutlineInputBorder()),
-                                                                          ),
-                                                                        ),
-                                                                      ]);
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .only(
+                                                                        left: 15.0
+                                                                            .w,
+                                                                        right:
+                                                                            15.w,
+                                                                        bottom:
+                                                                            15.h,
+                                                                      ),
+                                                                      child:
+                                                                          TextField(
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        controller:
+                                                                            cartController.quantityController,
+                                                                        onSubmitted:
+                                                                            (value) async {
+                                                                          if (int.parse(cartController.quantityController.text) >
+                                                                              0) {
+                                                                            await cartController.setUserQuantity(
+                                                                                pId: snapshot.data.docs[index]["id"].toString(),
+                                                                                quantity: cartController.quantityController.text);
+                                                                            cartController.quantityController.clear();
+                                                                            Get.back();
+                                                                          } else {
+                                                                            CustomWidgets.customAuthSnackbar(
+                                                                                message: "Please add quantity above 1",
+                                                                                title: "Invalid quantity");
+                                                                          }
+                                                                        },
+                                                                        decoration: const InputDecoration(
+                                                                            labelText:
+                                                                                "Quantity",
+                                                                            border:
+                                                                                OutlineInputBorder()),
+                                                                      ),
+                                                                    ),
+                                                                  );
                                                                 },
                                                                 child: Icon(
                                                                   Icons.edit,
