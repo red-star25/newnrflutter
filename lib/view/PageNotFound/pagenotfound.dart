@@ -7,11 +7,9 @@ class PageNotFount extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Container(
-          child: Text(
-            "Page not found ❌",
-            style: AppTextDecoration.bodyText2,
-          ),
+        child: Text(
+          "Page not found ❌",
+          style: AppTextDecoration.bodyText2,
         ),
       ),
     );

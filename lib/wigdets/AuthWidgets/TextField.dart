@@ -11,6 +11,8 @@ class CustomTextField extends StatelessWidget {
   final bool isObsecure;
   final Widget prefix;
   final TextInputType textInputType;
+  final int maxLength;
+  final TextInputAction textInputAction;
   const CustomTextField(
       {@required this.validateField,
       this.onFieldSubmit,
@@ -18,7 +20,9 @@ class CustomTextField extends StatelessWidget {
       this.hintText,
       this.isObsecure = false,
       this.prefix,
-      this.textInputType = TextInputType.text});
+      this.textInputType = TextInputType.text,
+      this.textInputAction = TextInputAction.done,
+      this.maxLength});
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +37,17 @@ class CustomTextField extends StatelessWidget {
             return validateField(value);
           },
           controller: controller,
-          onFieldSubmitted: (value) {
-            return onFieldSubmit(value);
-          },
+          onFieldSubmitted: (value) => onFieldSubmit(value),
           obscureText: isObsecure,
           keyboardType: textInputType,
+          maxLength: maxLength,
+          textInputAction: textInputAction,
           decoration: InputDecoration(
             prefix: prefix,
             hintText: hintText,
             hintStyle: TextStyle(
               color: Colors.grey.withOpacity(0.6),
-              fontSize: 18.sp,
+              fontSize: 16.sp,
             ),
             border: InputBorder.none,
             fillColor: AppColors.primaryColor,

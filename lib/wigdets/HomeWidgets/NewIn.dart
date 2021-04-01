@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/controller/ProductController/productController.dart';
+import 'package:nrlifecare/model/ProductModel/productModel.dart';
 import 'package:nrlifecare/wigdets/ShimmerLoading/shimmerLoading.dart';
 
 class NewIn extends StatelessWidget {
@@ -38,7 +38,7 @@ class NewIn extends StatelessWidget {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
               child: FittedBox(
                 child: Text(
                   "home_newin",
@@ -52,16 +52,15 @@ class NewIn extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 10.h,
+              height: 5.h,
             ),
             Flexible(
               child: SizedBox(
                 height: 1.sh,
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("NewProducts")
-                        .snapshots(),
-                    builder: (context, snapshot) {
+                child: StreamBuilder<List<ProductModel>>(
+                    stream: homeController.getProducts("NewProducts"),
+                    builder:
+                        (context, AsyncSnapshot<List<ProductModel>> snapshot) {
                       if (!snapshot.hasData) {
                         return NewInShimmer();
                       } else {
@@ -83,8 +82,7 @@ class NewIn extends StatelessWidget {
                                         onTap: () {
                                           Get.find<ProductController>()
                                                   .selectedProduct =
-                                              snapshot.data.docs[index].data()
-                                                  as Map<String, dynamic>;
+                                              snapshot.data[index];
 
                                           Get.find<ProductController>()
                                               .selectedIndex
@@ -93,6 +91,12 @@ class NewIn extends StatelessWidget {
                                           Get.find<ProductController>()
                                               .heroTag
                                               .value = "newProduct$index";
+
+                                          Get.find<ProductController>()
+                                                  .imgBgColor
+                                                  .value =
+                                              AppColors
+                                                  .listColor["l${index + 1}"];
 
                                           Get.toNamed(
                                             "/product",
@@ -118,9 +122,8 @@ class NewIn extends StatelessWidget {
                                                     tag: "newProduct$index",
                                                     child: CachedNetworkImage(
                                                       imageUrl: snapshot
-                                                          .data
-                                                          .docs[index]
-                                                              ["productImage"]
+                                                          .data[index]
+                                                          .productImage
                                                           .toString(),
                                                       placeholder: (_, __) =>
                                                           SpinKitRipple(
@@ -152,10 +155,8 @@ class NewIn extends StatelessWidget {
                                                       FittedBox(
                                                           child: Text(
                                                               snapshot
-                                                                  .data
-                                                                  .docs[index][
-                                                                      "productName"]
-                                                                  .toString(),
+                                                                  .data[index]
+                                                                  .productName,
                                                               style: AppTextDecoration
                                                                   .bodyText4)),
                                                       SizedBox(
@@ -163,11 +164,8 @@ class NewIn extends StatelessWidget {
                                                       ),
                                                       FittedBox(
                                                         child: Text(
-                                                          snapshot
-                                                              .data
-                                                              .docs[index][
-                                                                  "productSize"]
-                                                              .toString(),
+                                                          snapshot.data[index]
+                                                              .productSize,
                                                           style:
                                                               AppTextDecoration
                                                                   .bodyText1
@@ -191,7 +189,7 @@ class NewIn extends StatelessWidget {
                                                       right: 20.0.w),
                                                   child: FittedBox(
                                                     child: Text(
-                                                      "₹${double.parse(snapshot.data.docs[index]["productPrice"].toString())}/-",
+                                                      "₹${double.parse(snapshot.data[index].productPrice.toString())}/-",
                                                       style: AppTextDecoration
                                                           .bodyText2
                                                           .copyWith(
@@ -204,35 +202,32 @@ class NewIn extends StatelessWidget {
                                                     homeController
                                                         .addNewInProductToCart(
                                                             id: snapshot
-                                                                .data
-                                                                .docs[index]
-                                                                    ["id"]
-                                                                .toString());
+                                                                .data[index]
+                                                                .id);
                                                   },
-                                                  child:
-                                                      snapshot.data.docs[index]
-                                                                  ["isAdded"] ==
-                                                              false
-                                                          ? SvgPicture.asset(
-                                                              "assets/icons/shopping-basket.svg",
+                                                  child: snapshot.data[index]
+                                                              .isAdded ==
+                                                          false
+                                                      ? SvgPicture.asset(
+                                                          "assets/icons/shopping-basket.svg",
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          width: 25.w,
+                                                          height: 25.h,
+                                                        )
+                                                      : Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.check,
                                                               color: AppColors
-                                                                  .primaryColor,
-                                                              width: 25.w,
-                                                              height: 25.h,
-                                                            )
-                                                          : Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons.check,
-                                                                  color: AppColors
-                                                                      .secondaryColor,
-                                                                  size: 20.h,
-                                                                ),
-                                                                Text("Added",
-                                                                    style: AppTextDecoration
-                                                                        .subtitle2),
-                                                              ],
+                                                                  .secondaryColor,
+                                                              size: 20.h,
                                                             ),
+                                                            Text("Added",
+                                                                style: AppTextDecoration
+                                                                    .subtitle2),
+                                                          ],
+                                                        ),
                                                 ),
                                               ],
                                             ),
@@ -244,8 +239,7 @@ class NewIn extends StatelessWidget {
                                 ),
                               );
                             },
-                            itemCount:
-                                int.parse(snapshot.data.docs.length.toString()),
+                            itemCount: snapshot.data.length,
                           ),
                         );
                       }

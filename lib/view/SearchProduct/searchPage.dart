@@ -18,7 +18,7 @@ class _SearchPageState extends State<SearchPage> {
 
   final categoryController = Get.find<CategoryController>();
 
-  List<String> _searchHistory = [
+  final _searchHistory = [
     'NRCOF-TR',
     'NRPro',
     'NRVita',
@@ -132,7 +132,7 @@ class _SearchPageState extends State<SearchPage> {
           });
         },
         onSubmitted: (query) {
-          if (!query.isBlank || !query.isEmpty) {
+          if (!query.isBlank || query.isNotEmpty) {
             setState(() {
               addSearchTerm(query);
               selectedTerm = query;

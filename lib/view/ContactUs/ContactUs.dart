@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
+import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/wigdets/GlobalWidgets/globalHeader.dart';
 import 'package:nrlifecare/wigdets/HomeWidgets/FloatingButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,117 +55,56 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        floatingActionButton: FloatingButton(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              GlobalHeader(title: "contactus"),
-              SizedBox(
-                height: 20.h,
-              ),
-              AnimationLimiter(
-                child: Column(
-                  children: AnimationConfiguration.toStaggeredList(
-                    duration: const Duration(milliseconds: 800),
-                    childAnimationBuilder: (widget) => SlideAnimation(
-                      horizontalOffset: 50.0,
-                      child: FadeInAnimation(
-                        child: widget,
+      child: WillPopScope(
+        onWillPop: () {
+          Get.offAllNamed("/aboutUs");
+          Get.find<HomeController>().updateSelectedFabIcon(4);
+          return Future.value(true);
+        },
+        child: Scaffold(
+          floatingActionButton: FloatingButton(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                GlobalHeader(title: "contactus"),
+                SizedBox(
+                  height: 20.h,
+                ),
+                AnimationLimiter(
+                  child: Column(
+                    children: AnimationConfiguration.toStaggeredList(
+                      duration: const Duration(milliseconds: 800),
+                      childAnimationBuilder: (widget) => SlideAnimation(
+                        horizontalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: widget,
+                        ),
                       ),
-                    ),
-                    children: [
-                      SizedBox(
-                        height: 0.53.sh,
-                        width: 1.sw,
-                        child: AnimationLimiter(
-                          child: ListView.separated(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return index.isOdd
-                                    ? AnimationConfiguration.staggeredList(
-                                        position: index,
-                                        duration:
-                                            const Duration(milliseconds: 800),
-                                        child: SlideAnimation(
-                                          verticalOffset: 50.0,
-                                          child: FadeInAnimation(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 20.w, right: 10.w),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        contactUsDetails[index]
-                                                                [0]
-                                                            .toString(),
-                                                        style: AppTextDecoration
-                                                            .bodyText4,
-                                                      ).tr(),
-                                                      SizedBox(
-                                                        height: 10.h,
-                                                      ),
-                                                      Text(
-                                                              contactUsDetails[
-                                                                      index][1]
-                                                                  .toString(),
-                                                              style:
-                                                                  AppTextDecoration
-                                                                      .subtitle2)
-                                                          .tr(),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10.w),
-                                                    child: Image.asset(
-                                                      contactUsDetails[index][2]
-                                                          .toString(),
-                                                      height: 120.h,
-                                                      width: 120.w,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : AnimationConfiguration.staggeredList(
-                                        position: index,
-                                        duration:
-                                            const Duration(milliseconds: 800),
-                                        child: SlideAnimation(
-                                          verticalOffset: 50.0,
-                                          child: FadeInAnimation(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 20.w, right: 10.w),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 10.w),
-                                                    child: Image.asset(
-                                                      contactUsDetails[index][2]
-                                                          .toString(),
-                                                      height: 120.h,
-                                                      width: 120.w,
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 0.53.sh,
+                          width: 1.sw,
+                          child: AnimationLimiter(
+                            child: ListView.separated(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return index.isOdd
+                                      ? AnimationConfiguration.staggeredList(
+                                          position: index,
+                                          duration:
+                                              const Duration(milliseconds: 800),
+                                          child: SlideAnimation(
+                                            verticalOffset: 50.0,
+                                            child: FadeInAnimation(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 20.w, right: 10.w),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
@@ -189,69 +130,146 @@ class ContactUs extends StatelessWidget {
                                                             .tr(),
                                                       ],
                                                     ),
-                                                  ),
-                                                ],
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10.w),
+                                                      child: Image.asset(
+                                                        contactUsDetails[index]
+                                                                [2]
+                                                            .toString(),
+                                                        height: 120.h,
+                                                        width: 120.w,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                              },
-                              separatorBuilder: (context, index) => SizedBox(
-                                    height: 30.h,
-                                  ),
-                              itemCount: contactUsDetails.length),
+                                        )
+                                      : AnimationConfiguration.staggeredList(
+                                          position: index,
+                                          duration:
+                                              const Duration(milliseconds: 800),
+                                          child: SlideAnimation(
+                                            verticalOffset: 50.0,
+                                            child: FadeInAnimation(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 20.w, right: 10.w),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 10.w),
+                                                      child: Image.asset(
+                                                        contactUsDetails[index]
+                                                                [2]
+                                                            .toString(),
+                                                        height: 120.h,
+                                                        width: 120.w,
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            contactUsDetails[
+                                                                    index][0]
+                                                                .toString(),
+                                                            style:
+                                                                AppTextDecoration
+                                                                    .bodyText4,
+                                                          ).tr(),
+                                                          SizedBox(
+                                                            height: 10.h,
+                                                          ),
+                                                          Text(
+                                                                  contactUsDetails[
+                                                                              index]
+                                                                          [1]
+                                                                      .toString(),
+                                                                  style: AppTextDecoration
+                                                                      .subtitle2)
+                                                              .tr(),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                },
+                                separatorBuilder: (context, index) => SizedBox(
+                                      height: 30.h,
+                                    ),
+                                itemCount: contactUsDetails.length),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 0),
-                          ),
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 1),
-                          ),
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 2),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 3),
-                          ),
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 4),
-                          ),
-                          Flexible(
-                            child: ResuableContactUsCard(
-                                contactUsSecondaryList: contactUsSecondaryList,
-                                index: 5),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                    ],
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 0),
+                            ),
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 1),
+                            ),
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 2),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 3),
+                            ),
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 4),
+                            ),
+                            Flexible(
+                              child: ResuableContactUsCard(
+                                  contactUsSecondaryList:
+                                      contactUsSecondaryList,
+                                  index: 5),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

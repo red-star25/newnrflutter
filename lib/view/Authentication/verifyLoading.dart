@@ -8,7 +8,6 @@ import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
 import 'package:nrlifecare/controller/AuthController/authcontroller.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyLoading extends StatefulWidget {
   @override
@@ -29,10 +28,10 @@ class _VerifyLoadingState extends State<VerifyLoading> {
     super.initState();
   }
 
-  verify() async {
+  Future<void> verify() async {
     user = auth.currentUser;
     await user.sendEmailVerification();
-    timer = Timer.periodic(Duration(seconds: 5), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       await checkEmailVerified();
     });
   }
@@ -73,7 +72,7 @@ class _VerifyLoadingState extends State<VerifyLoading> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Container(
+            child: SizedBox(
               width: 0.8.sw,
               height: 0.2.sh,
               child: Center(
@@ -87,7 +86,7 @@ class _VerifyLoadingState extends State<VerifyLoading> {
           SizedBox(
             height: 20.h,
           ),
-          CircularProgressIndicator()
+          const CircularProgressIndicator()
         ],
       ),
     );

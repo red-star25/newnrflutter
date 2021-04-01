@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
+import 'package:nrlifecare/controller/CartController/cartController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +17,7 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final homeController = Get.find<HomeController>();
+  final cartController = Get.find<CartController>();
   String userName = "";
   String photoURL = "";
   String email = "";
@@ -23,10 +25,11 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     getUserDetails();
+    cartController.getCartProducts();
     super.initState();
   }
 
-  void getUserDetails() async {
+  Future<void> getUserDetails() async {
     userName = await SharedPrefs.getUserName();
     photoURL = await SharedPrefs.getPhotoURL();
     email = await SharedPrefs.getEmail();
@@ -43,29 +46,17 @@ class _UserProfileState extends State<UserProfile> {
           width: 1.sw,
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  Get.offNamed("/home");
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 20.w,
-                    top: 10.h,
-                  ),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.primaryColor,
-                        size: 30.h,
-                      )),
+              if (photoURL != null)
+                CircleAvatar(
+                  radius: 80.h,
+                  backgroundImage: NetworkImage(photoURL),
+                )
+              else
+                CircleAvatar(
+                  radius: 80.h,
+                  backgroundImage:
+                      const AssetImage("assets/images/userImage.png"),
                 ),
-              ),
-              CircleAvatar(
-                radius: 80.h,
-                backgroundImage:
-                    photoURL != null ? NetworkImage(photoURL) : null,
-              ),
               SizedBox(
                 height: 20.h,
               ),
@@ -125,9 +116,9 @@ class _UserProfileState extends State<UserProfile> {
                                             child: Column(children: [
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "EN"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "English"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -137,16 +128,17 @@ class _UserProfileState extends State<UserProfile> {
                                                             .setLanguage("EN");
                                                         setState(() {
                                                           context.locale =
-                                                              Locale("en");
+                                                              const Locale(
+                                                                  "en");
                                                         });
                                                       },
                                                       leading: Text(
                                                         "EN",
                                                         style: TextStyle(
                                                           color: homeController
-                                                                          .languageSettings[
-                                                                      "EN"] ==
-                                                                  true
+                                                                      .selectedLanguage
+                                                                      .toString() ==
+                                                                  "English"
                                                               ? Colors.white
                                                               : AppColors
                                                                   .primaryColor,
@@ -155,17 +147,18 @@ class _UserProfileState extends State<UserProfile> {
                                                       title: Text("English",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "EN"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "English"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor)),
                                                       trailing: homeController
-                                                                      .languageSettings[
-                                                                  "EN"] ==
-                                                              true
-                                                          ? Icon(Icons.check,
+                                                                  .selectedLanguage
+                                                                  .toString() ==
+                                                              "English"
+                                                          ? const Icon(
+                                                              Icons.check,
                                                               color:
                                                                   Colors.white)
                                                           : Icon(Icons.language,
@@ -178,9 +171,9 @@ class _UserProfileState extends State<UserProfile> {
                                               ),
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "HI"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "Hindi"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -191,16 +184,17 @@ class _UserProfileState extends State<UserProfile> {
                                                                   "HI");
                                                           setState(() {
                                                             context.locale =
-                                                                Locale("hi");
+                                                                const Locale(
+                                                                    "hi");
                                                           });
                                                         },
                                                         leading: Text(
                                                           "HI",
                                                           style: TextStyle(
                                                             color: homeController
-                                                                            .languageSettings[
-                                                                        "HI"] ==
-                                                                    true
+                                                                        .selectedLanguage
+                                                                        .toString() ==
+                                                                    "Hindi"
                                                                 ? Colors.white
                                                                 : AppColors
                                                                     .primaryColor,
@@ -210,18 +204,19 @@ class _UserProfileState extends State<UserProfile> {
                                                           "Hindi",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "HI"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "Hindi"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor),
                                                         ),
                                                         trailing: homeController
-                                                                        .languageSettings[
-                                                                    "HI"] ==
-                                                                true
-                                                            ? Icon(Icons.check,
+                                                                    .selectedLanguage
+                                                                    .toString() ==
+                                                                "Hindi"
+                                                            ? const Icon(
+                                                                Icons.check,
                                                                 color: Colors
                                                                     .white)
                                                             : Icon(
@@ -234,9 +229,9 @@ class _UserProfileState extends State<UserProfile> {
                                               ),
                                               Obx(() => Card(
                                                     color: homeController
-                                                                    .languageSettings[
-                                                                "GU"] ==
-                                                            true
+                                                                .selectedLanguage
+                                                                .toString() ==
+                                                            "Gujarati"
                                                         ? AppColors.primaryColor
                                                         : Colors.white,
                                                     elevation: 5,
@@ -247,16 +242,17 @@ class _UserProfileState extends State<UserProfile> {
                                                                   "GU");
                                                           setState(() {
                                                             context.locale =
-                                                                Locale("gu");
+                                                                const Locale(
+                                                                    "gu");
                                                           });
                                                         },
                                                         leading: Text(
                                                           "GU",
                                                           style: TextStyle(
                                                             color: homeController
-                                                                            .languageSettings[
-                                                                        "GU"] ==
-                                                                    true
+                                                                        .selectedLanguage
+                                                                        .toString() ==
+                                                                    "Gujarati"
                                                                 ? Colors.white
                                                                 : AppColors
                                                                     .primaryColor,
@@ -266,18 +262,19 @@ class _UserProfileState extends State<UserProfile> {
                                                           "Gujarati",
                                                           style: TextStyle(
                                                               color: homeController
-                                                                              .languageSettings[
-                                                                          "GU"] ==
-                                                                      true
+                                                                          .selectedLanguage
+                                                                          .toString() ==
+                                                                      "Gujarati"
                                                                   ? Colors.white
                                                                   : AppColors
                                                                       .primaryColor),
                                                         ),
                                                         trailing: homeController
-                                                                        .languageSettings[
-                                                                    "GU"] ==
-                                                                true
-                                                            ? Icon(Icons.check,
+                                                                    .selectedLanguage
+                                                                    .toString() ==
+                                                                "Gujarati"
+                                                            ? const Icon(
+                                                                Icons.check,
                                                                 color: Colors
                                                                     .white)
                                                             : Icon(
@@ -303,23 +300,32 @@ class _UserProfileState extends State<UserProfile> {
                                     ).tr(),
                                   ),
                                 ),
-                                Card(
-                                  elevation: 5,
-                                  child: ListTile(
-                                    onTap: () {},
-                                    subtitle: Text(
-                                      "0",
-                                      style: AppTextDecoration.bodyText1,
-                                    ),
-                                    leading: Icon(
-                                      Icons.shopping_bag_outlined,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                    title: Text(
-                                      "your_orders",
-                                      style: AppTextDecoration.bodyText3,
-                                    ).tr(),
-                                  ),
+                                GetBuilder<CartController>(
+                                  init: CartController(),
+                                  builder: (_) {
+                                    return Card(
+                                      elevation: 5,
+                                      child: ListTile(
+                                        onTap: () {
+                                          Get.offAllNamed("/cart");
+                                          homeController
+                                              .updateSelectedFabIcon(3);
+                                        },
+                                        subtitle: Text(
+                                          _.cartItems.length.toString(),
+                                          style: AppTextDecoration.bodyText1,
+                                        ),
+                                        leading: Icon(
+                                          Icons.shopping_bag_outlined,
+                                          color: AppColors.primaryColor,
+                                        ),
+                                        title: Text(
+                                          "your_orders",
+                                          style: AppTextDecoration.bodyText3,
+                                        ).tr(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

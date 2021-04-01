@@ -4,6 +4,6 @@ import 'package:nrlifecare/controller/HomeController/homeController.dart';
 class HomeBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => HomeController());
+    Get.put<HomeController>(HomeController());
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -13,9 +14,9 @@ class CartController extends GetxController {
   double totalCartPrice = 0.0;
 
   TextEditingController quantityController;
-  TextEditingController phoneNumberController = new TextEditingController();
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController addressController = new TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   final Telephony telephony = Telephony.instance;
 
@@ -32,6 +33,8 @@ class CartController extends GetxController {
 
   String uId, userName, email;
 
+  String modeOfPayment;
+
   @override
   void onInit() {
     quantityController = TextEditingController(text: "1");
@@ -43,35 +46,56 @@ class CartController extends GetxController {
     super.onInit();
   }
 
+  Future<bool> onBackPress() {
+    Get.offAllNamed("/category");
+    Get.find<HomeController>().updateSelectedFabIcon(2);
+    return Future.value(true);
+  }
+
   Future<void> smsSend() async {
     final SmsSendStatusListener listener = (SendStatus status) {
       if (status == SendStatus.SENT) {
         CustomWidgets.customPaymentSnackbar(
-            message: "Order Placed Successfully",
+            message: "Order Has Been Successfully Placed",
             title: "Congratulation",
             utfLogo: "✔");
+        phoneNumberController.clear();
+        nameController.clear();
+        addressController.clear();
       }
     };
-
-    await telephony
-        .sendSms(
-      to: "6353369354",
-      message: smsMessage,
-      statusListener: listener,
-    )
-        .then((value) {
-      Get.offNamed("/cart");
-    });
+    try {
+      await telephony
+          .sendSms(
+        to: "6353369354",
+        message: smsMessage,
+        statusListener: listener,
+      )
+          .then((value) async {
+        Get.toNamed("/orderSuccess");
+      }).then((value) async {
+        try {
+          await telephony.sendSms(
+            to: phoneNumberController.text,
+            message:
+                "Your order has been placed. Our Medical Representative will reach you soon. Thank You",
+          );
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> openCheckout() async {
-    // rzp_live_lpk9qpV9GInbUw
     final options = {
       'key': "rzp_test_7w5UEKTQKOkb0s",
       'amount': (totalCartPrice * 100).roundToDouble().toString(),
       'name': "NR Life Care",
       'description': 'Online Order',
-      'prefill': {'contact': "", 'email': email},
+      'prefill': {'contact': phoneNumberController.text, 'email': email},
       'external': {
         'wallets': ['paytm']
       }
@@ -84,17 +108,59 @@ class CartController extends GetxController {
     }
   }
 
+  Future<void> setMessage({String mode}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(uId)
+          .collection("cartProducts")
+          .get()
+          .then((value) {
+        final productName = [];
+        final productQuantity = [];
+
+        for (var i = 0; i < value.docs.length; i++) {
+          productName.add(value.docs[i]["productName"].toString());
+          productQuantity.add(value.docs[i]["userQuantity"].toString());
+        }
+
+        final product = productName.reduce(
+            // ignore: prefer_interpolation_to_compose_strings
+            (value, element) => value + "," + element);
+
+        final quantity = productQuantity.reduce(
+            // ignore: prefer_interpolation_to_compose_strings
+            (value, element) => value + "," + element);
+
+        smsMessage =
+            "$mode:\nProducts:\n$product\n\nQuantity:\n$quantity\n\nName: ${userName}\nAddress :${addressController.text}\nPhone Number :${phoneNumberController.text}";
+      }).then((value) async {
+        nameController.clear();
+        phoneNumberController.clear();
+        addressController.clear();
+        smsSend();
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     CustomWidgets.customPaymentSnackbar(
-        message: "Order successfully placed", title: "Success", utfLogo: "✔");
+        message: "Order has been successfully placed",
+        title: "Success",
+        utfLogo: "✔");
+    setMessage(mode: "Online Payment");
+    Get.toNamed("/orderSuccess");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print(response.message);
+    debugPrint(response.message);
     CustomWidgets.customPaymentSnackbar(
         message: response.message.toString(),
         title: response.code.toString(),
         utfLogo: "❌");
+    Get.offNamed("/cart");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -111,40 +177,96 @@ class CartController extends GetxController {
   Future<void> setUserQuantity({String pId, String quantity}) async {
     isLoading = true;
     update();
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(uId)
-        .collection("cartProducts")
-        .doc(pId)
-        .update({"userQuantity": quantity}).then((value) {
-      totalCartProductPrice();
-      isLoading = false;
-      update();
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(uId)
+          .collection("cartProducts")
+          .doc(pId)
+          .update({"userQuantity": quantity}).then((value) {
+        totalCartProductPrice();
+        isLoading = false;
+        update();
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> getCartProducts() async {
     cartItems.clear();
     getUid();
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(uId)
-        .collection("cartProducts")
-        .get()
-        .then((value) {
-      for (var i = 0; i < value.docs.length; i++) {
-        cartItems.add(value.docs[i].data());
-      }
-      update();
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(uId)
+          .collection("cartProducts")
+          .get()
+          .then((value) {
+        for (var i = 0; i < value.docs.length; i++) {
+          cartItems.add(value.docs[i].data());
+        }
+        update();
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
-  void deleteCartProduct(
+  Future<void> deleteCartProduct(
       {String id, String categoryId, String categoryName}) async {
     if (categoryId == null) {
       if (categoryName == "TopProducts") {
         isLoading = true;
         update();
+        try {
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uId)
+              .collection("cartProducts")
+              .doc(id)
+              .delete()
+              .then((value) async {
+            await FirebaseFirestore.instance
+                .collection("TopProducts")
+                .doc(id)
+                .update({"isAdded": false}).then((value) {
+              totalCartProductPrice();
+              isLoading = false;
+              update();
+            });
+          });
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      } else if (categoryName == "NewProducts") {
+        isLoading = true;
+        update();
+        try {
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uId)
+              .collection("cartProducts")
+              .doc(id)
+              .delete()
+              .then((value) async {
+            await FirebaseFirestore.instance
+                .collection("NewProducts")
+                .doc(id)
+                .update({"isAdded": false});
+          }).then((value) {
+            totalCartProductPrice();
+            isLoading = false;
+            update();
+          });
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    } else {
+      isLoading = true;
+      update();
+      try {
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(uId)
@@ -153,7 +275,9 @@ class CartController extends GetxController {
             .delete()
             .then((value) async {
           await FirebaseFirestore.instance
-              .collection("TopProducts")
+              .collection("Categories")
+              .doc(categoryId)
+              .collection("products")
               .doc(id)
               .update({"isAdded": false}).then((value) {
             totalCartProductPrice();
@@ -161,47 +285,9 @@ class CartController extends GetxController {
             update();
           });
         });
-      } else if (categoryName == "NewProducts") {
-        isLoading = true;
-        update();
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(uId)
-            .collection("cartProducts")
-            .doc(id)
-            .delete()
-            .then((value) async {
-          await FirebaseFirestore.instance
-              .collection("NewProducts")
-              .doc(id)
-              .update({"isAdded": false});
-        }).then((value) {
-          totalCartProductPrice();
-          isLoading = false;
-          update();
-        });
+      } catch (e) {
+        debugPrint(e.toString());
       }
-    } else {
-      isLoading = true;
-      update();
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(uId)
-          .collection("cartProducts")
-          .doc(id)
-          .delete()
-          .then((value) async {
-        await FirebaseFirestore.instance
-            .collection("Categories")
-            .doc(categoryId)
-            .collection("products")
-            .doc(id)
-            .update({"isAdded": false}).then((value) {
-          totalCartProductPrice();
-          isLoading = false;
-          update();
-        });
-      });
     }
     isLoading = false;
     update();
@@ -209,19 +295,23 @@ class CartController extends GetxController {
 
   Future<void> totalCartProductPrice() async {
     totalCartPrice = 0.0;
-    await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(uId)
-        .collection("cartProducts")
-        .get()
-        .then((value) {
-      for (var i = 0; i < value.docs.length; i++) {
-        totalCartPrice = totalCartPrice +
-            (double.parse(value.docs[i]["userQuantity"].toString()) *
-                (double.parse(value.docs[i]["productPrice"].toString())));
-      }
-    });
-    update();
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(uId)
+          .collection("cartProducts")
+          .get()
+          .then((value) {
+        for (var i = 0; i < value.docs.length; i++) {
+          totalCartPrice = totalCartPrice +
+              (double.parse(value.docs[i]["userQuantity"].toString()) *
+                  (double.parse(value.docs[i]["productPrice"].toString())));
+        }
+      });
+      update();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override

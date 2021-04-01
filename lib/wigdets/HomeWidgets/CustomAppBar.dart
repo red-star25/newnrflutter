@@ -62,36 +62,41 @@ class CustomAppBar extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
+            const Spacer(),
+            Flexible(
               child: Row(
                 children: [
-                  IconButton(
-                    onPressed: () async {
+                  InkWell(
+                    onTap: () async {
                       Get.toNamed("/userProfile");
                     },
-                    icon: Icon(
+                    child: Icon(
                       Icons.person_outline_outlined,
                       color: AppColors.primaryColor,
                       size: 30.h,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                      await SharedPrefs.setIsLoggedIn(isLoggedIn: false);
-                      final uId = await SharedPrefs.getUid();
-                      await FirebaseFirestore.instance
-                          .collection("Users")
-                          .doc(uId)
-                          .delete();
-                      await SharedPrefs.setUid();
-                      Get.offAllNamed("/login");
-                    },
-                    icon: Icon(
-                      Icons.exit_to_app_rounded,
-                      color: AppColors.primaryColor,
-                      size: 30.h,
+                  SizedBox(
+                    width: 15.w,
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      onTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                        await SharedPrefs.setIsLoggedIn(isLoggedIn: false);
+                        final uId = await SharedPrefs.getUid();
+                        await FirebaseFirestore.instance
+                            .collection("Users")
+                            .doc(uId)
+                            .delete();
+                        await SharedPrefs.setUid(uId: uId);
+                        Get.offAllNamed("/login");
+                      },
+                      child: Icon(
+                        Icons.exit_to_app_rounded,
+                        color: AppColors.primaryColor,
+                        size: 30.h,
+                      ),
                     ),
                   ),
                 ],

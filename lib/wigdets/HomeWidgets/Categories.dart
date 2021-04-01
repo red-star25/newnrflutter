@@ -10,6 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:nrlifecare/model/CategoryModel/categoryModel.dart';
 import '../ShimmerLoading/shimmerLoading.dart';
 
 class Categories extends StatelessWidget {
@@ -68,11 +69,10 @@ class Categories extends StatelessWidget {
           SizedBox(
             height: 0.16.sh,
             width: 1.sw,
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Categories")
-                    .snapshots(),
-                builder: (context, snapshot) {
+            child: StreamBuilder<List<CategoryModel>>(
+                stream: categoryController.getCategories(),
+                builder:
+                    (context, AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
                     return CategoriesShimmer();
                   } else {
@@ -89,11 +89,10 @@ class Categories extends StatelessWidget {
                               child: FadeInAnimation(
                                 child: InkWell(
                                   onTap: () {
+                                    // categoryController
+                                    //     .setSelectedCategory(index);
                                     categoryController
-                                        .setSelectedCategory(index);
-                                    categoryController.setCategoryId(snapshot
-                                        .data.docs[index]["id"]
-                                        .toString());
+                                        .setCategoryId(snapshot.data[index].id);
                                     Get.find<HomeController>()
                                         .selectedFabIcon
                                         .value = 2;
@@ -116,9 +115,7 @@ class Categories extends StatelessWidget {
                                                   const EdgeInsets.all(6.0),
                                               child: CachedNetworkImage(
                                                 imageUrl: snapshot
-                                                    .data
-                                                    .docs[index]
-                                                        ["categoryImage"]
+                                                    .data[index].categoryImage
                                                     .toString(),
                                                 placeholder: (_, __) =>
                                                     SpinKitRipple(
@@ -138,9 +135,7 @@ class Categories extends StatelessWidget {
                                           height: 2.h,
                                         ),
                                         Text(
-                                          snapshot
-                                              .data.docs[index]["categoryName"]
-                                              .toString(),
+                                          snapshot.data[index].categoryName,
                                           style: TextStyle(
                                               color: AppColors.primaryColor,
                                               fontSize: 16.sp,
@@ -159,9 +154,7 @@ class Categories extends StatelessWidget {
                         separatorBuilder: (context, index) => SizedBox(
                           width: 10.w,
                         ),
-                        itemCount: int.parse(
-                          snapshot.data.docs.length.toString(),
-                        ),
+                        itemCount: snapshot.data.length,
                       ),
                     );
                   }

@@ -14,6 +14,7 @@ import 'package:nrlifecare/wigdets/AuthWidgets/Heading.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/TextField.dart';
 import 'package:nrlifecare/wigdets/AuthWidgets/ThirdPartyAuth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 
 class PhoneAuth extends StatefulWidget {
   @override
@@ -25,14 +26,10 @@ class _PhoneAuthState extends State<PhoneAuth> {
 
   final authController = Get.find<AuthController>();
 
-  String verificationId, smsCode;
+  String _verificationCode;
 
-  AuthCredential _phoneAuthCredential;
-
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _otpController = TextEditingController();
-
-  final _auth = FirebaseAuth.instance;
+  final _phoneNumberController = TextEditingController();
+  final _otpController = TextEditingController();
 
   bool codeSent = false;
   bool isLoading = false;
@@ -44,7 +41,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
       backgroundColor: AppColors.primaryColor,
       body: Column(
         children: [
-          Heading(headingText: "phone_text"),
+          const Heading(headingText: "phone_text"),
           SizedBox(
             height: 40.h,
           ),
@@ -57,7 +54,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                   topRight: Radius.circular(40),
                 ),
               ),
-              child: !authController.isLoading.value
+              child: !isLoading
                   ? Column(
                       children: [
                         Column(
@@ -93,29 +90,34 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                       height: 5.h,
                                     ),
                                     CustomTextField(
+                                      maxLength: 10,
                                       textInputType: TextInputType.number,
+                                      // ignore: missing_return
                                       validateField: (number) {
                                         authController
                                             .phoneNumberValidator(number);
                                       },
                                       controller: _phoneNumberController,
-                                      hintText: "9898989898",
+                                      hintText: "1234567890",
                                       prefix: Text("+91",
                                           style: AppTextDecoration.bodyText3),
                                     ),
                                     SizedBox(
                                       height: 5.h,
                                     ),
-                                    codeSent
-                                        ? CustomTextField(
-                                            textInputType: TextInputType.number,
-                                            validateField: (otp) {
-                                              authController.otpValidator(otp);
-                                            },
-                                            controller: _otpController,
-                                            hintText: "Enter 6 digit OTP",
-                                          )
-                                        : Container()
+                                    if (codeSent)
+                                      CustomTextField(
+                                        maxLength: 6,
+                                        textInputType: TextInputType.number,
+                                        // ignore: missing_return
+                                        validateField: (otp) {
+                                          authController.otpValidator(otp);
+                                        },
+                                        controller: _otpController,
+                                        hintText: "Enter 6 digit OTP",
+                                      )
+                                    else
+                                      Container()
                                   ],
                                 ),
                               ),
@@ -151,10 +153,9 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                       onPressed: () {
                                         // Sign In User
                                         codeSent
-                                            ? signInWithOTP(
-                                                smsCode, verificationId)
-                                            : verifyPhone(
-                                                _phoneNumberController.text);
+                                            ? signInWithOTP(_verificationCode,
+                                                _otpController.text)
+                                            : _verifyPhone();
                                       },
                                       child: Text(
                                         "send_otp",
@@ -170,19 +171,8 @@ class _PhoneAuthState extends State<PhoneAuth> {
                                               BorderRadius.circular(10)),
                                       color: Colors.transparent,
                                       onPressed: () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        final smsCode = _otpController.text
-                                            .toString()
-                                            .trim();
-
-                                        _phoneAuthCredential =
-                                            PhoneAuthProvider.credential(
-                                                verificationId: verificationId,
-                                                smsCode: smsCode);
-
-                                        _login();
+                                        signInWithOTP(_otpController.text,
+                                            _verificationCode);
                                       },
                                       child: Text(
                                         "Verify",
@@ -221,72 +211,90 @@ class _PhoneAuthState extends State<PhoneAuth> {
     );
   }
 
-  _login() async {
+  Future<void> signInWithOTP(String smsCode, String _verificationCode) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await FirebaseAuth.instance
-          .signInWithCredential(_phoneAuthCredential)
+          .signInWithCredential(PhoneAuthProvider.credential(
+              verificationId: _verificationCode, smsCode: smsCode))
           .then((authRes) async {
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(authRes.user.uid)
-            .set({"uId": authRes.user.uid});
-        await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
-        await SharedPrefs.setUid(uId: authRes.user.uid);
-        setState(() {
-          isLoading = false;
-        });
-        Get.offAllNamed("/home");
+        if (authRes.user != null) {
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(authRes.user.uid)
+              .set({"uId": authRes.user.uid});
+          await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+          await SharedPrefs.setUid(uId: authRes.user.uid);
+          setState(() {
+            isLoading = false;
+          });
+          Get.offAllNamed("/home");
+        }
       });
     } catch (e) {
-      authController.isLoading.value = false;
-      print(e);
+      setState(() {
+        isLoading = false;
+      });
+
+      CustomWidgets.customAuthSnackbar(
+          message: "Invalid OTP", title: "Error Occured");
+      FocusScope.of(context).unfocus();
     }
   }
 
-  void signInWithOTP(String smsCode, String verId) {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-    } catch (e) {
-      print(e);
+  Future<void> _verifyPhone() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (_phoneNumberController.text.isPhoneNumber) {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: '+91${_phoneNumberController.text}',
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await FirebaseAuth.instance
+                .signInWithCredential(credential)
+                .then((authRes) async {
+              await FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(authRes.user.uid)
+                  .set({"uId": authRes.user.uid});
+              await SharedPrefs.setIsLoggedIn(isLoggedIn: true);
+              await SharedPrefs.setUid(uId: authRes.user.uid);
+              setState(() {
+                isLoading = false;
+              });
+              Get.offAllNamed("/home");
+            });
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            CustomWidgets.customAuthSnackbar(
+                message: e.message, title: "Error Occured");
+            Get.offAllNamed("/phone");
+            setState(() {
+              isLoading = false;
+            });
+          },
+          codeSent: (String verficationID, int resendToken) {
+            setState(() {
+              _verificationCode = verficationID;
+              codeSent = true;
+              isLoading = false;
+            });
+          },
+          codeAutoRetrievalTimeout: (String verificationID) {
+            setState(() {
+              _verificationCode = verificationID;
+            });
+          },
+          timeout: const Duration(seconds: 120));
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      CustomWidgets.customAuthSnackbar(
+          message: "Please Provide valid phone number",
+          title: "Invalid Phone Number");
     }
-  }
-
-  Future<void> verifyPhone(phoneNo) async {
-    PhoneVerificationCompleted verificationCompleted =
-        (PhoneAuthCredential phoneAuthCredential) async {
-      setState(() {
-        _phoneAuthCredential = phoneAuthCredential;
-      });
-      _login();
-    };
-
-    final PhoneVerificationFailed verificationfailed =
-        (Exception authException) {
-      print('$authException');
-    };
-
-    final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
-      setState(() {
-        verificationId = verId;
-        codeSent = true;
-      });
-    };
-
-    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
-      setState(() {
-        verificationId = verId;
-      });
-    };
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: "+91$phoneNo",
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationfailed,
-        codeSent: smsSent,
-        codeAutoRetrievalTimeout: autoTimeout);
   }
 }

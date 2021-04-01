@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,8 @@ class AuthController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isResizeToAvoidBottom = false.obs;
+  RxBool isOnBoard = false.obs;
+  RxBool isConnecting = false.obs;
 
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL
@@ -27,7 +30,7 @@ class AuthController extends GetxController {
   Future registerUser(GlobalKey<FormState> key) async {
     if (key.currentState.validate()) {
       try {
-        final userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text)
@@ -42,7 +45,7 @@ class AuthController extends GetxController {
               title: "Enter other email address");
         }
       } catch (e) {
-        print(e);
+        debugPrint(e.toString());
       }
     }
   }
@@ -54,7 +57,7 @@ class AuthController extends GetxController {
     if (key.currentState.validate()) {
       try {
         isLoading.value = true;
-        UserCredential userCredential = await FirebaseAuth.instance
+        await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text)
@@ -179,6 +182,26 @@ class AuthController extends GetxController {
     _confirmpasswordController.text = "";
   }
 
+  Future<void> getOnBoardState() async {
+    isOnBoard.value = await SharedPrefs.getOnBoard();
+  }
+
+  bool isConnected = false;
+
+  Future<void> checkConnect() async {
+    try {
+      isConnecting.value = true;
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+      }
+      isConnecting.value = false;
+    } on SocketException catch (_) {
+      isConnected = false;
+      isConnecting.value = false;
+    }
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -187,5 +210,12 @@ class AuthController extends GetxController {
     _passwordController.dispose();
     _confirmpasswordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void onInit() {
+    checkConnect();
+    getOnBoardState();
+    super.onInit();
   }
 }
