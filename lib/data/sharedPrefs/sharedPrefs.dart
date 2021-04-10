@@ -72,7 +72,7 @@ class SharedPrefs {
     return email;
   }
 
-  static Future<void> setLocale({String locale}) async {
+  static Future<void> setPrefsLocale({String locale}) async {
     final _prefs = await SharedPreferences.getInstance();
     await _prefs.setString(LOCALE, locale);
   }

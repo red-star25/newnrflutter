@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 
-class PageNotFount extends StatelessWidget {
+class PageNotFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

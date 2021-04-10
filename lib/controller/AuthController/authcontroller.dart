@@ -24,6 +24,8 @@ class AuthController extends GetxController {
   RxBool isOnBoard = false.obs;
   RxBool isConnecting = false.obs;
 
+  RxString locale = "".obs;
+
   // ------------------------------------------------------------------------
   // REGISTER USER WITH EMAIL
 
@@ -202,6 +204,10 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> getLocale() async {
+    locale.value = await SharedPrefs.getLocale() ?? "English";
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -215,6 +221,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     checkConnect();
+    getLocale();
     getOnBoardState();
     super.onInit();
   }

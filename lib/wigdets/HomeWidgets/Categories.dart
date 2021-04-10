@@ -9,7 +9,7 @@ import 'package:nrlifecare/constants/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:nrlifecare/controller/CategoryController/categoryController.dart';
 import 'package:nrlifecare/controller/HomeController/homeController.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../RippleLoading/rippleLoading.dart';
 import 'package:nrlifecare/model/CategoryModel/categoryModel.dart';
 import '../ShimmerLoading/shimmerLoading.dart';
 

@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil_init.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import './wigdets/RippleLoading/rippleLoading.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/bindings/AuthBindings/authBindings.dart';
 import 'package:nrlifecare/bindings/CartBindings/cartBindings.dart';
@@ -21,7 +21,7 @@ import 'constants/colors.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await EasyLocalization.ensureInitialized();
+  // await EasyLocalization.ensureInitialized();
   AuthBindings().dependencies();
   CartBindings().dependencies();
   HomeBindings().dependencies();
@@ -53,11 +53,11 @@ class MainApp extends StatelessWidget {
       builder: () => GetMaterialApp(
         theme: ThemeData(fontFamily: "Roboto"),
         initialRoute: "/",
-        unknownRoute: GetPage(name: "/notfound", page: () => PageNotFount()),
+        unknownRoute: GetPage(name: "/notfound", page: () => PageNotFound()),
         getPages: NrRouter.pages,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
-        locale: context.locale,
+        locale: Locale(authController.locale.value),
         debugShowCheckedModeBanner: false,
         home: Obx(() => Scaffold(
               body: !authController.isConnecting.value

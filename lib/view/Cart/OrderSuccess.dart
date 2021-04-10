@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:nrlifecare/constants/app_text_decoration.dart';
 import 'package:nrlifecare/constants/colors.dart';
+import 'package:nrlifecare/controller/HomeController/homeController.dart';
 
 class OrderSuccess extends StatelessWidget {
   @override
@@ -26,6 +27,7 @@ class OrderSuccess extends StatelessWidget {
             RaisedButton.icon(
               color: AppColors.primaryColor,
               onPressed: () {
+                Get.find<HomeController>().updateSelectedFabIcon(1);
                 Get.offAllNamed("/home");
               },
               icon: const Icon(

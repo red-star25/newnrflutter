@@ -6,7 +6,6 @@ import 'package:nrlifecare/controller/HomeController/homeController.dart';
 import 'package:nrlifecare/data/sharedPrefs/sharedPrefs.dart';
 import 'package:nrlifecare/wigdets/CustomSnackbar/customWidgets.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:uuid/uuid.dart';
 import 'package:telephony/telephony.dart';
 
 class CartController extends GetxController {
@@ -29,7 +28,6 @@ class CartController extends GetxController {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Razorpay _razorpay;
-  Uuid uuid;
 
   String uId, userName, email;
 
@@ -91,7 +89,7 @@ class CartController extends GetxController {
 
   Future<void> openCheckout() async {
     final options = {
-      'key': "rzp_test_7w5UEKTQKOkb0s",
+      'key': "rzp_live_lpk9qpV9GInbUw",
       'amount': (totalCartPrice * 100).roundToDouble().toString(),
       'name': "NR Life Care",
       'description': 'Online Order',
@@ -133,7 +131,7 @@ class CartController extends GetxController {
             (value, element) => value + "," + element);
 
         smsMessage =
-            "$mode:\nProducts:\n$product\n\nQuantity:\n$quantity\n\nName: ${userName}\nAddress :${addressController.text}\nPhone Number :${phoneNumberController.text}";
+            "$mode:\nProducts:\n$product\n\nQuantity:\n$quantity\n\nName: $userName\nAddress :${addressController.text}\nPhone Number :${phoneNumberController.text}";
       }).then((value) async {
         nameController.clear();
         phoneNumberController.clear();
@@ -145,22 +143,22 @@ class CartController extends GetxController {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    Get.toNamed("/orderSuccess");
     CustomWidgets.customPaymentSnackbar(
         message: "Order has been successfully placed",
         title: "Success",
         utfLogo: "✔");
-    setMessage(mode: "Online Payment");
-    Get.toNamed("/orderSuccess");
+    await setMessage(mode: "Online Payment");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     debugPrint(response.message);
+    Get.offNamed("/cart");
     CustomWidgets.customPaymentSnackbar(
         message: response.message.toString(),
         title: response.code.toString(),
         utfLogo: "❌");
-    Get.offNamed("/cart");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -230,8 +228,8 @@ class CartController extends GetxController {
             await FirebaseFirestore.instance
                 .collection("TopProducts")
                 .doc(id)
-                .update({"isAdded": false}).then((value) {
-              totalCartProductPrice();
+                .update({"isAdded": false}).then((value) async {
+              await totalCartProductPrice();
               isLoading = false;
               update();
             });
@@ -254,8 +252,8 @@ class CartController extends GetxController {
                 .collection("NewProducts")
                 .doc(id)
                 .update({"isAdded": false});
-          }).then((value) {
-            totalCartProductPrice();
+          }).then((value) async {
+            await totalCartProductPrice();
             isLoading = false;
             update();
           });
@@ -279,8 +277,8 @@ class CartController extends GetxController {
               .doc(categoryId)
               .collection("products")
               .doc(id)
-              .update({"isAdded": false}).then((value) {
-            totalCartProductPrice();
+              .update({"isAdded": false}).then((value) async {
+            await totalCartProductPrice();
             isLoading = false;
             update();
           });

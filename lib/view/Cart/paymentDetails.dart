@@ -46,7 +46,7 @@ class PaymentDetails extends StatelessWidget {
                     height: 20.h,
                   ),
                   Card(
-                    elevation: 5,
+                    elevation: 3,
                     child: Padding(
                       padding: EdgeInsets.all(18.w),
                       child: Column(

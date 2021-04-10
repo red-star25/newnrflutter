@@ -11,8 +11,6 @@ import 'package:nrlifecare/model/ProductModel/productModel.dart';
 class HomeController extends GetxController {
   ScrollController scrollController;
   RxInt selectedFabIcon = 1.obs;
-  // final topProducts = FakeData.topProducts;
-  // final newInProducts = FakeData.newInProducts;
   RxBool isLoggedIn = false.obs;
   bool isAddingToCart = false;
   final random = Random();
@@ -24,23 +22,19 @@ class HomeController extends GetxController {
     switch (languageId) {
       case "EN":
         selectedLanguage.value = "English";
-        await SharedPrefs.setLocale(locale: "English");
-        Get.back();
+        await SharedPrefs.setPrefsLocale(locale: "English");
         break;
       case "HI":
         selectedLanguage.value = "Hindi";
-        await SharedPrefs.setLocale(locale: "Hindi");
-        Get.back();
+        await SharedPrefs.setPrefsLocale(locale: "Hindi");
         break;
       case "GU":
         selectedLanguage.value = "Gujarati";
-        await SharedPrefs.setLocale(locale: "Gujarati");
-        Get.back();
+        await SharedPrefs.setPrefsLocale(locale: "Gujarati");
         break;
       default:
         selectedLanguage.value = "English";
-        await SharedPrefs.setLocale(locale: "English");
-        Get.back();
+        await SharedPrefs.setPrefsLocale(locale: "English");
     }
   }
 

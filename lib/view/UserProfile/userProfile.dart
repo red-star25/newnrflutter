@@ -47,9 +47,12 @@ class _UserProfileState extends State<UserProfile> {
           child: Column(
             children: [
               if (photoURL != null)
-                CircleAvatar(
-                  radius: 80.h,
-                  backgroundImage: NetworkImage(photoURL),
+                Padding(
+                  padding: EdgeInsets.only(top: 18.0.h),
+                  child: CircleAvatar(
+                    radius: 80.h,
+                    backgroundImage: NetworkImage(photoURL),
+                  ),
                 )
               else
                 CircleAvatar(
@@ -105,8 +108,8 @@ class _UserProfileState extends State<UserProfile> {
                                 Card(
                                   elevation: 5,
                                   child: ListTile(
-                                    onTap: () {
-                                      Get.defaultDialog(
+                                    onTap: () async {
+                                      await Get.defaultDialog(
                                           radius: 5,
                                           barrierDismissible: true,
                                           title: "Choose preffered language",
@@ -123,14 +126,22 @@ class _UserProfileState extends State<UserProfile> {
                                                         : Colors.white,
                                                     elevation: 5,
                                                     child: ListTile(
-                                                      onTap: () {
-                                                        homeController
-                                                            .setLanguage("EN");
-                                                        setState(() {
-                                                          context.locale =
-                                                              const Locale(
-                                                                  "en");
-                                                        });
+                                                      onTap: () async {
+                                                        await homeController
+                                                            .setLanguage("EN")
+                                                            .then(
+                                                                (value) async {
+                                                          // await context
+                                                          //     .setLocale(
+                                                          //         const Locale(
+                                                          //             "en"));
+                                                          setState(() {
+                                                            context.locale =
+                                                                const Locale(
+                                                                    "en");
+                                                          });
+                                                        }).then((value) =>
+                                                                Get.back());
                                                       },
                                                       leading: Text(
                                                         "EN",
@@ -178,15 +189,22 @@ class _UserProfileState extends State<UserProfile> {
                                                         : Colors.white,
                                                     elevation: 5,
                                                     child: ListTile(
-                                                        onTap: () {
-                                                          homeController
-                                                              .setLanguage(
-                                                                  "HI");
-                                                          setState(() {
-                                                            context.locale =
-                                                                const Locale(
-                                                                    "hi");
-                                                          });
+                                                        onTap: () async {
+                                                          await homeController
+                                                              .setLanguage("HI")
+                                                              .then(
+                                                                  (value) async {
+                                                            // await context
+                                                            //     .setLocale(
+                                                            //         const Locale(
+                                                            //             "hi"));
+                                                            setState(() {
+                                                              context.locale =
+                                                                  const Locale(
+                                                                      "hi");
+                                                            });
+                                                          }).then((value) =>
+                                                                  Get.back());
                                                         },
                                                         leading: Text(
                                                           "HI",
@@ -236,15 +254,22 @@ class _UserProfileState extends State<UserProfile> {
                                                         : Colors.white,
                                                     elevation: 5,
                                                     child: ListTile(
-                                                        onTap: () {
-                                                          homeController
-                                                              .setLanguage(
-                                                                  "GU");
-                                                          setState(() {
-                                                            context.locale =
-                                                                const Locale(
-                                                                    "gu");
-                                                          });
+                                                        onTap: () async {
+                                                          await homeController
+                                                              .setLanguage("GU")
+                                                              .then(
+                                                                  (value) async {
+                                                            // await context
+                                                            //     .setLocale(
+                                                            //         const Locale(
+                                                            //             "gu"));
+                                                            setState(() {
+                                                              context.locale =
+                                                                  const Locale(
+                                                                      "gu");
+                                                            });
+                                                          }).then((value) =>
+                                                                  Get.back());
                                                         },
                                                         leading: Text(
                                                           "GU",
